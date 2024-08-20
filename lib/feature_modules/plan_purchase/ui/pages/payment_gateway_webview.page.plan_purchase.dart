@@ -80,7 +80,7 @@ class _PaymentGatewayWebView_PlanPurchaseState extends State<PaymentGatewayWebVi
                   print("onUpdateVisitedHistory");
                   print(url.toString());
                   print(paymentCheckUrl);
-                  if(url.toString().contains("https://vertexlabs.online/subscription/payment/status") ){
+                  if(url.toString().contains("http://68.183.247.240:8069/subscription/payment/status") ){
                     isConfirmationReached = true;
                     setState(() {
 
