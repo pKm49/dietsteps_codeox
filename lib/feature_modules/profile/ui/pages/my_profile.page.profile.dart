@@ -209,23 +209,23 @@ class MyProfilePage_Profile extends StatelessWidget {
                             'ar'? Ionicons.chevron_back :Ionicons.chevron_forward,
                       ),
                     ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: PrePostIconButton(
-                        specialColor: 0,
-                        onPressed: () {
-                          Get.toNamed(AppRouteNames.allergyAuditRoute,arguments: [false]);
-                        },
-                        theme: 'dark',
-                        border: '',
-                        buttonTitle: "allergies".tr,
-                        preIconData: Ionicons.alert_circle_outline,
-                        postIconData:Localizations.localeOf(context)
-                            .languageCode
-                            .toString() ==
-                            'ar'? Ionicons.chevron_back :Ionicons.chevron_forward,
-                      ),
-                    ),
+                    // SizedBox(
+                    //   width: double.infinity,
+                    //   child: PrePostIconButton(
+                    //     specialColor: 0,
+                    //     onPressed: () {
+                    //       Get.toNamed(AppRouteNames.allergyAuditRoute,arguments: [false]);
+                    //     },
+                    //     theme: 'dark',
+                    //     border: '',
+                    //     buttonTitle: "allergies".tr,
+                    //     preIconData: Ionicons.alert_circle_outline,
+                    //     postIconData:Localizations.localeOf(context)
+                    //         .languageCode
+                    //         .toString() ==
+                    //         'ar'? Ionicons.chevron_back :Ionicons.chevron_forward,
+                    //   ),
+                    // ),
                     SizedBox(
                       width: double.infinity,
                       child: PrePostIconButton(
