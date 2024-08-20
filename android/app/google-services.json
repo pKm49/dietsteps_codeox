@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "67194850029",
+    "project_id": "dietsteps-b8d70",
+    "storage_bucket": "dietsteps-b8d70.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:67194850029:android:ffea421fea6a830e511ae4",
+        "android_client_info": {
+          "package_name": "com.codeox.dietsteps"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlEW3fGlYXoyQ6vn0JaV--J8ixi5pFkXI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:67194850029:android:aa10df0abe05f2df511ae4",
+        "android_client_info": {
+          "package_name": "com.codeox.dietstepsdriver"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlEW3fGlYXoyQ6vn0JaV--J8ixi5pFkXI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

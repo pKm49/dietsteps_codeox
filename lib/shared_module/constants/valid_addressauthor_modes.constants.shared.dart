@@ -1,0 +1,1 @@
+enum VALIDADDRESSAUTHOR_MODES { complete_registration, author_address }
