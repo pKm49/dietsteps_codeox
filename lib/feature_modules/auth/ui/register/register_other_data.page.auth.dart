@@ -60,8 +60,8 @@ class RegisterOtherDataPage_Auth extends StatelessWidget {
                             padding: APPSTYLE_LargePaddingHorizontal,
                             child: TextFormField(
                               controller: registerController.firstNameArabicTextEditingController.value,
-                              validator: (email) =>
-                                  checkIfArabicNameValid(email, 'first_name_ar',false),
+                              // validator: (email) =>
+                              //     checkIfArabicNameValid(email, 'first_name_ar',false),
                               decoration: InputDecoration(
                                 hintText: 'first_name_ar_hint'.tr,
                                 label: Row(
@@ -85,8 +85,8 @@ class RegisterOtherDataPage_Auth extends StatelessWidget {
                             padding: APPSTYLE_LargePaddingHorizontal,
                             child: TextFormField(
                               controller: registerController.lastNameArabicTextEditingController.value,
-                              validator: (email) =>
-                                  checkIfArabicNameValid(email, 'last_name_ar',false),
+                              // validator: (email) =>
+                              //     checkIfArabicNameValid(email, 'last_name_ar',false),
                               decoration: InputDecoration(
                                 hintText: 'last_name_ar_hint'.tr,
                                 label: Row(
