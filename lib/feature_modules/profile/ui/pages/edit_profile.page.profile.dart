@@ -713,7 +713,6 @@ class _EditProfilePage_ProfileState extends State<EditProfilePage_Profile> {
       ),
     ).then((valueFromDialog) {
       // use the value as you wish
-      print(valueFromDialog);
     });
   }
 

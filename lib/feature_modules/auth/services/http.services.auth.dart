@@ -48,9 +48,7 @@ class AuthHttpService {
   Future<bool> resetPassword(String mobile, String newPassword, String gender, String birthday, String email) async {
 
     try{
-      print("resetPassword");
-      print("resetPassword");
-      print("resetPassword");
+
       AppHttpResponse response = await patchRequest(AuthHttpRequestEndpoint_ResetPassword, {
         "mobile": mobile,
         "new_password": newPassword,
@@ -77,8 +75,7 @@ class AuthHttpService {
       await getRequest(AuthHttpRequestEndpoint_GetMealCategories, params);
 
       List<GeneralItem> tempMealCategories = [];
-      print("getMealCategories");
-      print(response.data);
+
       if (response.statusCode == 200 && response.data != null) {
         for (var i = 0; i < response.data.length; i++) {
           tempMealCategories.add(mapGeneralItem(response.data[i]));
@@ -100,9 +97,7 @@ class AuthHttpService {
           '$AuthHttpRequestEndpoint_GetMealsByCatory${categoryId}', null);
 
       List<MealItem> tempSubscriptionPlans = [];
-      print("getMealsByCategory");
-      print(response.statusCode);
-      print(response.data);
+
       if (response.statusCode == 200 && response.data != null) {
         for (var i = 0; i < response.data.length; i++) {
           tempSubscriptionPlans.add(mapMealItem(response.data[i]));

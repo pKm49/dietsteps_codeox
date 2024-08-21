@@ -269,7 +269,7 @@ class MyProfilePage_Profile extends StatelessWidget {
                         },
                         theme: 'dark',
                         border: '',
-                        buttonTitle: "about_diet_done".tr,
+                        buttonTitle: "about_diet_steps".tr,
                         preIconData: Ionicons.help_circle_outline,
                         postIconData:Localizations.localeOf(context)
                             .languageCode

@@ -20,8 +20,7 @@ class PlanPurchaseHttpService {
       await getRequest(SubscriptionsHttpRequestEndpoint_GetPlanCategories, params);
 
       List<SubscriptionPlanCategory> tempSubscriptionPlanCategories = [];
-      print("getSubscriptionCategories");
-      print(response.data);
+
       if (response.statusCode == 200 && response.data != null) {
         for (var i = 0; i < response.data.length; i++) {
           tempSubscriptionPlanCategories.add(mapSubscriptionCategory(response.data[i]));
@@ -45,9 +44,7 @@ class PlanPurchaseHttpService {
           '$SubscriptionsHttpRequestEndpoint_GetPlans${category.id}', null);
 
       List<SubscriptionPlan> tempSubscriptionPlans = [];
-      print("getSubscriptionsByCategory");
-      print(response.statusCode);
-      print(response.data);
+
       if (response.statusCode == 200 && response.data != null) {
         for (var i = 0; i < response.data.length; i++) {
           tempSubscriptionPlans.add(mapSubscriptionItem(response.data[i]));
@@ -93,25 +90,20 @@ class PlanPurchaseHttpService {
       AppHttpResponse response =
       await postRequest(SubscriptionsHttpRequestEndpoint_CreateOrder, purchaseData.toJson());
 
-      print("createOrder");
-      print(response.statusCode.toString());
-      print(response.data.toString());
-      print(response.message.toString());
+
       if (response.statusCode == 200 && response.data != null) {
-        print("createOrder inside iff");
-        print(response.data[0].toString());
+
         return mapPaymentData(response.data[0]);
 
       }else{
-        print("createOrder inside else");
+
         showSnackbar(Get.context!, response.message , "error");
       }
-      print("createOrder outside else");
 
       return mapPaymentData({});
 
     }catch (e,strc){
-      print("something_wrong error");
+
       print(e);
       print(strc);
       showSnackbar(Get.context!, "something_wrong".tr , "error");
@@ -175,10 +167,6 @@ class PlanPurchaseHttpService {
       AppHttpResponse response =
       await postRequest(SubscriptionsHttpRequestEndpoint_ActivateSubscription, params);
 
-      print("activateSubscription");
-      print(response.statusCode.toString());
-      print(response.data.toString());
-      print(response.message.toString());
       return response.statusCode == 200;
 
     }catch  (e,st){

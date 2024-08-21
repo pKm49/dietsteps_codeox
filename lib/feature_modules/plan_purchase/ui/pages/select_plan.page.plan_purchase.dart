@@ -3,17 +3,17 @@ import 'dart:ui';
 import 'package:dietsteps/feature_modules/plan_purchase/controllers/plan_purchase.controller.dart';
 import 'package:dietsteps/feature_modules/plan_purchase/ui/components/subscriptionplan_card.component.plan_purchase.dart';
 import 'package:dietsteps/feature_modules/plan_purchase/ui/components/subscriptionplan_card_loaded.component.plan_purchase.dart';
- import 'package:dietsteps/shared_module/constants/app_route_names.constants.shared.dart';
- import 'package:dietsteps/shared_module/constants/style_params.constants.shared.dart';
+import 'package:dietsteps/shared_module/constants/app_route_names.constants.shared.dart';
+import 'package:dietsteps/shared_module/constants/style_params.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/widget_styles.constants.shared.dart';
 import 'package:dietsteps/shared_module/controllers/controller.shared.dart';
- import 'package:dietsteps/shared_module/services/utility-services/toaster_snackbar_shower.service.shared.dart';
+import 'package:dietsteps/shared_module/services/utility-services/toaster_snackbar_shower.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/widget_generator.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/widget_properties_generator.service.shared.dart';
 import 'package:dietsteps/shared_module/ui/components/custom_back_button.component.shared.dart';
 import 'package:dietsteps/shared_module/ui/components/language_preview_button.component.shared.dart';
 import 'package:flutter/material.dart';
-  import 'package:get/get.dart';
+import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -31,7 +31,7 @@ class _SelectPlanPage_PlanPurchaseState
   final planPurchaseController = Get.find<PlanPurchaseController>();
   final sharedController = Get.find<SharedController>();
 
-@override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -73,8 +73,8 @@ class _SelectPlanPage_PlanPurchaseState
         ),
         body: SafeArea(
           child: Obx(
-            ()=> Container(
-               height: screenheight,
+                ()=> Container(
+              height: screenheight,
               child: Column(
                 children: [
 
@@ -97,7 +97,7 @@ class _SelectPlanPage_PlanPurchaseState
                                 tileMode: TileMode.clamp),
                           ),
                           padding: EdgeInsets.symmetric(
-                            vertical: APPSTYLE_SpaceSmall,horizontal: APPSTYLE_SpaceMedium
+                              vertical: APPSTYLE_SpaceSmall,horizontal: APPSTYLE_SpaceMedium
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -198,23 +198,23 @@ class _SelectPlanPage_PlanPurchaseState
                   ),
                   Visibility(
                     visible: !planPurchaseController.isSubscriptionsFetching.value &&
-                     planPurchaseController.subscriptions.isNotEmpty,
+                        planPurchaseController.subscriptions.isNotEmpty,
                     child: Expanded(
-                      child:  ListView(
-                        children: [
-                          for(var index=0;index<planPurchaseController.subscriptions.length;index++)
-                            InkWell(
-                            onTap: (){
-                              planPurchaseController.changeSubscription(planPurchaseController.subscriptions[index]);
-                            },
-                            child: SubscriptionPlanCardComponent_PlanPurchase(
-                              isSelected: planPurchaseController.currentSubscription.value.id==
-                                  planPurchaseController.subscriptions[index].id,
-                              subscriptionPlan: planPurchaseController.subscriptions[index],
-                            ),
-                          )
-                        ],
-                      )
+                        child:  ListView(
+                          children: [
+                            for(var index=0;index<planPurchaseController.subscriptions.length;index++)
+                              InkWell(
+                                onTap: (){
+                                  planPurchaseController.changeSubscription(planPurchaseController.subscriptions[index]);
+                                },
+                                child: SubscriptionPlanCardComponent_PlanPurchase(
+                                  isSelected: planPurchaseController.currentSubscription.value.id==
+                                      planPurchaseController.subscriptions[index].id,
+                                  subscriptionPlan: planPurchaseController.subscriptions[index],
+                                ),
+                              )
+                          ],
+                        )
                     ),
                   ),
                   Padding(
@@ -229,8 +229,7 @@ class _SelectPlanPage_PlanPurchaseState
                               if(planPurchaseController.currentSubscription.value.id == -1){
                                 showSnackbar(Get.context!, "choose_package_message".tr, "info");
                               }else{
-                                Get.toNamed(AppRouteNames.planPurchaseSetInitialDateRoute);
-
+                                planPurchaseController.planChoiceSelected();
                               }
                             }else{
                               planPurchaseController.getSubscriptionsByCategory();

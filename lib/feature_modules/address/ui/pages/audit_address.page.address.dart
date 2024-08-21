@@ -37,8 +37,7 @@ class _AuditAddressPage_AddressState extends State<AuditAddressPage_Address> {
     addressAuthorMode =
         getArguments[0] ?? VALIDADDRESSAUTHOR_MODES.complete_registration;
     mobile = getArguments[1];
-    print("mobile at address is");
-    print(mobile);
+
     addressController.setFromRoute(addressAuthorMode);
     addressController.getAreas();
   }

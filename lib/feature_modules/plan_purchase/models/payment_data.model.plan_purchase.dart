@@ -25,8 +25,7 @@ class PaymentData {
 }
 
 PaymentData mapPaymentData(dynamic payload) {
-  print("mapPaymentData");
-  print(payload);
+
   int subscriptionId = -1;
    if (payload['subscription_details'] != null) {
     if (payload['subscription_details']['subscription_id'] != null) {

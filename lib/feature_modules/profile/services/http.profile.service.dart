@@ -59,7 +59,6 @@ class ProfileHttpService {
   Future<bool> updateAllergies(List<GeneralItem> allergies, String mobile ) async {
 
     try{
-      print("updateAllergies");
 
 
       AppHttpResponse response = await patchRequest(ProfileHttpRequestEndpoint_Allergy,
@@ -67,8 +66,7 @@ class ProfileHttpService {
             "mobile": mobile,
             "allergies": allergies.map((e) => e.id).toList(),
           });
-      print("response");
-      print(response.statusCode);
+
       if(response.statusCode != 200){
         showSnackbar(Get.context!, "something_wrong".tr, "error");
       }
@@ -135,7 +133,6 @@ class ProfileHttpService {
   Future<bool> updateDislikes(List<GeneralItem> allergies, String mobile ) async {
 
     try{
-      print("updateAllergies");
 
 
       AppHttpResponse response = await patchRequest(ProfileHttpRequestEndpoint_Dislike,
@@ -143,8 +140,6 @@ class ProfileHttpService {
             "mobile": mobile,
             "dislikes": allergies.map((e) => e.id).toList(),
           });
-      print("response");
-      print(response.statusCode);
       if(response.statusCode != 200){
         showSnackbar(Get.context!, "something_wrong".tr, "error");
       }
@@ -171,8 +166,6 @@ class ProfileHttpService {
           tempItems.add(mapGeneralItem(response.data[i]));
         }
       }
-      print("getIngredients tempItems");
-      print(tempItems.length);
       return tempItems;
 
     }catch (e,st){

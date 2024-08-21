@@ -21,22 +21,27 @@ class SubscriptoinDailyMeal {
 SubscriptoinDailyMeal mapSubscriptoinDailyMeal(dynamic payload) {
 
   List<SubscriptoinDailyMealItem> items = [];
+  int selectedCount = 0;
 
   if(payload["items"] != null && payload["items"] is! String ){
     payload["items"].forEach((element) {
       if(element != null){
-        items.add(mapSubscriptoinDailyMealItem(element));
+        SubscriptoinDailyMealItem subscriptoinDailyMealItem =  mapSubscriptoinDailyMealItem(element);
+        selectedCount +=subscriptoinDailyMealItem.selectedCount;
+        items.add(subscriptoinDailyMealItem);
       }
     });
   }
   int itemCount =  payload["item_count"] ?? 0;
+
+
   return SubscriptoinDailyMeal(
       id: payload["id"] ?? -1,
-    itemCount:itemCount,
-    arabicName: payload["arabic_name"] ?? "",
-    name: payload["name"] ?? "",
+      itemCount:itemCount,
+      arabicName: payload["arabic_name"] ?? "",
+      name: payload["name"] ?? "",
       items:items,
-      isAlreadySelected: itemCount==items.where((element) => element.isSelected).toList().length
+      isAlreadySelected: itemCount==selectedCount
 
   );
 }

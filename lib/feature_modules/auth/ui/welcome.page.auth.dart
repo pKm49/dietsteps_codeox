@@ -1,3 +1,4 @@
+import 'package:dietsteps/feature_modules/auth/controllers/meals.controller.auth.dart';
 import 'package:dietsteps/shared_module/constants/app_route_names.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/asset_urls.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/style_params.constants.shared.dart';
@@ -5,10 +6,14 @@ import 'package:dietsteps/shared_module/constants/widget_styles.constants.shared
 import 'package:dietsteps/shared_module/services/utility-services/widget_generator.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/widget_properties_generator.service.shared.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:ionicons/ionicons.dart';
 
 class WelcomePage_Auth extends StatelessWidget {
-  const WelcomePage_Auth({super.key});
+  WelcomePage_Auth({super.key});
+
+  MealsController mealsController = Get.put(MealsController());
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +39,16 @@ class WelcomePage_Auth extends StatelessWidget {
             Container(
 
               padding: APPSTYLE_LargePaddingAll,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: ListView(
                 children: [
                   addVerticalSpace(APPSTYLE_SpaceLarge),
 
-                  Expanded(child: Center(
-                    child:             Image.asset(ASSETS_NAMELOGO, width: screenwidth*.3),
-                  )),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(ASSETS_NAMELOGO, width: screenwidth*.3),
+                    ],
+                  ),
                   addVerticalSpace(APPSTYLE_SpaceLarge ),
                   Text("welcome_message_title".tr,
                       textAlign: TextAlign.center,
@@ -56,10 +63,10 @@ class WelcomePage_Auth extends StatelessWidget {
                   SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor:
-                            MaterialStateProperty.all<Color>(APPSTYLE_BackgroundWhite)
-                        ),
+                          style: ButtonStyle(
+                              backgroundColor:
+                              MaterialStateProperty.all<Color>(APPSTYLE_BackgroundWhite)
+                          ),
                           child:   Text('login'.tr,
                               style: getHeadlineMediumStyle(context).copyWith(
                                   color: APPSTYLE_Black,fontWeight: APPSTYLE_FontWeightBold),
@@ -67,6 +74,52 @@ class WelcomePage_Auth extends StatelessWidget {
                           onPressed: () {
                             Get.toNamed(AppRouteNames.loginRoute);
                           })),
+                  addVerticalSpace(APPSTYLE_SpaceMedium),
+                  SizedBox(
+
+                      width: double.infinity,
+                      child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(width: 2.0, color: APPSTYLE_BackgroundWhite),
+                          ),
+                          child:   Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(ASSETS_MEALS,width: 30),
+                              addHorizontalSpace(APPSTYLE_SpaceMedium),
+                              Text('view_meals'.tr,
+                                  style: getHeadlineMediumStyle(context).copyWith(
+                                      color: APPSTYLE_BackgroundWhite,fontWeight: APPSTYLE_FontWeightBold),
+                                  textAlign: TextAlign.center),
+                            ],
+                          ),
+                          onPressed: () {
+                            Get.toNamed(AppRouteNames.menuListRoute);
+                          })),
+                  addVerticalSpace(APPSTYLE_SpaceMedium),
+                  SizedBox(
+
+                      width: double.infinity,
+                      child:OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(width: 2.0, color: APPSTYLE_BackgroundWhite),
+                        ),
+                        onPressed: () {
+                          Get.toNamed(AppRouteNames.planPurchaseSubscriptionPlansCategoryListRoute);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(ASSETS_SUBSCRIPTIONS,width: 30,),
+
+                            addHorizontalSpace(APPSTYLE_SpaceMedium),
+                            Text('view_subscriptions'.tr,
+                                style: getHeadlineMediumStyle(context).copyWith(
+                                    color: APPSTYLE_BackgroundWhite,fontWeight: APPSTYLE_FontWeightBold),
+                                textAlign: TextAlign.center),
+                          ],
+                        ),
+                      ))
                 ],
               ),
             ),

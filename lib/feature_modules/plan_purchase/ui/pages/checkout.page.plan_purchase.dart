@@ -292,15 +292,13 @@ class _CheckoutPage_PlanPurchaseState
                                 ),
                                 addVerticalSpace(APPSTYLE_SpaceMedium),
                                 Container(
-                                  height: 100,
                                   width: screenwidth,
                                   decoration: APPSTYLE_ShadowedContainerSmallDecoration,
                                   padding: APPSTYLE_MediumPaddingAll,
                                   margin: APPSTYLE_LargePaddingHorizontal,
                                   alignment: Alignment.center,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: [
+                                  child: Wrap(
+                                     children: [
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [

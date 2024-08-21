@@ -15,6 +15,8 @@ class SubscriptoinDailyMealItem {
   final int ratingCount;
   final int rating;
   final bool isSelected;
+  final bool isDislike;
+  final int selectedCount;
 
   SubscriptoinDailyMealItem(
       {
@@ -31,6 +33,8 @@ class SubscriptoinDailyMealItem {
         required this.protien,
         required this.rating,
         required this.ratingCount,
+        required this.isDislike,
+        required this.selectedCount,
       });
 }
 
@@ -38,10 +42,11 @@ SubscriptoinDailyMealItem mapSubscriptoinDailyMealItem(dynamic payload) {
 
   return SubscriptoinDailyMealItem(
     id: payload["id"] ?? -1,
-    arabicName: payload["arabic_name"] ?? "",
+    arabicName: payload["arabic_name"] != null?
+    payload["arabic_name"]==false?'':payload["arabic_name"]:"",
     name: payload["name"] ?? "",
     description: payload["description"] != null?
-      payload["description"]==false?'':payload["description"]:"",
+    payload["description"]==false?'':payload["description"]:"",
     arabicDescription: payload["arabic_description"] != null?
     payload["arabic_description"]==false?'':payload["arabic_description"]:"",
     calories: payload["calories"] ?? 0.0,
@@ -50,7 +55,9 @@ SubscriptoinDailyMealItem mapSubscriptoinDailyMealItem(dynamic payload) {
     protien: payload["protein"] ?? 0.0,
     rating:payload["rating"] != null?  payload["rating"].round() : 0,
     ratingCount: payload["rating_count"] ?? 0,
+    selectedCount: payload["selected_count"] ?? 0,
     isSelected: payload["is_selected"] ?? false,
+    isDislike: payload["is_dislike"] ?? false,
     image: payload["image"] ?? ASSETS_SAMPLEFOOD,
   );
 }

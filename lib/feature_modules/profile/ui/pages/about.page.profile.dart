@@ -68,12 +68,12 @@ class _AboutPage_ProfileState extends State<AboutPage_Profile> {
                 addVerticalSpace(APPSTYLE_SpaceLarge*2 ),
                 Padding(
                   padding: APPSTYLE_LargePaddingHorizontal,
-                  child: Text("diet_done_caption".tr,style: getHeadlineMediumStyle(context).copyWith(color: APPSTYLE_Grey60,fontWeight: APPSTYLE_FontWeightBold)),
+                  child: Text("diet_steps_caption".tr,style: getHeadlineMediumStyle(context).copyWith(color: APPSTYLE_Grey60,fontWeight: APPSTYLE_FontWeightBold)),
                 ),
                 addVerticalSpace(APPSTYLE_SpaceMedium),
                 Padding(
                   padding: APPSTYLE_LargePaddingHorizontal,
-                  child: Text("diet_done_description".tr,style: getBodyMediumStyle(context).copyWith(color: APPSTYLE_Grey40 )),
+                  child: Text("diet_steps_description".tr,style: getBodyMediumStyle(context).copyWith(color: APPSTYLE_Grey40 )),
                 ),
 
                 addVerticalSpace(APPSTYLE_SpaceLarge ),

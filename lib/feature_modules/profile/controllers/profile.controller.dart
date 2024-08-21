@@ -193,9 +193,7 @@ class ProfileController extends GetxController {
       var profileHttpService = ProfileHttpService();
       ingredients.value = await profileHttpService.getIngredients();
       ingredientsToShow.value = ingredients;
-      print("getIngredients");
-      print(ingredientsToShow.length);
-      print(ingredients.length);
+
       isIngredientsFetching.value = false;
     }else{
       isIngredientsFetching.value = false;
@@ -210,13 +208,9 @@ class ProfileController extends GetxController {
         isAllergiesFetching.value = true;
         var profileHttpService = ProfileHttpService();
         allergies.value = await profileHttpService.getAllergies(tMobile);
-        print("getAllergies completed");
-        print(allergies.length);
-        print(  isAllergiesFetching.value );
+
         isAllergiesFetching.value = false;
-        print('getAllergies after');
-        print(  isAllergiesFetching.value );
-        print(  isIngredientsFetching.value );
+
       }else {
         showSnackbar(Get.context!, "couldnt_load_profiledata".tr, "error");
         showSnackbar(Get.context!, "login_message".tr, "error");
@@ -361,8 +355,7 @@ class ProfileController extends GetxController {
   }
 
   void updateAllergyDislikePurpose(bool isRegisterComplete) {
-    print("updateAllergyDislikePurpose");
-    print(isRegisterComplete);
+
     isAllregyDislikeForRegisterComplete.value = isRegisterComplete;
   }
 

@@ -14,8 +14,7 @@ class ReferralData {
 }
 
 ReferralData mapReferralData(dynamic payload) {
-  print("mapReferralData");
-  print(payload);
+
   return ReferralData(
     refferalCode: payload["referral_code"] !=null?payload["referral_code"].toString(): "",
       refferalEarnings: payload["referral_earnings"] !=null?payload["referral_earnings"].toString(): "" 

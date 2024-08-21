@@ -246,7 +246,7 @@ class _RegisterNameEnglishPage_AuthState extends State<RegisterNameEnglishPage_A
       ),
     ).then((valueFromDialog) {
       // use the value as you wish
-      print(valueFromDialog);
+
     });
   }
 }

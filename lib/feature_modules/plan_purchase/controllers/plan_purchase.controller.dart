@@ -57,7 +57,7 @@ class PlanPurchaseController extends GetxController {
     minimumPossibleDate.value = DateTime.now().add(Duration(days: 2));
     selectedDate.value = DateTime.now().add(Duration(days: 3));
     setCurrentMonthWeekDays();
-     couponCodeController.value.addListener(() {
+    couponCodeController.value.addListener(() {
       resetCouponCode();
     });
   }
@@ -68,7 +68,7 @@ class PlanPurchaseController extends GetxController {
     isPaymentGatewayLoading.value = false;
     var planPurchaseHttpService = new PlanPurchaseHttpService();
     subscriptionCategories.value =
-        await planPurchaseHttpService.getSubscriptionCategories();
+    await planPurchaseHttpService.getSubscriptionCategories();
     isCategoriesFetching.value = false;
     currentCategory.value = mapSubscriptionCategory({});
     update();
@@ -82,19 +82,16 @@ class PlanPurchaseController extends GetxController {
     }
   }
 
-
-
   changeCategory(SubscriptionPlanCategory subscriptionPlanCategory) {
     currentCategory.value = subscriptionPlanCategory;
   }
 
   void changeSubscription(SubscriptionPlan subscription) {
-    print("changeSubscription");
+
     currentSubscription.value = subscription;
     subTotal.value = currentSubscription.value.price;
     discount.value = 0.0;
     total.value = subTotal.value- discount.value;
-    print(currentSubscription.value.name);
   }
   Future<void> getSubscriptionsByCategory(  ) async {
     isPaymentGatewayLoading.value = false;
@@ -126,7 +123,7 @@ class PlanPurchaseController extends GetxController {
 
     var planPurchaseHttpService = PlanPurchaseHttpService();
     DiscountData discountData = await planPurchaseHttpService.verifyCoupon(
-         currentSubscription.value.id,
+        currentSubscription.value.id,
         couponCodeController.value.text);
 
     if (!discountData.isValid ) {
@@ -163,11 +160,7 @@ class PlanPurchaseController extends GetxController {
           mobile: mobile
       ) );
       paymentData.value = tPaymentData;
-      print("payment data");
-      print(paymentData.value.paymentUrl);
-      print(paymentData.value.redirectUrl);
-      print(paymentData.value.refId);
-      print(paymentData.value.orderId);
+
       if (paymentData.value.paymentUrl == "" ||
           paymentData.value.redirectUrl == "") {
         if ((total.value == 0 || total.value == 0.0) && (paymentData.value.refId!='' && paymentData.value.orderId!='')) {
@@ -180,7 +173,7 @@ class PlanPurchaseController extends GetxController {
         }else{
           showSnackbar(Get.context!, "customer_support_message".tr, "error");
         }
-          print("payment capture error");
+
         isOrderCreating.value = false;
       } else {
         isPaymentGatewayLoading.value = true;
@@ -206,7 +199,7 @@ class PlanPurchaseController extends GetxController {
       var planPurchaseHttpService = PlanPurchaseHttpService();
       String dateString = DateFormat("yyyy-MM-dd").format(selectedDate.value);
       bool isSuccess = await planPurchaseHttpService
-          .checkDateAvailability(dateString,mobile);
+          .checkDateAvailability(dateString,mobile,currentSubscription.value.id);
       isDateChecking.value = false;
 
       if (isSuccess) {
@@ -244,8 +237,7 @@ class PlanPurchaseController extends GetxController {
       var planPurchaseHttpService = PlanPurchaseHttpService();
       bool isSuccess = await planPurchaseHttpService
           .activateSubscription(subscriptionId);
-      print("activatePlan");
-      print(isSuccess);
+
       resetData();
     }
 
@@ -304,15 +296,12 @@ class PlanPurchaseController extends GetxController {
     List<DateTime> weekDays = [];
     DateTime weekStartDate = getDate(currentMonth.value.subtract(Duration(days: currentMonth.value.weekday))) ;
     DateTime weekEndDate = getDate(currentMonth.value.add(Duration(days: DateTime.daysPerWeek - (currentMonth.value.weekday+1))));
-    print("weekStartDate month: ${weekStartDate.month}");
-    print("weekEndDate month: ${weekEndDate.month}");
-    print("currentMonth.value month : ${currentMonth.value.month}");
+
     if(weekStartDate.month < currentMonth.value.month && weekEndDate.month < currentMonth.value.month){
       weekStartDate = currentMonth.value;
       weekEndDate = currentMonth.value.add(Duration(days: 6));
     }
-    print("weekStartDate : $weekStartDate");
-    print("weekEndDate : $weekEndDate");
+
     firstWeekDays.clear();
     secondWeekDays.clear();
     thirdWeekDays.clear();
@@ -369,5 +358,18 @@ class PlanPurchaseController extends GetxController {
   }
 
   DateTime getDate(DateTime d) => DateTime(d.year, d.month, d.day);
+
+  Future<void> planChoiceSelected() async {
+    var sharedPreferences = await SharedPreferences.getInstance();
+    final String? mobile = sharedPreferences.getString('mobile');
+
+    if (mobile != null && mobile != "") {
+      Get.toNamed(AppRouteNames.planPurchaseSetInitialDateRoute);
+    }else{
+      showSnackbar(Get.context!, "login_message".tr, "info");
+      Get.toNamed(AppRouteNames.loginRoute);
+    }
+
+  }
 
 }
