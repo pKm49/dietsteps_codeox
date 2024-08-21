@@ -1,6 +1,8 @@
 import 'package:dietsteps/feature_modules/address/ui/pages/audit_address.page.address.dart';
 import 'package:dietsteps/feature_modules/address/ui/pages/my_address_list.page.address.dart';
 import 'package:dietsteps/feature_modules/auth/ui/login.page.auth.dart';
+import 'package:dietsteps/feature_modules/auth/ui/meals_subs/meals_details.page.auth.dart';
+import 'package:dietsteps/feature_modules/auth/ui/meals_subs/meals_list.page.auth.dart';
 import 'package:dietsteps/feature_modules/auth/ui/register/register_aboutme_page.auth.dart';
 import 'package:dietsteps/feature_modules/auth/ui/register/register_name_english.page.auth.dart';
 import 'package:dietsteps/feature_modules/auth/ui/register/register_origin_page.auth.dart';
@@ -41,7 +43,7 @@ AppPages() => [
   ),
   GetPage(
     name: AppRouteNames.welcomeScreenRoute,
-    page: () => const WelcomePage_Auth(),
+    page: () =>   WelcomePage_Auth(),
   ),
   GetPage(
     name: AppRouteNames.loginRoute,
@@ -90,7 +92,21 @@ AppPages() => [
     name: AppRouteNames.resetPasswordAboutMeRoute,
     page: () =>   ResetPasswordAboutMePage_Auth(),
   ),
+  GetPage(
+    name: AppRouteNames.menuItemDetailsRoute,
+    page: () =>   MealsDetailsPage_Auth(),
+  ),
 
+  GetPage(
+    name: AppRouteNames.menuListRoute,
+    page: () =>   MealsListPage_Auth(),
+  ),
+
+
+  GetPage(
+    name: AppRouteNames.planPurchaseSubscriptionPlansCategoryListRoute,
+    page: () =>   SelectPlanCategoryPage_PlanPurchase(),
+  ),
   GetPage(
     name: AppRouteNames.planPurchaseSubscriptionPlansCategoryListRoute,
     page: () =>   SelectPlanCategoryPage_PlanPurchase(),

@@ -29,6 +29,7 @@ class  AppRouteNames {
 
   //menu list
   static const String menuListRoute = '/menu-list';
+  static const String menuItemDetailsRoute = '/menu-details';
 
   //subscription list
 

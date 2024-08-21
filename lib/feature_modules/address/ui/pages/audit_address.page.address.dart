@@ -381,13 +381,16 @@ class _AuditAddressPage_AddressState extends State<AuditAddressPage_Address> {
   }
 
   void handleSubmitClick() {
-
     if (addressController.areaId.value == -1 ||
-        addressController.blockId.value == -1) {
+        addressController.blockId.value == -1 ||
+        addressController.streetTextEditingController.value.text =="" ||
+        addressController.houseNumberTextEditingController.value.text =="") {
       if (addressController.areaId.value == -1) {
         showSnackbar(Get.context!, "select_area".tr, "error");
       } else if (addressController.blockId.value == -1) {
         showSnackbar(Get.context!, "select_block".tr, "error");
+      }else{
+        showSnackbar(Get.context!, "check_input_and_try_again".tr, "error");
       }
     } else {
       if (addressAuthorMode == VALIDADDRESSAUTHOR_MODES.complete_registration) {

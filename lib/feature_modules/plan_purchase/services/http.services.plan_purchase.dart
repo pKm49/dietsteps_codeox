@@ -1,4 +1,4 @@
- 
+
 import 'package:dietsteps/feature_modules/plan_purchase/constants/http_request_endpoints.constant.plan_purchase.dart';
 import 'package:dietsteps/feature_modules/plan_purchase/models/discount_data.model.plan_purchase.dart';
 import 'package:dietsteps/feature_modules/plan_purchase/models/payment_data.model.plan_purchase.dart';
@@ -74,7 +74,7 @@ class PlanPurchaseHttpService {
       );
 
       if (response.statusCode == 200 && response.data != null) {
-         return mapDiscountData(response.data[0],true);
+        return mapDiscountData(response.data[0],true);
       }
 
       return mapDiscountData({},false);
@@ -119,12 +119,13 @@ class PlanPurchaseHttpService {
     }
   }
 
-  Future<bool> checkDateAvailability(String date, String mobile) async {
+  Future<bool> checkDateAvailability(String date, String mobile, int planChoiceId) async {
 
     try{
       Map<String, dynamic> params = {};
-      params["date"]=date;
+      params["start_date"]=date;
       params["mobile"]=mobile;
+      params["plan_choice"]=planChoiceId;
       AppHttpResponse response =
       await getRequest(SubscriptionsHttpRequestEndpoint_CheckDateAvailability, params);
 
@@ -155,7 +156,7 @@ class PlanPurchaseHttpService {
         if(response.data[0]['payment_status'] !=null){
           return response.data[0]['payment_status'] == "paid";
         }
-       }
+      }
 
       return false;
 

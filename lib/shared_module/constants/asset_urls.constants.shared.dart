@@ -26,5 +26,6 @@ const String ASSETS_SELECTHAND = "assets/images/select_hand.svg";
 const String ASSETS_SPLASH_ANIMATION = "assets/animations/splash_animation.gif";
 const String ASSETS_SUCCESS_ANIMATION =
     "assets/animations/success_animation.gif";
-
+const String ASSETS_MEALS = "assets/images/meals.png";
+const String ASSETS_SUBSCRIPTIONS = "assets/images/subscriptions.png";
 const String ASSETS_TRANSLATIONS = "assets/translations/translations.json";
