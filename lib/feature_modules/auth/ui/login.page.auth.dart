@@ -43,7 +43,7 @@ class _LoginPage_AuthState extends State<LoginPage_Auth> {
         backgroundColor: APPSTYLE_WhatsappGreen,
         shape: const CircleBorder(),
       ),
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body:Obx(
             () => Container(
           width: screenwidth,
@@ -66,18 +66,18 @@ class _LoginPage_AuthState extends State<LoginPage_Auth> {
                 child: Column(
                   children: [
                     addVerticalSpace(APPSTYLE_SpaceLarge),
-                   Row(
-                     mainAxisAlignment: MainAxisAlignment.end,
-                     children: [
-                     LanguagePreviewButtonComponentShared(textColor:APPSTYLE_BackgroundWhite)
-                   ],),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        LanguagePreviewButtonComponentShared(textColor:APPSTYLE_BackgroundWhite)
+                      ],),
                     Expanded(
                       child: Form(
                         key: loginFormKey,
                         child: ListView(
                           children: [
                             Center(
-                              child:             Image.asset(ASSETS_NAMELOGO, width: screenwidth*.3),
+                              child:             Image.asset(ASSETS_NAMELOGO, width: screenwidth*.2),
                             ),
                             addVerticalSpace(APPSTYLE_SpaceLarge),
 
@@ -117,10 +117,10 @@ class _LoginPage_AuthState extends State<LoginPage_Auth> {
                                         textAlign: TextAlign.center,
                                         style: getBodyMediumStyle(context)
                                             .copyWith(fontWeight: FontWeight.bold,
-                                        color: APPSTYLE_BackgroundWhite)),
+                                            color: APPSTYLE_BackgroundWhite)),
                                     onPressed: () {
 
-                                    handleResetPasswordClick();
+                                      handleResetPasswordClick();
 
                                     }),
                               ],

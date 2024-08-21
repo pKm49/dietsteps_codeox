@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:67194850029:android:05c2e07cf43050f4511ae4",
+        "android_client_info": {
+          "package_name": "com.codeox.dietst"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlEW3fGlYXoyQ6vn0JaV--J8ixi5pFkXI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:67194850029:android:ffea421fea6a830e511ae4",
         "android_client_info": {
           "package_name": "com.codeox.dietsteps"
