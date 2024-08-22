@@ -651,15 +651,18 @@ class _MealSelectionPage_MySubscriptionState
                                         mainAxisExtent: screenheight * 0.35),
                                     itemBuilder: (context, indx) {
                                       return MealSelectionItemCardSelectedComponent_MySubscription(
-                                          isSelectable: false,
-                                          selectedCount:0,
+                                          isSelectable: true,
+                                          selectedCount:-1,
                                           subscriptoinDailyMealItem:
                                           mySubscriptionController
                                               .subscriptoinMealConfig
                                               .value
                                               .meals[index].items[indx],
                                           onAdded: (int count){
-
+                                            showRateDialog( mySubscriptionController
+                                                .subscriptoinMealConfig
+                                                .value
+                                                .meals[index].items[indx].id);
                                           });
                                     },
                                   ),
@@ -1019,6 +1022,122 @@ class _MealSelectionPage_MySubscriptionState
       },
     );
   }
+
+
+  showRateDialog(int mealId) async {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                  Radius.circular(APPSTYLE_BorderRadiusLarge))),
+          contentPadding: APPSTYLE_MediumPaddingAll,
+          content: Obx(
+                ()=> SizedBox(
+                height: 75 + (APPSTYLE_SpaceMedium * 5),
+                child:Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text( 'rate_meal'.tr,
+                      style: getHeadlineMediumStyle(context)
+                          .copyWith(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                    addVerticalSpace(APPSTYLE_SpaceSmall),
+                    Row(
+                      children: [
+                        for (var i = 0; i < 5; i++)
+                          Expanded(
+                              flex: 1,
+                              child: InkWell(
+                                onTap: () {
+
+                                  mySubscriptionController.changeSelectedRating(i+1);
+                                },
+                                child: Icon(
+                                  Icons.star,
+                                  size: 30,
+                                  color: i + 1 <= mySubscriptionController.currentSelectedRating.value
+                                      ? APPSTYLE_GuideYellow
+                                      : APPSTYLE_Grey40,
+                                ),
+                              )),
+                      ],
+                    ),
+                    addVerticalSpace(APPSTYLE_SpaceMedium),
+                    Row(
+                      children: List.generate(
+                          600 ~/ 10,
+                              (index) => Expanded(
+                            child: Container(
+                              color: index % 2 == 0
+                                  ? Colors.transparent
+                                  : Colors.grey,
+                              height: 2,
+                            ),
+                          )),
+                    ),
+                    addVerticalSpace(APPSTYLE_SpaceMedium),
+                    Row(
+                      children: [
+                        Expanded(
+                            flex: 1,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text( 'cancel'.tr,
+                                style: getBodyMediumStyle(context),
+                                textAlign: TextAlign.center,
+                              ),
+                            )),
+                        Visibility(
+                          visible:  mySubscriptionController.isRatingSubmitting.value,
+                          child: Expanded(
+                            flex: 1,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    color: APPSTYLE_Grey80,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Visibility(
+                          visible: !mySubscriptionController.isRatingSubmitting.value,
+                          child: Expanded(
+                              flex: 1,
+                              child: InkWell(
+                                onTap: () {
+                                  if (mySubscriptionController.currentSelectedRating.value > 0) {
+                                    mySubscriptionController.rateMeal(mealId);
+                                  }
+                                },
+                                child: Text('rate'.tr,
+                                  style: getBodyMediumStyle(context)
+                                      .copyWith(fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.center,
+                                ),
+                              )),
+                        )
+                      ],
+                    )
+                  ],
+                )
+            ),
+          )
+      ),
+    );
+  }
+
+
 
 
 }

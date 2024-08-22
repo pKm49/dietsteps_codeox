@@ -117,6 +117,18 @@ class MySubsHttpService {
       return false;
     }
   }
+  Future<bool> rateMeals(String mobile, int mealId, int rating) async {
 
+    try{
+      AppHttpResponse response =
+      await postRequest(MySubscriptionHttpRequestEndpoint_RateMeal,
+          {"params": {"mobile": mobile,"meal_id":mealId,"rating":rating}});
+
+      return response.statusCode == 200;
+
+    }catch (e){
+      return false;
+    }
+  }
 
 }

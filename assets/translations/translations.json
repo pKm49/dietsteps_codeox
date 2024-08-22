@@ -277,8 +277,9 @@
       "view_subscriptions": "View Subscriptions",
       "no_meals_found": "No Meals found",
       "confirm_selection": "Confirm Meal Selection",
-      "confirm_selection_message": "Are you sure to select this meal? This item contains ingredients you marked as 'Dislike'"
-
+      "confirm_selection_message": "Are you sure to select this meal? This item contains ingredients you marked as 'Dislike'",
+      "rate_meal": "Rate Meal",
+      "rate": "Rate"
     }
   },
   {
@@ -562,7 +563,9 @@
       "view_subscriptions": "عرض الاشتراكات",
       "no_meals_found": "لم يتم العثور على وجبات",
       "confirm_selection": "تأكيد اختيار الوجبة",
-      "confirm_selection_message": "هل أنت متأكد من اختيار هذه الوجبة؟ يحتوي هذا العنصر على المكونات التي قمت بوضع علامة \"لا تحبها\"."
+      "confirm_selection_message": "هل أنت متأكد من اختيار هذه الوجبة؟ يحتوي هذا العنصر على المكونات التي قمت بوضع علامة \"لا تحبها\".",
+      "rate_meal": "قيم الوجبه",
+      "rate": "التقييم"
     }
   }
 ]

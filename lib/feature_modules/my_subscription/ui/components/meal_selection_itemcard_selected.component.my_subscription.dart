@@ -39,12 +39,12 @@ class _MealSelectionItemCardSelectedComponent_MySubscriptionState extends State<
 
     return InkWell(
       onTapDown: (_) {
-        if(widget.isSelectable){
+        if(widget.isSelectable && widget.selectedCount>-1) {
           _startOperation();
         }
       },
       onTapUp: (_) {
-        if(widget.isSelectable) {
+        if(widget.isSelectable && widget.selectedCount>-1) {
           _timer.cancel();
           if(!isLongPressed)
           {
@@ -60,6 +60,10 @@ class _MealSelectionItemCardSelectedComponent_MySubscriptionState extends State<
             isLongPressed = false;
             setState(() {
             });
+          }
+        }else{
+          if(widget.isSelectable){
+            widget.onAdded(1);
           }
         }
 
