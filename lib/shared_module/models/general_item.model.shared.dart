@@ -24,8 +24,10 @@ GeneralItem mapGeneralItem(dynamic payload){
 
   return GeneralItem.GeneralItem(
     id :payload["id"]??payload["meal_category_id"]??-1,
-    name :payload["name"]??payload["meal_category_name"]??"",
-    arabicName :payload["arabic_name"] != null?payload["arabic_name"].toString():
-    payload["meal_category_arabic_name"] != null?payload["meal_category_arabic_name"].toString():"",
+    name: payload["name"]!=null && payload["name"] != false?payload["name"]
+        : payload["meal_category_name"]!=null && payload["meal_category_name"] != false?payload["meal_category_name"]:"",
+    arabicName: payload["arabic_name"]!=null && payload["arabic_name"] != false?payload["arabic_name"] :
+    payload["meal_category_arabic_name"] != null && payload["meal_category_arabic_name"] != false ?
+    payload["meal_category_arabic_name"].toString():"",
   );
 }

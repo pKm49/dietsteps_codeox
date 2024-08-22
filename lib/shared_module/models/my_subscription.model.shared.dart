@@ -1,7 +1,4 @@
 
-
-import 'package:dietsteps/feature_modules/address/models/shipping_address.model.address.dart';
-
 class MySubscription {
   final int id;
   final String planName;
@@ -13,12 +10,12 @@ class MySubscription {
 
   MySubscription(
       {required this.id,
-      required this.status,
-      required this.planName,
-      required this.planArabicName,
-      required this.fromDate,
-      required this.toDate,
-      required this.mealsConfig, });
+        required this.status,
+        required this.planName,
+        required this.planArabicName,
+        required this.fromDate,
+        required this.toDate,
+        required this.mealsConfig, });
 }
 
 MySubscription mapMySubscription(dynamic payload) {
@@ -36,13 +33,9 @@ MySubscription mapMySubscription(dynamic payload) {
 
   return MySubscription(
     id: payload["id"] ?? -1,
-
-    planName: payload["plan"] ?? "",
-     status: payload["state"] ?? "",
-    planArabicName: payload["plan_arabic"] != null
-        ? payload["plan_arabic"].toString()
-        : "",
-
+    status: payload["state"]!=null && payload["state"] != false?payload["state"] : "",
+    planName: payload["plan"]!=null && payload["plan"] != false?payload["plan"] : "",
+    planArabicName: payload["plan_arabic"]!=null && payload["plan_arabic"] != false?payload["plan_arabic"] : "",
     fromDate: payload["start_date"] != null
         ? DateTime.parse(payload["start_date"].toString())
         : DateTime.now(),

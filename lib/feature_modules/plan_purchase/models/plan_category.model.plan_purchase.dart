@@ -1,4 +1,5 @@
 
+
 import 'package:dietsteps/shared_module/constants/asset_urls.constants.shared.dart';
 
 class SubscriptionPlanCategory {
@@ -53,13 +54,13 @@ SubscriptionPlanCategory mapSubscriptionCategory(dynamic payload){
     });
   }
   return SubscriptionPlanCategory(
-    id :payload["id"]??-1,
-    imageUrl :payload["image"]!= null?payload["image"].toString():ASSETS_WELCOME_LOGIN_BG,
-    name :payload["name"]??"",
-    arabicName :payload["arabic_name"]??"",
-    description :payload["description"]??"",
-    arabicDescription :payload["arabic_description"]??"",
-    mealsConfig: mealConfig,
-    mealsConfigArabic: mealsConfigArabic
+      id :payload["id"]??-1,
+      imageUrl :payload["image"]!= null?payload["image"].toString():ASSETS_WELCOME_LOGIN_BG,
+      name: payload["name"]!=null && payload["name"] != false?payload["name"] : "",
+      arabicName: payload["arabic_name"]!=null && payload["arabic_name"] != false?payload["arabic_name"] : "",
+      description: payload["description"]!=null && payload["description"] != false?payload["description"] : "",
+      arabicDescription: payload["arabic_description"]!=null && payload["arabic_description"] != false?payload["arabic_description"] : "",
+      mealsConfig: mealConfig,
+      mealsConfigArabic: mealsConfigArabic
   );
 }

@@ -1,4 +1,5 @@
 
+
 import 'package:dietsteps/feature_modules/my_subscription/models/subscription_dailymeal_item.model.my_subscription.dart';
 
 class SubscriptoinDailyMeal {
@@ -38,10 +39,9 @@ SubscriptoinDailyMeal mapSubscriptoinDailyMeal(dynamic payload) {
   return SubscriptoinDailyMeal(
       id: payload["id"] ?? -1,
       itemCount:itemCount,
-      arabicName: payload["arabic_name"] ?? "",
-      name: payload["name"] ?? "",
+      arabicName: payload["arabic_name"]!=null && payload["arabic_name"] != false?payload["arabic_name"] : "",
+      name: payload["name"]!=null && payload["name"] != false?payload["name"] : "",
       items:items,
       isAlreadySelected: itemCount==selectedCount
-
   );
 }

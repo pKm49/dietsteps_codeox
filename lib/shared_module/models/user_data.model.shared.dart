@@ -1,5 +1,5 @@
+
 import 'package:dietsteps/shared_module/constants/asset_urls.constants.shared.dart';
-import 'package:dietsteps/shared_module/models/general_item.model.shared.dart';
 import 'package:intl/intl.dart';
 
 class UserData {
@@ -93,12 +93,12 @@ UserData mapUserData(dynamic payload) {
     id: payload["id"] ?? -1,
     profilePictureUrl: payload["profile_picture"] != null
         ? payload["profile_picture"].toString() !=""?
-          payload["profile_picture"].toString()
+    payload["profile_picture"].toString()
         : ASSETS_DEFAULTPROFILEPIC
         : ASSETS_DEFAULTPROFILEPIC,
     mobile: payload["mobile"] ?? "",
     customerCode: payload["customer_code"] != null ?
-        payload["customer_code"].toString()
+    payload["customer_code"].toString()
         : "",
     email: payload["email"] != null
         ? payload["email"].toString() == 'false'
@@ -106,10 +106,11 @@ UserData mapUserData(dynamic payload) {
         : payload["email"].toString()
         : "",
 
-    firstName: payload["first_name"] != null ? payload["first_name"].toString() : "",
-    firstNameArabic: payload["first_name_arabic"] != null ? payload["first_name_arabic"].toString() : "",
-    lastName: payload["last_name"] != null ? payload["last_name"].toString() : "",
-    lastNameArabic: payload["last_name_arabic"] != null ? payload["last_name_arabic"].toString() : "",
+    firstName: payload["first_name"]!=null && payload["first_name"] != false?payload["plan_arabic"] : "",
+    firstNameArabic: payload["first_name_arabic"]!=null && payload["first_name_arabic"] != false?payload["first_name_arabic"] : "",
+    lastName: payload["last_name"]!=null && payload["last_name"] != false?payload["last_name"] : "",
+    lastNameArabic: payload["last_name_arabic"]!=null && payload["last_name_arabic"] != false?payload["last_name_arabic"] : "",
+
     gender: payload["gender"] != null ? payload["gender"].toString() : "",
     birthday: payload["date_of_birth"] != null ? payload["date_of_birth"].toString() : "",
     height: payload["height"] !=null ? double.parse(payload["height"].toString()):0.0,

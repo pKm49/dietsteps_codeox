@@ -1,4 +1,5 @@
 
+
 import 'package:dietsteps/shared_module/constants/asset_urls.constants.shared.dart';
 
 class SubscriptoinDailyMealItem {
@@ -42,19 +43,17 @@ SubscriptoinDailyMealItem mapSubscriptoinDailyMealItem(dynamic payload) {
 
   return SubscriptoinDailyMealItem(
     id: payload["id"] ?? -1,
-    arabicName: payload["arabic_name"] != null?
-    payload["arabic_name"]==false?'':payload["arabic_name"]:"",
-    name: payload["name"] ?? "",
-    description: payload["description"] != null?
-    payload["description"]==false?'':payload["description"]:"",
-    arabicDescription: payload["arabic_description"] != null?
-    payload["arabic_description"]==false?'':payload["arabic_description"]:"",
+    arabicName: payload["arabic_name"]!=null && payload["arabic_name"] != false?payload["arabic_name"] : "",
+    name: payload["name"]!=null && payload["name"] != false?payload["name"] : "",
+    description: payload["description"]!=null && payload["description"] != false?payload["description"] : "",
+    arabicDescription: payload["arabic_description"]!=null && payload["arabic_description"] != false?payload["arabic_description"] : "",
+
     calories: payload["calories"] ?? 0.0,
     carbs: payload["carbs"] ?? 0.0,
     fat: payload["fat"] ?? 0.0,
     protien: payload["protein"] ?? 0.0,
-    rating:payload["rating"] != null?  payload["rating"].round() : 0,
-    ratingCount: payload["rating_count"] ?? 0,
+    rating :payload["rating"] !=null?int.parse(payload["rating"].toString()):0,
+    ratingCount :payload["rating_count"] !=null?int.parse(payload["rating_count"].toString()):0,
     selectedCount: payload["selected_count"] ?? 0,
     isSelected: payload["is_selected"] ?? false,
     isDislike: payload["is_dislike"] ?? false,

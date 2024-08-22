@@ -31,7 +31,8 @@ class SubscriptionPlan {
 }
 
 SubscriptionPlan mapSubscriptionItem(dynamic payload ){
-
+  print("mapSubscriptionItem");
+  print(payload);
   Map<int, bool> dayAvailability = {};
   if(payload["available_days"]!=null){
     if(payload["available_days"]["sunday"]!=null){
@@ -78,8 +79,8 @@ SubscriptionPlan mapSubscriptionItem(dynamic payload ){
     protein :payload["protein"]??0.0,
     carbohydrates :payload["carbohydrates"]??0.0,
     strikePrice :(payload["strike_price"] !="" && payload["strike_price"] != null)?payload["strike_price"]:0.0,
-    name :payload["name"]??"",
-    arabicName :payload["arabic_name"] !=null?payload["arabic_name"].toString():"",
+    name: payload["name"]!=null && payload["name"] != false?payload["name"] : "",
+    arabicName: payload["arabic_name"]!=null && payload["arabic_name"] != false?payload["arabic_name"] : "",
     durationType :payload["duration_type"]??"Week",
     days :payload["days_count"]!=null?payload["days_count"].toString():"0",
   );
