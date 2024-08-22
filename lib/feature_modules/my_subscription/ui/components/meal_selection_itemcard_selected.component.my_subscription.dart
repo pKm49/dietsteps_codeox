@@ -73,8 +73,8 @@ class _MealSelectionItemCardSelectedComponent_MySubscriptionState extends State<
           APPSTYLE_BorderedContainerSmallDecoration
               .copyWith(
               color: APPSTYLE_Grey20,
-              border: Border.all(color:widget.selectedCount>0?APPSTYLE_GuideGreen: APPSTYLE_Grey40,
-                  width: widget.selectedCount>0? 3:.2)
+              border: Border.all(color:(widget.selectedCount>0|| widget.selectedCount==-1)?APPSTYLE_GuideGreen: APPSTYLE_Grey40,
+                  width: (widget.selectedCount>0|| widget.selectedCount==-1)? 3:.2)
           ),
           curve: Curves.bounceIn,
           duration: Duration(milliseconds: 500),
@@ -234,13 +234,28 @@ class _MealSelectionItemCardSelectedComponent_MySubscriptionState extends State<
                 ],
               ),
               Column(
+                mainAxisAlignment:widget.selectedCount==-1? MainAxisAlignment.spaceBetween: MainAxisAlignment.start,
                 children: [
                   Visibility(
-                    visible: widget.selectedCount>0,
+                    visible: widget.selectedCount>0 || widget.selectedCount==-1,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Icon(Ionicons.checkmark_circle,color: APPSTYLE_GuideGreen,size: APPSTYLE_FontSize24)
+                      ],
+                    ),
+                  ),
+                  Visibility(
+                    visible: widget.selectedCount==-1,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          decoration: APPSTYLE_BorderedContainerExtraSmallDecoration.
+                          copyWith(color: APPSTYLE_PrimaryColor),
+                          padding: APPSTYLE_ExtraSmallPaddingVertical.copyWith(left: APPSTYLE_SpaceSmall,right: APPSTYLE_SpaceSmall),
+                          child: Text("rate_meal".tr,style: getLabelLargeStyle(context).copyWith(color: APPSTYLE_BackgroundWhite)),
+                        )
                       ],
                     ),
                   )
