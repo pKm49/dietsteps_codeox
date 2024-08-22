@@ -335,6 +335,7 @@ class _AboutPage_ProfileState extends State<AboutPage_Profile> {
     final updateButtonCancelTextWidget = Text('no'.tr,style: TextStyle(color: APPSTYLE_Black),);
 
     updateLogoutAction() async {
+      print("deleteAccount triggered");
       final profileController = Get.find<ProfileController>();
       profileController.deleteAccount();
       Navigator.pop(context);

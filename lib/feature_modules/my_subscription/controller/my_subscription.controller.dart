@@ -106,7 +106,7 @@ class MySubscriptionController extends GetxController {
       currentMonth.value = getCurrentMonth(startDate, endDate);
       subscriptionDates.forEach((key, value) {
         subscriptionDays.add(key);
-
+        print("$key $value");
         if(!doesContainDate(subscriptionMonths,DateTime(key.year,key.month,1))){
           subscriptionMonths.add(DateTime(key.year,key.month,1));
         }
@@ -172,12 +172,15 @@ class MySubscriptionController extends GetxController {
     List<DateTime> weekDays = [];
     DateTime weekStartDate = getDate(currentMonth.value.subtract(Duration(days: currentMonth.value.weekday))) ;
     DateTime weekEndDate = getDate(currentMonth.value.add(Duration(days: DateTime.daysPerWeek - (currentMonth.value.weekday+1))));
-
+    print("weekStartDate month: ${weekStartDate.month}");
+    print("weekEndDate month: ${weekEndDate.month}");
+    print("currentMonth.value month : ${currentMonth.value.month}");
     if(weekStartDate.month < currentMonth.value.month && weekEndDate.month < currentMonth.value.month){
       weekStartDate = currentMonth.value;
       weekEndDate = currentMonth.value.add(Duration(days: 6));
     }
-
+    print("weekStartDate : $weekStartDate");
+    print("weekEndDate : $weekEndDate");
     firstWeekDays.clear();
     secondWeekDays.clear();
     thirdWeekDays.clear();
@@ -255,7 +258,10 @@ class MySubscriptionController extends GetxController {
 
           var mySubsHttpService = MySubsHttpService();
           subscriptoinMealConfig.value =  await mySubsHttpService.getMealsByDay(tMobile,f.format(selectedDate.value));
-
+          print("getMealsByDay data recieved");
+          print(subscriptoinMealConfig.value.recommendedCalories);
+          print(subscriptoinMealConfig.value.meals.length);
+          print(subscriptoinMealConfig.value.meals[0].items.length);
           initializeMealSelection(f.format(selectedDate.value));
           isMealsFetching.value = false;
 
@@ -287,53 +293,61 @@ class MySubscriptionController extends GetxController {
                 VALIDSUBSCRIPTIONDAY_STATUS.freezed &&
                 selectedMealConfig.value.meals.where((element) => element.items.isEmpty).toList().isEmpty) )
     ){
+      if(subscriptionDates[
+      selectedDate.value] ==
+          VALIDSUBSCRIPTIONDAY_STATUS.freezed &&
+          selectedMealConfig.value.meals.where((element) => element.items.isEmpty).toList().isEmpty){
+        unfreezeAndSaveMeals();
+      }else{
+        if(subscriptionDates[
+        selectedDate.value] ==
+            VALIDSUBSCRIPTIONDAY_STATUS.mealSelected &&
+            selectedMealConfig.value.meals.where((element) => element.items.isEmpty).toList().isNotEmpty){
+          showSnackbar(Get.context!, "please_select_meals_for_all_categories".tr, "error");
 
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      final String? tMobile = prefs.getString('mobile');
-      if (tMobile != null && tMobile != '') {
+        }else{
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          final String? tMobile = prefs.getString('mobile');
+          if (tMobile != null && tMobile != '') {
 
-        final sharedController = Get.find<SharedController>();
-        int subscriptionId = sharedController.mySubscriptions.where((p0) => p0.status=='in_progress').toList().isNotEmpty?
-        sharedController.mySubscriptions.where((p0) => p0.status=='in_progress').toList()[0].id:-1;
+            final sharedController = Get.find<SharedController>();
+            int subscriptionId = sharedController.mySubscriptions.where((p0) => p0.status=='in_progress').toList().isNotEmpty?
+            sharedController.mySubscriptions.where((p0) => p0.status=='in_progress').toList()[0].id:-1;
 
-        if(subscriptionId != -1){
-          isDayMealSaving.value = true;
-          final f = new DateFormat('yyyy-MM-dd');
-          var mySubsHttpService = MySubsHttpService();
-          bool isSuccess  =  await mySubsHttpService.saveMealsByDay(subscriptionId,selectedMealConfig.value, f.format(selectedDate.value));
+            if(subscriptionId != -1){
+              isDayMealSaving.value = true;
+              final f = new DateFormat('yyyy-MM-dd');
+              var mySubsHttpService = MySubsHttpService();
+              bool isSuccess  =  await mySubsHttpService.saveMealsByDay(subscriptionId,selectedMealConfig.value, f.format(selectedDate.value));
 
-          if(isSuccess){
-            if(isNavigateBack){
-              Get.back();
-              showSnackbar(Get.context!, "selection_saved".tr, "info");
+              if(isSuccess){
+                if(isNavigateBack){
+                  Get.back();
+                  showSnackbar(Get.context!, "selection_saved".tr, "info");
+                }
+
+                getSubscriptionDates(false,false);
+
+
+              }
+
+              isDayMealSaving.value = false;
+            }else {
+              showSnackbar(Get.context!, "couldnt_load_profiledata".tr, "error");
+              showSnackbar(Get.context!, "login_message".tr, "error");
+              Get.offAllNamed(AppRouteNames.loginRoute);
             }
 
-            getSubscriptionDates(false,false);
-            // if(subscriptionDates[
-            // selectedDate.value] ==
-            //     VALIDSUBSCRIPTIONDAY_STATUS.freezed && selectedDate.value.isAfter(
-            //     DateTime.now().add(Duration(days: 1)))){
-            //   freezeSubscription(selectedDate.value,false);
-            // }else{
-            //   Get.back();
-            //   showSnackbar(Get.context!, "selection_saved".tr, "info");
-            //   getSubscriptionDates(false,false);
-            // }
-
+          } else {
+            showSnackbar(Get.context!, "couldnt_load_profiledata".tr, "error");
+            showSnackbar(Get.context!, "login_message".tr, "error");
+            Get.offAllNamed(AppRouteNames.loginRoute);
           }
 
-          isDayMealSaving.value = false;
-        }else {
-          showSnackbar(Get.context!, "couldnt_load_profiledata".tr, "error");
-          showSnackbar(Get.context!, "login_message".tr, "error");
-          Get.offAllNamed(AppRouteNames.loginRoute);
         }
 
-      } else {
-        showSnackbar(Get.context!, "couldnt_load_profiledata".tr, "error");
-        showSnackbar(Get.context!, "login_message".tr, "error");
-        Get.offAllNamed(AppRouteNames.loginRoute);
       }
+
 
     }else{
       if(selectedMealConfig.value.meals.where((element) => element.items.isEmpty).toList().isNotEmpty && isNavigateBack){
@@ -346,7 +360,10 @@ class MySubscriptionController extends GetxController {
 
 
   void initializeMealSelection(String date) {
-
+    print("initializeMealSelection data recieved");
+    print(subscriptoinMealConfig.value.recommendedCalories);
+    print(subscriptoinMealConfig.value.meals.length);
+    print(subscriptoinMealConfig.value.meals[0].items.length);
     try{
       List<SubscriptoinDailyMeal> meals = [];
       double recommendedCalories = 0.0;
@@ -363,7 +380,9 @@ class MySubscriptionController extends GetxController {
 
           }
         }
-
+        print("initializeMealSelection data recieved");
+        print(mealItems.length);
+        print(element.itemCount);
         meals.add(SubscriptoinDailyMeal(
             name: element.name,
             id: element.id,
@@ -380,6 +399,7 @@ class MySubscriptionController extends GetxController {
     }catch (e,st){
       print(e);
       print(st);
+      print("reached error");
     }
 
   }
@@ -591,5 +611,69 @@ class MySubscriptionController extends GetxController {
         date: subscriptoinMealConfig.value.date,
         recommendedCalories:subscriptoinMealConfig.value.recommendedCalories, meals: meals);
 
+  }
+
+  Future<void> unfreezeAndSaveMeals() async {
+    if(!isFreezing.value){
+      final sharedController = Get.find<SharedController>();
+      int subscriptionId = sharedController.mySubscriptions.where((p0) => p0.status=='in_progress').toList().isNotEmpty?
+      sharedController.mySubscriptions.where((p0) => p0.status=='in_progress').toList()[0].id:-1;
+
+      if(subscriptionId != -1){
+        final f = DateFormat('yyyy-MM-dd');
+        List<String> frozenDays = [];
+        frozenDays.add(f.format(selectedDate.value));
+        isFreezing.value = true;
+        var mySubsHttpService = MySubsHttpService();
+        bool isSuccess  =  await mySubsHttpService.freezeSubscriptionDays(subscriptionId,frozenDays,false);
+        if(isSuccess){
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          final String? tMobile = prefs.getString('mobile');
+          if (tMobile != null && tMobile != '') {
+
+            final sharedController = Get.find<SharedController>();
+            int subscriptionId = sharedController.mySubscriptions.where((p0) => p0.status=='in_progress').toList().isNotEmpty?
+            sharedController.mySubscriptions.where((p0) => p0.status=='in_progress').toList()[0].id:-1;
+
+            if(subscriptionId != -1){
+              isDayMealSaving.value = true;
+              final f = new DateFormat('yyyy-MM-dd');
+              var mySubsHttpService = MySubsHttpService();
+              bool isSuccess  =  await mySubsHttpService.saveMealsByDay(subscriptionId,selectedMealConfig.value, f.format(selectedDate.value));
+              isFreezing.value = false;
+
+              if(isSuccess){
+                Get.back();
+                showSnackbar(Get.context!, "selection_saved".tr, "info");
+                getSubscriptionDates(false,false);
+              }
+
+              isDayMealSaving.value = false;
+            }else {
+              showSnackbar(Get.context!, "couldnt_load_profiledata".tr, "error");
+              showSnackbar(Get.context!, "login_message".tr, "error");
+              Get.offAllNamed(AppRouteNames.loginRoute);
+            }
+
+          } else {
+            showSnackbar(Get.context!, "couldnt_load_profiledata".tr, "error");
+            showSnackbar(Get.context!, "login_message".tr, "error");
+            Get.offAllNamed(AppRouteNames.loginRoute);
+          }
+
+        }else{
+          isFreezing.value = false;
+        }
+
+
+      }else {
+        showSnackbar(Get.context!, "couldnt_load_profiledata".tr, "error");
+        showSnackbar(Get.context!, "login_message".tr, "error");
+        Get.offAllNamed(AppRouteNames.loginRoute);
+      }
+
+
+
+    }
   }
 }

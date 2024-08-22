@@ -76,8 +76,12 @@ class _LoginPage_AuthState extends State<LoginPage_Auth> {
                         key: loginFormKey,
                         child: ListView(
                           children: [
-                            Center(
-                              child:             Image.asset(ASSETS_NAMELOGO, width: screenwidth*.2),
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(ASSETS_NAMELOGO, width: screenwidth*.25),
+                              ],
                             ),
                             addVerticalSpace(APPSTYLE_SpaceLarge),
 

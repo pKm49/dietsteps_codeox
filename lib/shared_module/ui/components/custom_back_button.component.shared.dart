@@ -5,14 +5,15 @@ import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
 
 class CustomBackButton extends StatelessWidget {
-  bool? isPrimaryMode;
+  GestureTapCallback? onDeleteSelected;
 
-  CustomBackButton({super.key, this.isPrimaryMode});
+  bool? isPrimaryMode;
+  CustomBackButton({super.key, this.isPrimaryMode, this.onDeleteSelected});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
+      onTap:onDeleteSelected ?? () {
         Get.back();
       },
       child: Container(

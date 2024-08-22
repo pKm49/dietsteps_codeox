@@ -1,3 +1,4 @@
+ import 'package:dietsteps/feature_modules/auth/services/default_profilepic_base64.dart';
 import 'package:intl/intl.dart';
 
 class RegisterCredential {
@@ -75,7 +76,7 @@ class RegisterCredential {
     "floor_number": floorNumber,
     "comments": comments,
     "apartment_no":apartmentNumber,
-    "profile_picture": profile_picture,
+    "profile_picture": profile_picture ==""?getDefaultProfilePictureBase64():profile_picture,
     "other_source": other_source
   };
 }

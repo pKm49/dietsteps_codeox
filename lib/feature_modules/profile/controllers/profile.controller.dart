@@ -297,6 +297,7 @@ class ProfileController extends GetxController {
   }
 
   Future<void> deleteAccount() async {
+    print("deleteAccount clicked");
     var sharedPreferences = await SharedPreferences.getInstance();
     final String? mobile = sharedPreferences.getString('mobile');
 

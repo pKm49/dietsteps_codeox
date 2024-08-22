@@ -32,6 +32,7 @@ class MealSelectionPage_MySubscription extends StatefulWidget {
       _MealSelectionPage_MySubscriptionState();
 }
 
+
 class _MealSelectionPage_MySubscriptionState
     extends State<MealSelectionPage_MySubscription> {
   final mySubscriptionController = Get.find<MySubscriptionController>();
@@ -61,6 +62,8 @@ class _MealSelectionPage_MySubscriptionState
     return PopScope(
       canPop: false,
       onPopInvoked : (didPop){
+        print("onPopInvoked");
+        print(didPop);
         if (didPop) {
           return;
         }else{
@@ -110,7 +113,48 @@ class _MealSelectionPage_MySubscriptionState
             elevation: 0.0,
             title: Row(
               children: [
-                CustomBackButton(isPrimaryMode: false),
+                CustomBackButton(
+
+                    onDeleteSelected:(){
+                      print("onPopInvoked");
+
+                      if(!mySubscriptionController.isMealsFetching.value &&
+                          !mySubscriptionController.isFreezing.value &&
+                          mySubscriptionController
+                              .subscriptoinMealConfig.value.meals.isNotEmpty &&
+                          mySubscriptionController.subscriptionDates[
+                          mySubscriptionController.selectedDate.value] !=
+                              VALIDSUBSCRIPTIONDAY_STATUS.offDay &&
+                          ( mySubscriptionController.subscriptionDates[
+                          mySubscriptionController.selectedDate.value] !=
+                              VALIDSUBSCRIPTIONDAY_STATUS.freezed ||
+                              (mySubscriptionController.subscriptionDates[
+                              mySubscriptionController.selectedDate.value] ==
+                                  VALIDSUBSCRIPTIONDAY_STATUS.freezed && mySubscriptionController.selectedDate.value.isAfter(
+                                  DateTime.now().add(Duration(days: 1)))) ) &&
+                          mySubscriptionController.subscriptionDates[
+                          mySubscriptionController
+                              .selectedDate.value] !=
+                              VALIDSUBSCRIPTIONDAY_STATUS.delivered  &&
+                          mySubscriptionController.selectedDate.value.isAfter(
+                              DateTime.now().add(Duration(days: 1)))){
+                        if (!mySubscriptionController
+                            .isDayMealSaving.value &&
+                            !mySubscriptionController
+                                .isMealsFetching.value) {
+                          mySubscriptionController.setMealsByDate(false);
+                          Navigator.pop(context);
+
+                        }else{
+                          Navigator.pop(context);
+                        }
+                      }else{
+                        Navigator.pop(context);
+
+                      }
+
+                    },
+                    isPrimaryMode: false),
                 Expanded(
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
