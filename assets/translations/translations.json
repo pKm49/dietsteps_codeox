@@ -279,7 +279,9 @@
       "confirm_selection": "Confirm Meal Selection",
       "confirm_selection_message": "Are you sure to select this meal? This item contains ingredients you marked as 'Dislike'",
       "rate_meal": "Rate Meal",
-      "rate": "Rate"
+      "rate": "Rate",
+      "rating_saved": "Submitted Succesfully"
+
     }
   },
   {
@@ -565,7 +567,9 @@
       "confirm_selection": "تأكيد اختيار الوجبة",
       "confirm_selection_message": "هل أنت متأكد من اختيار هذه الوجبة؟ يحتوي هذا العنصر على المكونات التي قمت بوضع علامة \"لا تحبها\".",
       "rate_meal": "قيم الوجبه",
-      "rate": "التقييم"
+      "rate": "التقييم",
+      "rating_saved": "تم تقديم التقديم بنجاح"
+
     }
   }
 ]

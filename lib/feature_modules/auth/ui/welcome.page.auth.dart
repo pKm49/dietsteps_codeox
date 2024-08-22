@@ -96,30 +96,30 @@ class WelcomePage_Auth extends StatelessWidget {
                           onPressed: () {
                             Get.toNamed(AppRouteNames.menuListRoute);
                           })),
-                  addVerticalSpace(APPSTYLE_SpaceMedium),
-                  SizedBox(
-
-                      width: double.infinity,
-                      child:OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(width: 2.0, color: APPSTYLE_BackgroundWhite),
-                        ),
-                        onPressed: () {
-                          Get.toNamed(AppRouteNames.planPurchaseSubscriptionPlansCategoryListRoute);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(ASSETS_SUBSCRIPTIONS,width: 30,),
-
-                            addHorizontalSpace(APPSTYLE_SpaceMedium),
-                            Text('view_subscriptions'.tr,
-                                style: getHeadlineMediumStyle(context).copyWith(
-                                    color: APPSTYLE_BackgroundWhite,fontWeight: APPSTYLE_FontWeightBold),
-                                textAlign: TextAlign.center),
-                          ],
-                        ),
-                      ))
+                  // addVerticalSpace(APPSTYLE_SpaceMedium),
+                  // SizedBox(
+                  //
+                  //     width: double.infinity,
+                  //     child:OutlinedButton(
+                  //       style: OutlinedButton.styleFrom(
+                  //         side: const BorderSide(width: 2.0, color: APPSTYLE_BackgroundWhite),
+                  //       ),
+                  //       onPressed: () {
+                  //         Get.toNamed(AppRouteNames.planPurchaseSubscriptionPlansCategoryListRoute);
+                  //       },
+                  //       child: Row(
+                  //         mainAxisAlignment: MainAxisAlignment.center,
+                  //         children: [
+                  //           Image.asset(ASSETS_SUBSCRIPTIONS,width: 30,),
+                  //
+                  //           addHorizontalSpace(APPSTYLE_SpaceMedium),
+                  //           Text('view_subscriptions'.tr,
+                  //               style: getHeadlineMediumStyle(context).copyWith(
+                  //                   color: APPSTYLE_BackgroundWhite,fontWeight: APPSTYLE_FontWeightBold),
+                  //               textAlign: TextAlign.center),
+                  //         ],
+                  //       ),
+                  //     ))
                 ],
               ),
             ),
