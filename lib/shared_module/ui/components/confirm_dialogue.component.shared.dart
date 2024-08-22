@@ -15,9 +15,9 @@ class ConfirmDialogue extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dialogTitleWidget = Text('account_delete_title'.tr,style: getHeadlineMediumStyle(context).copyWith(
+    final dialogTitleWidget = Text(titleKey,style: getHeadlineMediumStyle(context).copyWith(
         color: APPSTYLE_Grey80,fontWeight: APPSTYLE_FontWeightBold));
-    final dialogTextWidget = Text( 'account_delete_content'.tr,style: getBodyMediumStyle(context));
+    final dialogTextWidget = Text( subtitleKey,style: getBodyMediumStyle(context));
 
     final updateButtonTextWidget = Text('yes'.tr,style: TextStyle(color: APPSTYLE_PrimaryColor),);
     final updateButtonCancelTextWidget = Text('no'.tr,style: TextStyle(color: APPSTYLE_Black),);
