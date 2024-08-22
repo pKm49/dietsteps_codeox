@@ -6,6 +6,7 @@ import 'package:dietsteps/feature_modules/plan_purchase/models/purchase_data.mod
 import 'package:dietsteps/feature_modules/plan_purchase/services/http.services.plan_purchase.dart';
 import 'package:dietsteps/shared_module/constants/app_route_names.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/asset_urls.constants.shared.dart';
+import 'package:dietsteps/shared_module/constants/default_values.constants.shared.dart';
 import 'package:dietsteps/shared_module/controllers/controller.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/toaster_snackbar_shower.service.shared.dart';
 import 'package:flutter/material.dart';
@@ -48,15 +49,14 @@ class PlanPurchaseController extends GetxController {
   var fifthWeekDays = <DateTime>[].obs;
   var sixthWeekDays = <DateTime>[].obs;
   var minimumPossibleDate = DateTime.now().obs;
-  var selectedDate = DateTime.now().obs;
+  var selectedDate = DefaultInvalidDate.obs;
   var currentMonth = DateTime (DateTime.now().year,DateTime.now().month,1).obs;
 
   @override
   void onInit() {
     super.onInit();
     minimumPossibleDate.value = DateTime.now().add(Duration(days: 2));
-    selectedDate.value = DateTime.now().add(Duration(days: 3));
-    setCurrentMonthWeekDays();
+     setCurrentMonthWeekDays();
     couponCodeController.value.addListener(() {
       resetCouponCode();
     });

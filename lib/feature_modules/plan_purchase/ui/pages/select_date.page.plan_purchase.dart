@@ -2,10 +2,12 @@
 import 'package:dietsteps/feature_modules/plan_purchase/controllers/plan_purchase.controller.dart';
 import 'package:dietsteps/feature_modules/plan_purchase/ui/components/calendar_date.component.plan_purchase.dart';
 import 'package:dietsteps/shared_module/constants/app_route_names.constants.shared.dart';
+import 'package:dietsteps/shared_module/constants/default_values.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/style_params.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/widget_styles.constants.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/calendar_utilities.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/date_conversion.service.shared.dart';
+import 'package:dietsteps/shared_module/services/utility-services/toaster_snackbar_shower.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/widget_generator.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/widget_properties_generator.service.shared.dart';
 import 'package:dietsteps/shared_module/ui/components/custom_back_button.component.shared.dart';
@@ -449,7 +451,10 @@ class _SelectInitialDatePage_PlanPurchaseState extends State<SelectInitialDatePa
                                   Expanded(
                                     child: FittedBox(
                                       fit: BoxFit.scaleDown,
-                                      child: Text(getFormattedDate(planPurchaseController.selectedDate.value),
+                                      child: Text(
+                                        isSameDay(planPurchaseController.selectedDate.value,DefaultInvalidDate)?
+                                        "select_starting_date".tr:
+                                        getFormattedDate(planPurchaseController.selectedDate.value),
 
                                         style: getHeadlineMediumStyle(context).copyWith(
                                             color: APPSTYLE_PrimaryColor,
@@ -476,9 +481,15 @@ class _SelectInitialDatePage_PlanPurchaseState extends State<SelectInitialDatePa
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      if(!planPurchaseController.isDateChecking.value){
+                      if(!planPurchaseController.isDateChecking.value &&
+                          !isSameDay(planPurchaseController.selectedDate.value,DefaultInvalidDate)
+                      ){
                         planPurchaseController.checkDateStatus();
 
+                      }else{
+                        if(isSameDay(planPurchaseController.selectedDate.value,DefaultInvalidDate)){
+                          showSnackbar(context, "select_starting_date".tr, "error");
+                        }
                       }
                       // Get.toNamed(AppRouteNames.planPurchaseCheckoutRoute);
 
