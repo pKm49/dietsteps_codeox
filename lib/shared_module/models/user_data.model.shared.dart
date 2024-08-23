@@ -106,7 +106,7 @@ UserData mapUserData(dynamic payload) {
         : payload["email"].toString()
         : "",
 
-    firstName: payload["first_name"]!=null && payload["first_name"] != false?payload["plan_arabic"] : "",
+    firstName: payload["first_name"]!=null && payload["first_name"] != false?payload["first_name"] : "",
     firstNameArabic: payload["first_name_arabic"]!=null && payload["first_name_arabic"] != false?payload["first_name_arabic"] : "",
     lastName: payload["last_name"]!=null && payload["last_name"] != false?payload["last_name"] : "",
     lastNameArabic: payload["last_name_arabic"]!=null && payload["last_name_arabic"] != false?payload["last_name_arabic"] : "",

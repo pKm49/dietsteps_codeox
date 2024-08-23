@@ -19,13 +19,13 @@ class MealCategoryCardComponent extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: APPSTYLE_SpaceExtraSmall,horizontal: APPSTYLE_SpaceMedium),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(APPSTYLE_BorderRadiusMedium),
-          color: isSelected ? APPSTYLE_PrimaryColor : APPSTYLE_PrimaryColorBg,
+          color: isSelected ? APPSTYLE_PrimaryColor : APPSTYLE_PrimaryColorBgLight,
 
         ),
         child: Text(
           label,
           style: getLabelLargeStyle(context).copyWith(
-            color: isSelected ? APPSTYLE_BackgroundWhite : APPSTYLE_Grey80,
+            color: APPSTYLE_BackgroundWhite,
           ),
         ),
       ),
