@@ -46,10 +46,10 @@ class WelcomePage_Auth extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(ASSETS_NAMELOGO, width: screenwidth*.25),
+                      Image.asset(ASSETS_NAMELOGO, width: screenwidth*.35),
                     ],
                   ),
-                  addVerticalSpace(APPSTYLE_SpaceLarge ),
+                  addVerticalSpace(APPSTYLE_SpaceLarge*2 ),
                   Text("welcome_message_title".tr,
                       textAlign: TextAlign.center,
                       style: getHeadlineLargeStyle(context).copyWith(
@@ -59,7 +59,7 @@ class WelcomePage_Auth extends StatelessWidget {
                   Text("welcome_message_description".tr,
                       textAlign: TextAlign.center,
                       style: getHeadlineMediumStyle(context).copyWith(color: APPSTYLE_BackgroundWhite)),
-                  addVerticalSpace(APPSTYLE_SpaceLarge*3),
+                  addVerticalSpace(APPSTYLE_SpaceLarge*5),
                   SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(

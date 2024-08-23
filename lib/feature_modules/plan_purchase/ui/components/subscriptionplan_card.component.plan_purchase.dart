@@ -24,7 +24,7 @@ class SubscriptionPlanCardComponent_PlanPurchase extends StatelessWidget {
           color: Colors.transparent,
           border: Border.all(
               color:isSelected? APPSTYLE_PrimaryColor:Colors.transparent, width: 2)),
-      height: screenheight * .25,
+      height: screenheight * .28,
       width: screenwidth,
       padding: APPSTYLE_ExtraSmallPaddingAll,
       margin: EdgeInsets.only(bottom: APPSTYLE_SpaceExtraSmall,
@@ -32,11 +32,11 @@ class SubscriptionPlanCardComponent_PlanPurchase extends StatelessWidget {
       child: Container(
         decoration: APPSTYLE_BorderedContainerSmallDecoration
             .copyWith(
-          color: APPSTYLE_Black,
+          color: APPSTYLE_PrimaryColor,
           boxShadow: APPSTYLE_ContainerShadow
         ),
         padding: APPSTYLE_MediumPaddingAll,
-        height: (screenheight * .25)-(APPSTYLE_SpaceExtraSmall*2),
+        height: (screenheight * .28)-(APPSTYLE_SpaceExtraSmall*2),
         width: screenwidth,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,18 +50,11 @@ class SubscriptionPlanCardComponent_PlanPurchase extends StatelessWidget {
                 children: [
                   Expanded(
                     flex: 2,
-                    child: FittedBox(
-                      alignment: Localizations.localeOf(context)
-                          .languageCode
-                          .toString() ==
-                          'ar'?  Alignment.centerRight:Alignment.centerLeft,
-                      fit: BoxFit.scaleDown,
-                      child: Text( subscriptionPlan.name,
-                        style: getHeadlineLargeStyle(context)
-                            .copyWith(
-                            color:
-                            APPSTYLE_BackgroundWhite),
-                      ),
+                    child: Text( subscriptionPlan.name,
+                      style: getHeadlineLargeStyle(context)
+                          .copyWith(
+                          color:
+                          APPSTYLE_BackgroundWhite),
                     ),
                   ),
                   Visibility(

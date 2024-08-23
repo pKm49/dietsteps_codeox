@@ -34,7 +34,7 @@ class MySubscriptionController extends GetxController {
   var selectedMealConfig = mapSubscriptoinMealConfig({}, "").obs ;
   var itemScrollController = ItemScrollController();
   var isRatingSubmitting = false.obs;
-  var currentSelectedRating = (0).obs;
+  var currentSelectedRating = (1).obs;
 
 
   getSubscriptionDates(bool setDate, bool getSubs) async {
@@ -694,6 +694,8 @@ class MySubscriptionController extends GetxController {
       bool isSuccess = await mySubsHttpService.rateMeals(
           sharedController.userData.value.mobile,
           mealId, currentSelectedRating.value);
+      getSubscriptionDates(false, true);
+      currentSelectedRating.value =1;
       isRatingSubmitting.value = false;
       Get.back();
       if(isSuccess){
