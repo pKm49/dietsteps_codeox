@@ -78,7 +78,7 @@ class _PaymentGatewayWebView_PlanPurchaseState extends State<PaymentGatewayWebVi
                 },
                 onUpdateVisitedHistory: (InAppWebViewController controller, Uri? url, bool? flag) {
 
-                  if(url.toString().contains("http://68.183.247.240:8069/subscription/payment/status") ){
+                  if(url.toString().contains("https://erp.dietstepskw.com/subscription/payment/status") ){
                     isConfirmationReached = true;
                     setState(() {
 
