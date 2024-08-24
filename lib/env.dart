@@ -1,4 +1,5 @@
-const apiEndPoint = "68.183.247.240:8069";
+const apiEndPoint = "erp.dietstepskw.com";
+// const apiEndPoint = "erp.dietstepskw.com";
 // const apiEndPoint = "139.59.52.48:8069";
 
 const clientId = "y9P7ycEWDbPgCoRCetZvkCVBiumFfo";
