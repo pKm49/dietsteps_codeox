@@ -220,7 +220,8 @@ class _MySubscriptionListPage_ProfileState
                                         borderRadius: BorderRadius.circular(APPSTYLE_BorderRadiusExtraSmall*.5),
 
                                         color:  sharedController.mySubscriptions[index].status=="in_progress"?APPSTYLE_WhatsappGreen:
-                                        sharedController.mySubscriptions[index].status=="paid"?APPSTYLE_Black:APPSTYLE_PrimaryColor,
+                                        sharedController.mySubscriptions[index].status=="paid"?APPSTYLE_Black:
+                                        sharedController.mySubscriptions[index].status=="not paid"?APPSTYLE_GuideRed:APPSTYLE_PrimaryColor,
                                       ),
                                       padding: APPSTYLE_ExtraSmallPaddingAll.copyWith(left: APPSTYLE_SpaceSmall,right: APPSTYLE_SpaceSmall),
                                       child: Text(sharedController.mySubscriptions[index].status.split("_").join(" ").toString().toUpperCase(),
@@ -321,6 +322,33 @@ class _MySubscriptionListPage_ProfileState
                                     ),
                                   ],
                                 ),
+                                addVerticalSpace(APPSTYLE_SpaceSmall),
+                                Visibility(
+                                  visible: sharedController.mySubscriptions[index].status=="not paid",
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      InkWell(
+                                        child: Container(
+                                          decoration: APPSTYLE_BorderedContainerExtraSmallDecoration.copyWith(
+                                            borderRadius: BorderRadius.circular(APPSTYLE_BorderRadiusExtraSmall*.5),
+
+                                            color:  APPSTYLE_PrimaryColor,
+                                          ),
+                                          padding: APPSTYLE_ExtraSmallPaddingAll.copyWith(left: APPSTYLE_SpaceSmall,right: APPSTYLE_SpaceSmall),
+                                          child: Text('complete_payment'.tr,
+                                              style: getLabelLargeStyle(context).copyWith(color: APPSTYLE_BackgroundWhite) ),
+                                        ),
+                                        onTap: (){
+                                          if (!sharedController
+                                              .isOrderDetailsFetching.value) {
+                                            sharedController.getPaymentLink(sharedController.mySubscriptions[index].id);
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                )
                               ],
                             ),
                           );
