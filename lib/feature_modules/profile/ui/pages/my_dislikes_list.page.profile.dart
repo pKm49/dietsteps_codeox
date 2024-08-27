@@ -276,7 +276,7 @@ class _MyDislikesListPage_ProfileState
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: () {
-                              if(!profileController.isDislikesUpdating.value && profileController.dislikes.isNotEmpty){
+                              if(!profileController.isDislikesUpdating.value){
                                 profileController.updateDislikes(profileController.isAllregyDislikeForRegisterComplete.value);
 
                               }
