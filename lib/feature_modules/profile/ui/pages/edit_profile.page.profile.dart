@@ -504,57 +504,57 @@ class _EditProfilePage_ProfileState extends State<EditProfilePage_Profile> {
                               ],
                             ),
                           ),
-                          Container(
-                            decoration: APPSTYLE_ShadowedContainerSmallDecoration,
-                            padding: APPSTYLE_MediumPaddingAll,
-                            margin: APPSTYLE_LargePaddingAll.copyWith(bottom: 0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                    flex:1,
-                                    child: Text('birthday'.tr,
-                                        style: getBodyMediumStyle(context)
-                                            .copyWith(color: APPSTYLE_Grey40))),
-                                Visibility(
-                                  visible: profileController.isUserDataFetching.value,
-                                  child: Expanded(
-                                    flex:2,
-                                    child: Shimmer.fromColors(
-                                      baseColor: APPSTYLE_Grey20,
-                                      highlightColor: APPSTYLE_Grey40,
-                                      child: Container(
-                                        height: 30,
-                                        decoration:
-                                        APPSTYLE_BorderedContainerExtraSmallDecoration
-                                            .copyWith(
-                                          border: null,
-                                          color: APPSTYLE_Grey20,
-                                          borderRadius: BorderRadius.circular(
-                                              APPSTYLE_BlurRadiusSmall),
-                                        ),),
-                                    ),
-                                  ),),
-                                Visibility(
-                                  visible: !profileController.isUserDataFetching.value,
-                                  child: Expanded(
-                                      flex:2,
-                                      child:  TextFormField(
-                                          onTap: () {
-                                            showDOBPickerDialog();
-                                          },
-                                          showCursor: true,
-                                          readOnly: true,
-                                          controller: profileController.birthDayController.value,
-                                          decoration: bottomBorderInputDecoration.copyWith(
-                                            hintText:'${'day'.tr} / ${'month'.tr} / ${'year'.tr}',
-                                            isDense: true,
-                                          )
-
-                                      )),
-                                ),
-                              ],
-                            ),
-                          ),
+                          // Container(
+                          //   decoration: APPSTYLE_ShadowedContainerSmallDecoration,
+                          //   padding: APPSTYLE_MediumPaddingAll,
+                          //   margin: APPSTYLE_LargePaddingAll.copyWith(bottom: 0),
+                          //   child: Row(
+                          //     children: [
+                          //       Expanded(
+                          //           flex:1,
+                          //           child: Text('birthday'.tr,
+                          //               style: getBodyMediumStyle(context)
+                          //                   .copyWith(color: APPSTYLE_Grey40))),
+                          //       Visibility(
+                          //         visible: profileController.isUserDataFetching.value,
+                          //         child: Expanded(
+                          //           flex:2,
+                          //           child: Shimmer.fromColors(
+                          //             baseColor: APPSTYLE_Grey20,
+                          //             highlightColor: APPSTYLE_Grey40,
+                          //             child: Container(
+                          //               height: 30,
+                          //               decoration:
+                          //               APPSTYLE_BorderedContainerExtraSmallDecoration
+                          //                   .copyWith(
+                          //                 border: null,
+                          //                 color: APPSTYLE_Grey20,
+                          //                 borderRadius: BorderRadius.circular(
+                          //                     APPSTYLE_BlurRadiusSmall),
+                          //               ),),
+                          //           ),
+                          //         ),),
+                          //       Visibility(
+                          //         visible: !profileController.isUserDataFetching.value,
+                          //         child: Expanded(
+                          //             flex:2,
+                          //             child:  TextFormField(
+                          //                 onTap: () {
+                          //                   showDOBPickerDialog();
+                          //                 },
+                          //                 showCursor: true,
+                          //                 readOnly: true,
+                          //                 controller: profileController.birthDayController.value,
+                          //                 decoration: bottomBorderInputDecoration.copyWith(
+                          //                   hintText:'${'day'.tr} / ${'month'.tr} / ${'year'.tr}',
+                          //                   isDense: true,
+                          //                 )
+                          //
+                          //             )),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
                           Container(
                             decoration: APPSTYLE_ShadowedContainerSmallDecoration,
                             padding: APPSTYLE_MediumPaddingAll,
