@@ -171,13 +171,24 @@ class _SelectPlanCategoryPage_PlanPurchaseState
                             ),
 
                             items:planPurchaseController.subscriptionCategories.map((element) =>
-                                SubscriptionPlanCategoryCardComponent_PlanPurchase(
-                                  onClick:(){
-                                    planPurchaseController.changeCategory(element);
-                                    Get.toNamed(AppRouteNames.planPurchaseSubscriptionPlansListRoute);
-
-                                  },
-                                  subscriptionPlanCategory:element,
+                                Container(
+                                  decoration:
+                                  APPSTYLE_BorderedContainerSmallDecoration.copyWith(
+                                      color: Colors.transparent,
+                                      border: Border.all(
+                                          color:
+                                          planPurchaseController.currentCategory.value.id ==element.id?
+                                          APPSTYLE_PrimaryColor:Colors.transparent, width: 2)),
+                                  height: screenheight * .28,
+                                  width: screenwidth,
+                                  padding:  EdgeInsets.all(APPSTYLE_SpaceExtraSmall*.5),
+                                  child: SubscriptionPlanCategoryCardComponent_PlanPurchase(
+                                    onClick:(){
+                                      planPurchaseController.changeCategory(element);
+                                      Get.toNamed(AppRouteNames.planPurchaseSubscriptionPlansListRoute);
+                                    },
+                                    subscriptionPlanCategory:element,
+                                  ),
                                 ),
                             ).toList() ),
                       ),
