@@ -73,9 +73,9 @@ class RegisterCredential {
     "street": street,
     "jedha": jedha,
     "house_number": houseNumber,
-    "floor_number": floorNumber,
+    "floor_number": floorNumber==-1?'':floorNumber,
+    "apartment_no":apartmentNumber==-1?'':apartmentNumber,
     "comments": comments,
-    "apartment_no":apartmentNumber,
     "profile_picture": profile_picture ==""?getDefaultProfilePictureBase64():profile_picture,
     "other_source": other_source
   };

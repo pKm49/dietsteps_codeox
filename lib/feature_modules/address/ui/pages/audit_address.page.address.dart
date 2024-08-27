@@ -410,10 +410,10 @@ class _AuditAddressPage_AddressState extends State<AuditAddressPage_Address> {
               street: addressController.streetTextEditingController.value.text,
               houseNumber:
                   int.parse(addressController.houseNumberTextEditingController.value.text.toString().trim()),
-              floorNumber:
-              int.parse(addressController.floorNumberTextEditingController.value.text.toString().trim()),
-              apartmentNo:
-              int.parse(addressController.apartmentNumberTextEditingController.value.text.toString().trim()),
+            floorNumber:addressController.floorNumberTextEditingController.value.text.toString().trim()==""?-1:
+            int.parse(addressController.floorNumberTextEditingController.value.text.toString().trim()),
+            apartmentNo:addressController.apartmentNumberTextEditingController.value.text.toString().trim()==""?-1:
+            int.parse(addressController.apartmentNumberTextEditingController.value.text.toString().trim()),
           ),
           mobile
         ]);
