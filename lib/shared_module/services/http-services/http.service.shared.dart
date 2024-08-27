@@ -5,6 +5,7 @@ import 'package:dietsteps/shared_module/constants/http_request_endpoints.constan
 import 'package:dietsteps/shared_module/models/http_response.model.shared.dart';
 import 'package:dietsteps/shared_module/models/my_subscription.model.shared.dart';
 import 'package:dietsteps/shared_module/models/notification.model.shared.dart';
+import 'package:dietsteps/shared_module/models/payment_gateway_data.model.shared.dart';
 import 'package:dietsteps/shared_module/models/sendotp_credential.model.auth.dart';
 import 'package:dietsteps/shared_module/models/user_data.model.shared.dart';
 import 'package:dietsteps/shared_module/services/http-services/http_request_handler.service.shared.dart';
@@ -198,30 +199,56 @@ class SharedHttpService {
     }
   }
 
-  Future<PaymentData> getPaymentLink(int subscriptionId) async {
+  Future<PaymentCompletionData> getPaymentLink(int subscriptionId) async {
 
     try{
       Map<String, dynamic> params = {};
-      params["subscription_id"]=subscriptionId;
       AppHttpResponse response =
-      await postRequest(SharedHttpRequestEndpoint_GetPaymentLink, params);
+      await getRequest('$SharedHttpRequestEndpoint_GetPaymentLink/$subscriptionId',params );
+      print("getPaymentLink");
+      print(response.statusCode);
+      print(response.data);
+      print(response.message);
       if (response.statusCode == 200 && response.data != null) {
         print("createOrder inside iff");
         print(response.data[0].toString());
-        return mapPaymentData(response.data[0]);
-
+        return mapPaymentCompletionData(response.data[0]);
       }else{
         print("createOrder inside else");
         showSnackbar(Get.context!, response.message , "error");
       }
       print("createOrder outside else");
 
-      return mapPaymentData({});
+      return mapPaymentCompletionData({});
 
     }catch  (e,st){
       print(e);
       print(st);
-      return mapPaymentData({});
+      return mapPaymentCompletionData({});
     }
   }
+
+  Future<bool> checkOrderStatus(String referenceId) async {
+
+    try{
+      Map<String, dynamic> params = {};
+      params["reference"]=referenceId;
+      AppHttpResponse response =
+      await getRequest(SharedHttpRequestEndpoint_CheckOrderStatus, params);
+
+      if (response.statusCode == 200 && response.data != null) {
+        if(response.data[0]['payment_status'] !=null){
+          return response.data[0]['payment_status'] == "paid";
+        }
+      }
+
+      return false;
+
+    }catch  (e,st){
+      print(e);
+      print(st);
+      return false;
+    }
+  }
+
 }
