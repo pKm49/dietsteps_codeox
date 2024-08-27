@@ -26,6 +26,7 @@ class  AppRouteNames {
   static const String planPurchaseSubscriptionPlansListRoute = '/subscription-plan-list';
   static const String planPurchaseSetInitialDateRoute = '/subscription-plan-initial-date';
   static const String planPurchaseCheckoutRoute = '/subscription-plan-checkout';
+  static const String paymentCompleteCheckoutRoute = '/subscription-payment-complete-checkout';
 
   //menu list
   static const String menuListRoute = '/menu-list';
@@ -55,6 +56,7 @@ class  AppRouteNames {
   static const String notificationsRoute = '/notifications';
 
   static const String paymentPageRoute= '/payment-page';
+  static const String paymentCompletePageRoute= '/payment-complete-page';
 
   static const String checkoutSuccessRoute = '/checkout-success';
 
