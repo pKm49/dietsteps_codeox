@@ -89,7 +89,7 @@ class MealIngredient {
 MealIngredient mapMealIngredient(dynamic payload){
 
   return MealIngredient(
-      imageUrl :payload["image"]!= null?payload["image"].toString():ASSETS_SAMPLEFOOD,
+      imageUrl :payload["image"]!= null && payload["image"]!= ""?payload["image"].toString():ASSETS_SAMPLEFOOD,
       name :payload["name"]!= null && payload["name"]!= false?payload["name"] :"",
       arabicName :payload["arabic_name"]!= null && payload["arabic_name"]!= false?payload["arabic_name"] :""
   );
