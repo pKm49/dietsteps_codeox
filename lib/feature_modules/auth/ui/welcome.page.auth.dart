@@ -87,7 +87,7 @@ class WelcomePage_Auth extends StatelessWidget {
                             children: [
                               Image.asset(ASSETS_MEALS,width: 30),
                               addHorizontalSpace(APPSTYLE_SpaceMedium),
-                              Text('Show Meals / عرض وجبات الطعام',
+                              Text(' مشاهدة المنيو / Show our menu',
                                   style: getHeadlineMediumStyle(context).copyWith(
                                       color: APPSTYLE_BackgroundWhite,fontWeight: APPSTYLE_FontWeightBold),
                                   textAlign: TextAlign.center),
