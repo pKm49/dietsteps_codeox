@@ -5,6 +5,7 @@ import 'package:dietsteps/shared_module/constants/default_values.constants.share
 import 'package:dietsteps/shared_module/constants/valid_phoneverification_modes.constants.shared.dart';
 import 'package:dietsteps/shared_module/models/my_subscription.model.shared.dart';
 import 'package:dietsteps/shared_module/models/notification.model.shared.dart';
+import 'package:dietsteps/shared_module/models/payment_gateway_data.model.shared.dart';
 import 'package:dietsteps/shared_module/models/sendotp_credential.model.auth.dart';
 import 'package:dietsteps/shared_module/models/user_data.model.shared.dart';
 import 'package:dietsteps/shared_module/services/http-services/http.service.shared.dart';
@@ -34,6 +35,10 @@ class SharedController extends GetxController {
   var isOtpSending = false.obs;
   var isAppointmentBooking = false.obs;
 
+  var isPaymentGatewayLoading = false.obs;
+  var isOrderDetailsFetching = false.obs;
+  var paymentGatewayIsLoading = false.obs;
+  var paymentCompletionData =  mapPaymentCompletionData({}).obs;
   Rx<TextEditingController> mobileTextEditingController = TextEditingController().obs;
 
   @override
@@ -356,46 +361,65 @@ class SharedController extends GetxController {
       }
     }
 
+  }
+
+  void getPaymentLink(int subscriptionId) async {
+    showSnackbar(Get.context!, "customer_support_message".tr, "error");
+
+    // if(!isOrderDetailsFetching.value){
+    //   if(subscriptionId != -1){
+    //     isOrderDetailsFetching.value = true;
+    //     var sharedHttpService = SharedHttpService();
+    //      paymentCompletionData.value =  await sharedHttpService.getPaymentLink( subscriptionId);
+    //     isOrderDetailsFetching.value = false;
+    //
+    //     if (paymentCompletionData.value.transactionUrl == "" ||
+    //         paymentCompletionData.value.orderReference == "") {
+    //       showSnackbar(Get.context!, "customer_support_message".tr, "error");
+    //     } else{
+    //       Get.toNamed(AppRouteNames.paymentCompleteCheckoutRoute);
+    //     }
+    //   }
+    // }
+    //
 
   }
 
-  // void getPaymentLink(int subscriptionId) async {
-  //   if(!isPlanActivating.value){
-  //     if(subscriptionId != -1){
-  //       isPlanActivating.value = true;
-  //       var sharedHttpService = SharedHttpService();
-  //
-  //       PaymentData tPaymentData = await sharedHttpService.getPaymentLink( subscriptionId);
-  //
-  //       print("payment data");
-  //       print(tPaymentData.paymentUrl);
-  //       print(tPaymentData.redirectUrl);
-  //       print(tPaymentData.refId);
-  //       print(tPaymentData.orderId);
-  //       if (tPaymentData.paymentUrl == "" ||
-  //           tPaymentData.redirectUrl == "") {
-  //         if ((tPaymentData == 0 || total.value == 0.0) && (paymentData.value.refId!='' && paymentData.value.orderId!='')) {
-  //           showSnackbar(Get.context!, "payment_capture_success".tr, "info");
-  //           Get.toNamed(AppRouteNames.otpVerificationSuccessRoute,arguments: [
-  //             ASSETS_SUCCESSMARK,"subscription_success","subscription_success_info",
-  //             'home',false,AppRouteNames.homeRoute,""
-  //           ])?.then((value) => Get.toNamed(AppRouteNames.homeRoute,arguments: [0]));
-  //         }else{
-  //           showSnackbar(Get.context!, "customer_support_message".tr, "error");
-  //         }
-  //         print("payment capture error");
-  //         isPlanActivating.value = false;
-  //       } else {
-  //         isPaymentGatewayLoading.value = true;
-  //         Get.toNamed(AppRouteNames.paymentPageRoute, arguments: [
-  //           paymentData.value.paymentUrl,
-  //           paymentData.value.redirectUrl,
-  //           paymentData.value.paymentCheckUrl
-  //         ])?.then((value) => checkOrderStatus(mobile));
-  //       }
-  //     }
-  //   }
-  //
-  //
-  // }
+
+  void checkOrderStatus() async {
+    isPaymentGatewayLoading.value = true;
+    var sharedHttpService = SharedHttpService();
+    bool isSuccess =  await sharedHttpService.checkOrderStatus( paymentCompletionData.value.paymentReference);
+
+    if (!isSuccess) {
+      isPaymentGatewayLoading.value = false;
+      showSnackbar(Get.context!, "payment_capture_error".tr, "error");
+    } else {
+      showSnackbar(Get.context!, "payment_capture_success".tr, "info");
+      List<MySubscription> myUnPaidSubs = mySubscriptions.where((p0) => p0.status=='not paid').toList();
+      if(myUnPaidSubs.isNotEmpty){
+        activatePlan( paymentCompletionData.value.subscriptionId);
+      }
+      Get.toNamed(AppRouteNames.otpVerificationSuccessRoute,arguments: [
+        ASSETS_SUCCESSMARK,"subscription_success","subscription_success_info",
+        'home',false,AppRouteNames.homeRoute,""
+      ]) ;
+    }
+  }
+
+  void changePaymentGatewayLoading(bool status) {
+    paymentGatewayIsLoading.value = status;
+  }
+  paymentGatewayGoback(bool status) {
+    Get.back(result: status);
+  }
+
+  void redirectToPaymentPage() {
+    Get.toNamed(AppRouteNames.paymentCompletePageRoute, arguments: [
+      paymentCompletionData.value.transactionUrl,
+      "",
+      paymentCompletionData.value.paymentStatusUrl,
+    ])?.then((value) => checkOrderStatus());
+  }
+
 }
