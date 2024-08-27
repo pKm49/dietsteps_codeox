@@ -57,6 +57,7 @@ SubscriptoinDailyMealItem mapSubscriptoinDailyMealItem(dynamic payload) {
     selectedCount: payload["selected_count"] ?? 0,
     isSelected: payload["is_selected"] ?? false,
     isDislike: payload["is_dislike"] ?? false,
-    image: payload["image"] ?? ASSETS_SAMPLEFOOD,
+    image :payload["image"]!= null && payload["image"]!= ""?payload["image"].toString():ASSETS_SAMPLEFOOD,
+
   );
 }
