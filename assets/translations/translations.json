@@ -280,7 +280,9 @@
       "confirm_selection_message": "Are you sure to select this meal? This item contains ingredients you marked as 'Dislike'",
       "rate_meal": "Rate Meal",
       "rate": "Rate",
-      "rating_saved": "Submitted Succesfully"
+      "rating_saved": "Submitted Succesfully",
+      "order_reference": "Order Reference",
+      "payment_reference": "Payment Reference"
 
     }
   },
@@ -568,8 +570,9 @@
       "confirm_selection_message": "هل أنت متأكد من اختيار هذه الوجبة؟ يحتوي هذا العنصر على المكونات التي قمت بوضع علامة \"لا تحبها\".",
       "rate_meal": "قيم الوجبه",
       "rate": "التقييم",
-      "rating_saved": "تم تقديم التقديم بنجاح"
-
+      "rating_saved": "تم تقديم التقديم بنجاح",
+      "order_reference": "معرف الطلب",
+      "payment_reference": "معرف الدفع"
     }
   }
 ]
