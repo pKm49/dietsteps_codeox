@@ -13,6 +13,7 @@ import 'package:ionicons/ionicons.dart';
 class MealCalendarDateComponent_MySubscription extends StatelessWidget {
 
   Color borderColor;
+  DateTime dateTime;
   String dateText;
   String status;
   bool isSelected;
@@ -20,10 +21,13 @@ class MealCalendarDateComponent_MySubscription extends StatelessWidget {
 
   bool isSubscriptionDay;
   MealCalendarDateComponent_MySubscription({super.key,required this.isSubscriptionDay,required this.isSelected,required this.isMonthDay,
-    required this.borderColor ,  required this.status ,   required this.dateText});
+    required this.borderColor ,  required this.status , required this.dateTime ,   required this.dateText});
+
 
   @override
   Widget build(BuildContext context) {
+
+    DateTime threeDaysBefore = DateTime.now().add(Duration(days: -3));
 
     return Container(
         height: 55 + (APPSTYLE_SpaceExtraSmall * 2),
@@ -68,11 +72,27 @@ class MealCalendarDateComponent_MySubscription extends StatelessWidget {
             ),
 
             Visibility(
-                visible:  status==VALIDSUBSCRIPTIONDAY_STATUS.delivered  &&  (isMonthDay && isSubscriptionDay) ,
+                visible: status==VALIDSUBSCRIPTIONDAY_STATUS.delivered &&
+                    dateTime.isBefore(threeDaysBefore)
+                    &&  (isMonthDay && isSubscriptionDay) ,
+                child:   Icon(Ionicons.star,color: isSelected?APPSTYLE_BackgroundWhite:APPSTYLE_GuideRed,size: 15)
+            ),
+            Visibility(
+              visible: (status==VALIDSUBSCRIPTIONDAY_STATUS.delivered ) &&
+                  dateTime.isBefore(threeDaysBefore) &&  (isMonthDay && isSubscriptionDay) ,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text("rate".tr,style: getLabelSmallStyle(context).copyWith(
+                    color:isSelected?APPSTYLE_BackgroundWhite: APPSTYLE_GuideRed
+                ),),
+              ),
+            ),
+            Visibility(
+                visible:  status==VALIDSUBSCRIPTIONDAY_STATUS.delivered  && dateTime.isAfter(threeDaysBefore)&&  (isMonthDay && isSubscriptionDay) ,
                 child: SvgPicture.asset(ASSETS_FOODTRUCK,height: 13,color: isSelected?APPSTYLE_BackgroundWhite:APPSTYLE_WhatsappGreen)
             ),
             Visibility(
-              visible: (status==VALIDSUBSCRIPTIONDAY_STATUS.delivered ) &&  (isMonthDay && isSubscriptionDay) ,
+              visible: (status==VALIDSUBSCRIPTIONDAY_STATUS.delivered )  && dateTime.isAfter(threeDaysBefore)&&  (isMonthDay && isSubscriptionDay) ,
               child: FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text("delivered_single".tr,style: getLabelSmallStyle(context).copyWith(

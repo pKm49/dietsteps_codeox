@@ -23,6 +23,8 @@ class MealCalendarDateMealSelectionComponent_MySubscription extends StatelessWid
 
   @override
   Widget build(BuildContext context) {
+    DateTime threeDaysBefore = DateTime.now().add(Duration(days: -3));
+
     double screenwidth = MediaQuery.of(context).size.width;
     return Container(
       height: 100 ,
@@ -66,8 +68,8 @@ class MealCalendarDateMealSelectionComponent_MySubscription extends StatelessWid
                             color: isSelected?APPSTYLE_BackgroundWhite:
                             status==VALIDSUBSCRIPTIONDAY_STATUS.offDay?APPSTYLE_GuideRed:
                             status==VALIDSUBSCRIPTIONDAY_STATUS.freezed?APPSTYLE_GuideOrange:
-                            status==VALIDSUBSCRIPTIONDAY_STATUS.delivered?APPSTYLE_GuideGreen:
-                            status==VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected?APPSTYLE_PrimaryColor:
+                            status==VALIDSUBSCRIPTIONDAY_STATUS.delivered && date.isAfter(threeDaysBefore) ?APPSTYLE_GuideGreen:
+                            status==VALIDSUBSCRIPTIONDAY_STATUS.delivered && date.isBefore(threeDaysBefore) ?APPSTYLE_GuideRed:                            status==VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected?APPSTYLE_PrimaryColor:
                              APPSTYLE_WhatsappGreen
                         ),
                       ),
@@ -92,14 +94,32 @@ class MealCalendarDateMealSelectionComponent_MySubscription extends StatelessWid
                   ),
 
                   Visibility(
-                      visible:  status==VALIDSUBSCRIPTIONDAY_STATUS.delivered  ,
+                      visible: status==VALIDSUBSCRIPTIONDAY_STATUS.delivered &&
+                          date.isBefore(threeDaysBefore)  ,
+                      child:   Padding(
+                        padding: const EdgeInsets.only(bottom: APPSTYLE_SpaceExtraSmall),
+                        child: Icon(Ionicons.star,color: isSelected?APPSTYLE_BackgroundWhite:APPSTYLE_GuideRed,size: 17),
+                      )
+                  ),
+                  Visibility(
+                    visible: (status==VALIDSUBSCRIPTIONDAY_STATUS.delivered ) &&
+                        date.isBefore(threeDaysBefore)  ,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text("rate".tr,style: getLabelSmallStyle(context).copyWith(
+                          color:isSelected?APPSTYLE_BackgroundWhite: APPSTYLE_GuideRed
+                      ),),
+                    ),
+                  ),
+                  Visibility(
+                      visible:  status==VALIDSUBSCRIPTIONDAY_STATUS.delivered && date.isAfter(threeDaysBefore)  ,
                       child:  Padding(
                         padding: const EdgeInsets.only(bottom: APPSTYLE_SpaceExtraSmall),
                         child: SvgPicture.asset(ASSETS_FOODTRUCK,height: 13,color: isSelected?APPSTYLE_BackgroundWhite: APPSTYLE_WhatsappGreen),
                       )
                   ),
                   Visibility(
-                    visible: (status==VALIDSUBSCRIPTIONDAY_STATUS.delivered ) ,
+                    visible: (status==VALIDSUBSCRIPTIONDAY_STATUS.delivered ) && date.isAfter(threeDaysBefore) ,
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text("delivered_single".tr,style: getLabelSmallStyle(context).copyWith(
@@ -107,6 +127,7 @@ class MealCalendarDateMealSelectionComponent_MySubscription extends StatelessWid
                       ),),
                     ),
                   ),
+
 
                   Visibility(
                       visible: status==VALIDSUBSCRIPTIONDAY_STATUS.freezed   ,

@@ -273,6 +273,7 @@ class _MealCalendarPage_MySubscriptionState extends State<MealCalendarPage_MySub
 
                                             },
                                             child: MealCalendarDateComponent_MySubscription(
+                                                dateTime:mySubscriptionController.firstWeekDays[i],
                                                 isSelected:isSameDay(mySubscriptionController.firstWeekDays[i],mySubscriptionController.selectedDate.value),
                                                 status:mySubscriptionController.getDayStatus(mySubscriptionController.firstWeekDays[i]),
 
@@ -310,6 +311,7 @@ class _MealCalendarPage_MySubscriptionState extends State<MealCalendarPage_MySub
 
                                             },
                                             child: MealCalendarDateComponent_MySubscription(
+                                                dateTime:mySubscriptionController.secondWeekDays[i],
                                                 isSelected:isSameDay(mySubscriptionController.secondWeekDays[i],mySubscriptionController.selectedDate.value),
                                                 status:mySubscriptionController.getDayStatus(mySubscriptionController.secondWeekDays[i]),
 
@@ -346,6 +348,7 @@ class _MealCalendarPage_MySubscriptionState extends State<MealCalendarPage_MySub
 
                                             },
                                             child: MealCalendarDateComponent_MySubscription(
+                                                dateTime:mySubscriptionController.thirdWeekDays[i],
                                                 isSelected:isSameDay(mySubscriptionController.thirdWeekDays[i],mySubscriptionController.selectedDate.value),
                                                 status:mySubscriptionController.getDayStatus(mySubscriptionController.thirdWeekDays[i]),
 
@@ -382,6 +385,7 @@ class _MealCalendarPage_MySubscriptionState extends State<MealCalendarPage_MySub
 
                                             },
                                             child: MealCalendarDateComponent_MySubscription(
+                                                dateTime:mySubscriptionController.fourthWeekDays[i],
                                                 isSelected:isSameDay(mySubscriptionController.fourthWeekDays[i],mySubscriptionController.selectedDate.value),
                                                 status:mySubscriptionController.getDayStatus(mySubscriptionController.fourthWeekDays[i]),
 
@@ -417,6 +421,7 @@ class _MealCalendarPage_MySubscriptionState extends State<MealCalendarPage_MySub
                                               }
                                             },
                                             child:MealCalendarDateComponent_MySubscription (
+                                                dateTime:mySubscriptionController.fifthWeekDays[i],
                                                 isSelected:isSameDay(mySubscriptionController.fifthWeekDays[i],mySubscriptionController.selectedDate.value),
                                                 status:mySubscriptionController.getDayStatus(mySubscriptionController.fifthWeekDays[i]),
 
@@ -451,6 +456,7 @@ class _MealCalendarPage_MySubscriptionState extends State<MealCalendarPage_MySub
                                               }
                                             },
                                             child:MealCalendarDateComponent_MySubscription (
+                                                dateTime:mySubscriptionController.sixthWeekDays[i],
                                                 isSelected:isSameDay(mySubscriptionController.sixthWeekDays[i],mySubscriptionController.selectedDate.value),
                                                 status:mySubscriptionController.getDayStatus(mySubscriptionController.sixthWeekDays[i]),
                                                 isSubscriptionDay:mySubscriptionController.isSubscriptionDay(mySubscriptionController.sixthWeekDays[i]),
