@@ -172,7 +172,8 @@ class AddressController extends GetxController {
   Future<void> auditAddress() async {
 
         if(   streetTextEditingController.value.text !=""
-            && houseNumberTextEditingController.value.text !="" ){
+            && houseNumberTextEditingController.value.text !=""
+            && nicknameTextEditingController.value.text !="" ){
 
 
           var sharedPreferences = await SharedPreferences.getInstance();
