@@ -25,7 +25,6 @@ class LoginController extends GetxController {
        var sharedPreferences = await SharedPreferences.getInstance();
        sharedPreferences.setString("mobile", mobileTextEditingController.value.text);
        final sharedController = Get.find<SharedController>();
-       showSnackbar(Get.context!, "successfully_loggedin".tr, "info");
 
        sharedController.fetchUserData(AppRouteNames.homeRoute,mobileTextEditingController.value.text);
      }
