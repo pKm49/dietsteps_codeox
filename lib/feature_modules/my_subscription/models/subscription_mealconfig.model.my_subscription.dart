@@ -15,12 +15,14 @@ class SubscriptoinMealConfig {
 }
 
 SubscriptoinMealConfig mapSubscriptoinMealConfig(dynamic payload, String date) {
-
+  print("mapSubscriptoinMealConfig");
+  print(payload);
   List<SubscriptoinDailyMeal> meals = [];
 
   if(payload["meals"] != null && payload["meals"] is! String ){
     payload["meals"].forEach((element) {
       if(element != null){
+        print(element["item_count"]);
         if(element["item_count"] != null){
           if(element["item_count"] > 0){
             meals.add(mapSubscriptoinDailyMeal(element));

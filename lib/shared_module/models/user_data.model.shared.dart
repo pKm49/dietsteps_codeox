@@ -74,9 +74,6 @@ String convertBirthDay(DateTime birthDay) {
 }
 
 UserData mapUserData(dynamic payload) {
-  print("mapUserData");
-  print(payload["subscription_end_date"]);
-  print(payload["subscription_end_in"]);
 
 
   return UserData(

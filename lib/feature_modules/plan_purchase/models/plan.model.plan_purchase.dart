@@ -31,8 +31,7 @@ class SubscriptionPlan {
 }
 
 SubscriptionPlan mapSubscriptionItem(dynamic payload ){
-  print("mapSubscriptionItem");
-  print(payload);
+
   Map<int, bool> dayAvailability = {};
   if(payload["available_days"]!=null){
     if(payload["available_days"]["sunday"]!=null){

@@ -114,8 +114,7 @@ class _OtpVerificationOtpInputPage_SharedState extends State<OtpVerificationOtpI
                             },
                             onCompleted: (pin) {
                               setState(() {
-                                print("Otp");
-                                print(pin);
+
                                 otp = pin;
                               });
                             },

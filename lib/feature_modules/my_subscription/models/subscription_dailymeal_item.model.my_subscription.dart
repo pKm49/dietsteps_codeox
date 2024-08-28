@@ -40,7 +40,8 @@ class SubscriptoinDailyMealItem {
 }
 
 SubscriptoinDailyMealItem mapSubscriptoinDailyMealItem(dynamic payload) {
-
+  print("mapSubscriptoinDailyMealItem");
+  print(payload);
   return SubscriptoinDailyMealItem(
     id: payload["id"] ?? -1,
     arabicName: payload["arabic_name"]!=null && payload["arabic_name"] != false?payload["arabic_name"] : "",

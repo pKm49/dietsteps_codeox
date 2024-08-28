@@ -23,16 +23,14 @@ String convertBirthDay(DateTime birthDay) {
 }
 
 AppNotification mapAppNotification(dynamic payload) {
-  print("payload");
-  print(payload);
+
   DateTime dateTime = DateTime.now();
   try {
     dateTime = payload["datetime"] != null
         ?getParsableDate(payload["datetime"])
         : DateTime(1900,1,1);
   } catch (e) {
-    print("mapNotification error");
-    print(e);
+     print(e);
     dateTime = DateTime(1900,1,1);
   }
 

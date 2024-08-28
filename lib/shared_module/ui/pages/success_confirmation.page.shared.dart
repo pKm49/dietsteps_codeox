@@ -114,8 +114,7 @@ class _SuccessConfirmationPage_SharedState
                       onPressed: () async {
                         //       showSnackbar(Get.context!, "password_reset".tr, "info");
                         if(toRoute == AppRouteNames.addressAuditRoute){
-                          print("sending mobile is");
-                          print(mobile);
+
                           Get.toNamed(
                               AppRouteNames.addressAuditRoute,arguments:
                           [VALIDADDRESSAUTHOR_MODES.complete_registration,mobile]);

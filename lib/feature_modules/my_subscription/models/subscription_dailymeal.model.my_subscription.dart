@@ -20,7 +20,8 @@ class SubscriptoinDailyMeal {
 }
 
 SubscriptoinDailyMeal mapSubscriptoinDailyMeal(dynamic payload) {
-
+  print("mapSubscriptoinDailyMeal");
+  print(payload);
   List<SubscriptoinDailyMealItem> items = [];
   int selectedCount = 0;
 

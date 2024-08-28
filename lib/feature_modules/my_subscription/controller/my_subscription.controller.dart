@@ -109,7 +109,7 @@ class MySubscriptionController extends GetxController {
       currentMonth.value = getCurrentMonth(startDate, endDate);
       subscriptionDates.forEach((key, value) {
         subscriptionDays.add(key);
-        print("$key $value");
+
         if(!doesContainDate(subscriptionMonths,DateTime(key.year,key.month,1))){
           subscriptionMonths.add(DateTime(key.year,key.month,1));
         }
@@ -175,15 +175,12 @@ class MySubscriptionController extends GetxController {
     List<DateTime> weekDays = [];
     DateTime weekStartDate = getDate(currentMonth.value.subtract(Duration(days: currentMonth.value.weekday))) ;
     DateTime weekEndDate = getDate(currentMonth.value.add(Duration(days: DateTime.daysPerWeek - (currentMonth.value.weekday+1))));
-    print("weekStartDate month: ${weekStartDate.month}");
-    print("weekEndDate month: ${weekEndDate.month}");
-    print("currentMonth.value month : ${currentMonth.value.month}");
+
     if(weekStartDate.month < currentMonth.value.month && weekEndDate.month < currentMonth.value.month){
       weekStartDate = currentMonth.value;
       weekEndDate = currentMonth.value.add(Duration(days: 6));
     }
-    print("weekStartDate : $weekStartDate");
-    print("weekEndDate : $weekEndDate");
+
     firstWeekDays.clear();
     secondWeekDays.clear();
     thirdWeekDays.clear();
@@ -371,17 +368,16 @@ class MySubscriptionController extends GetxController {
         List<SubscriptoinDailyMealItem> mealItems = [];
 
         for (var item in element.items) {
+          print("initializeMealSelection selectedCount");
+          print(item.selectedCount);
           if(item.selectedCount>0){
             for(var i=0;i<item.selectedCount;i++){
               recommendedCalories += item.calories;
               mealItems.add(item);
             }
-
           }
         }
-        print("initializeMealSelection data recieved");
-        print(mealItems.length);
-        print(element.itemCount);
+
         meals.add(SubscriptoinDailyMeal(
             name: element.name,
             id: element.id,
