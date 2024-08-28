@@ -94,13 +94,13 @@ Address mapAddress(dynamic payload) {
         : "",
 
     floorNumber: payload["floor_number"] != null
-        ? payload["floor_number"] != ""? int.parse(payload["floor_number"].toString())
+        ? payload["floor_number"].trim() != ""? int.parse(payload["floor_number"].toString())
         :-1 : -1,
     houseNumber: payload["house_number"] != null
-        ? payload["house_number"] != ""? int.parse(payload["house_number"].toString())
+        ? payload["house_number"].trim() != ""? int.parse(payload["house_number"].toString())
         :-1 : -1,
     apartmentNo: payload["apartment_no"] != null
-        ? payload["apartment_no"] != ""? int.parse(payload["apartment_no"].toString())
+        ? payload["apartment_no"].trim() != ""? int.parse(payload["apartment_no"].toString())
         :-1 : -1,
 
 

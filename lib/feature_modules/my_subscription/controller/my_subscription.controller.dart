@@ -285,7 +285,7 @@ class MySubscriptionController extends GetxController {
 
 
 
-  Future<void> setMealsByDate(bool isNavigateBack ) async {
+  Future<void> setMealsByDate(bool isNavigateBack,int subscriptionId ) async {
     if(!isDayMealSaving.value &&
         ((subscriptionDates[
         selectedDate.value] !=
@@ -294,28 +294,27 @@ class MySubscriptionController extends GetxController {
             (subscriptionDates[
             selectedDate.value] ==
                 VALIDSUBSCRIPTIONDAY_STATUS.freezed &&
-                selectedMealConfig.value.meals.where((element) => element.items.isEmpty).toList().isEmpty) )
+                selectedMealConfig.value.meals.where((element) => element.items.length==element.itemCount).toList().length
+                ==selectedMealConfig.value.meals.length) )
     ){
       if(subscriptionDates[
       selectedDate.value] ==
           VALIDSUBSCRIPTIONDAY_STATUS.freezed &&
-          selectedMealConfig.value.meals.where((element) => element.items.isEmpty).toList().isEmpty){
+          selectedMealConfig.value.meals.where((element) => element.items.length==element.itemCount).toList().length
+              ==selectedMealConfig.value.meals.length){
         unfreezeAndSaveMeals();
       }else{
         if(subscriptionDates[
         selectedDate.value] ==
             VALIDSUBSCRIPTIONDAY_STATUS.mealSelected &&
-            selectedMealConfig.value.meals.where((element) => element.items.isEmpty).toList().isNotEmpty){
+            selectedMealConfig.value.meals.where((element) => element.items.length==element.itemCount).toList().length
+                !=selectedMealConfig.value.meals.length){
           showSnackbar(Get.context!, "please_select_meals_for_all_categories".tr, "error");
-
         }else{
           final SharedPreferences prefs = await SharedPreferences.getInstance();
           final String? tMobile = prefs.getString('mobile');
           if (tMobile != null && tMobile != '') {
 
-            final sharedController = Get.find<SharedController>();
-            int subscriptionId = sharedController.mySubscriptions.where((p0) => p0.status=='in_progress').toList().isNotEmpty?
-            sharedController.mySubscriptions.where((p0) => p0.status=='in_progress').toList()[0].id:-1;
 
             if(subscriptionId != -1){
               isDayMealSaving.value = true;
@@ -336,9 +335,7 @@ class MySubscriptionController extends GetxController {
 
               isDayMealSaving.value = false;
             }else {
-              showSnackbar(Get.context!, "couldnt_load_profiledata".tr, "error");
-              showSnackbar(Get.context!, "login_message".tr, "error");
-              Get.offAllNamed(AppRouteNames.loginRoute);
+              showSnackbar(Get.context!, "no_subscription".tr, "error");
             }
 
           } else {
@@ -350,7 +347,6 @@ class MySubscriptionController extends GetxController {
         }
 
       }
-
 
     }else{
       if(selectedMealConfig.value.meals.where((element) => element.items.isEmpty).toList().isNotEmpty && isNavigateBack){

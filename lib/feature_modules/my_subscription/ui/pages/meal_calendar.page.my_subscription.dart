@@ -4,6 +4,7 @@ import 'package:dietsteps/shared_module/constants/app_route_names.constants.shar
 import 'package:dietsteps/shared_module/constants/asset_urls.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/style_params.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/widget_styles.constants.shared.dart';
+import 'package:dietsteps/shared_module/controllers/controller.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/calendar_utilities.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/date_conversion.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/toaster_snackbar_shower.service.shared.dart';
@@ -26,11 +27,13 @@ class MealCalendarPage_MySubscription extends StatefulWidget {
 class _MealCalendarPage_MySubscriptionState extends State<MealCalendarPage_MySubscription> {
 
    final mySubscriptionController = Get.find<MySubscriptionController>();
+   final sharedController = Get.find<SharedController>();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    sharedController.getCustomerSubscriptions();
     mySubscriptionController.getSubscriptionDates(true,false);
   }
 

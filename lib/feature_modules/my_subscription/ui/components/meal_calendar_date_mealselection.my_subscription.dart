@@ -76,6 +76,8 @@ class MealCalendarDateMealSelectionComponent_MySubscription extends StatelessWid
                     ],
                   ),
                   Expanded(child: Container()),
+
+                  // Off Day  - no data & no action
                   Visibility(
                       visible: (status==VALIDSUBSCRIPTIONDAY_STATUS.offDay ) ,
                       child:  Padding(
@@ -93,6 +95,7 @@ class MealCalendarDateMealSelectionComponent_MySubscription extends StatelessWid
                     ),
                   ),
 
+                  // Delivered & Before 3 days - rating enabled
                   Visibility(
                       visible: status==VALIDSUBSCRIPTIONDAY_STATUS.delivered &&
                           date.isBefore(threeDaysBefore)  ,
@@ -111,6 +114,8 @@ class MealCalendarDateMealSelectionComponent_MySubscription extends StatelessWid
                       ),),
                     ),
                   ),
+
+                  // Delivered & After 3 days - no action
                   Visibility(
                       visible:  status==VALIDSUBSCRIPTIONDAY_STATUS.delivered && date.isAfter(threeDaysBefore)  ,
                       child:  Padding(
@@ -128,7 +133,7 @@ class MealCalendarDateMealSelectionComponent_MySubscription extends StatelessWid
                     ),
                   ),
 
-
+                  // Frozen
                   Visibility(
                       visible: status==VALIDSUBSCRIPTIONDAY_STATUS.freezed   ,
                       child: Padding(
@@ -145,6 +150,8 @@ class MealCalendarDateMealSelectionComponent_MySubscription extends StatelessWid
                       ),),
                     ),
                   ),
+
+                  // Meal Selected
                   Visibility(
                       visible: (status==VALIDSUBSCRIPTIONDAY_STATUS.mealSelected ) ,
                       child:  Padding(
@@ -161,15 +168,39 @@ class MealCalendarDateMealSelectionComponent_MySubscription extends StatelessWid
                       ),),
                     ),
                   ),
+
+                  // Today And Tomorrow
                   Visibility(
-                      visible: status==VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected   ,
+                      visible:  (date.isBefore(DateTime.now().add(Duration(days: 2)))) &&
+                          status==VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected ,
+                      child:  Padding(
+                        padding: const EdgeInsets.only(bottom: APPSTYLE_SpaceExtraSmall),
+                        child: SvgPicture.asset(ASSETS_FOODPLATE,height: 13,color:  isSelected?APPSTYLE_BackgroundWhite:APPSTYLE_WhatsappGreen),
+                      )
+                  ),
+                  Visibility(
+                    visible:  (date.isBefore(DateTime.now().add(Duration(days: 2)))) &&
+                        status==VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected ,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text("meal-selected_single".tr,style: getLabelSmallStyle(context).copyWith(
+                          color:  isSelected?APPSTYLE_BackgroundWhite:APPSTYLE_WhatsappGreen
+                      ),),
+                    ),
+                  ),
+
+                  // Meal Not Selected & After tommorrow
+                  Visibility(
+                      visible:(date.isAfter(DateTime.now().add(Duration(days: 2)))) &&
+                          status==VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected  ,
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: APPSTYLE_SpaceExtraSmall),
                         child: SvgPicture.asset(ASSETS_SELECTHAND,height: 13,color:  isSelected?APPSTYLE_BackgroundWhite:APPSTYLE_PrimaryColor,),
                       )
                   ),
                   Visibility(
-                    visible: (status==VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected ) ,
+                    visible:(date.isAfter(DateTime.now().add(Duration(days: 2)))) &&
+                        status==VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected ,
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text("meal-not-selected_single".tr,style: getLabelSmallStyle(context).copyWith(
