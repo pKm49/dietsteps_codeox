@@ -323,6 +323,8 @@ class _AuditAddressPage_AddressState extends State<AuditAddressPage_Address> {
                             addVerticalSpace(APPSTYLE_SpaceMedium),
                             TextFormField(
                               keyboardType: TextInputType.text,
+                              validator: (password) =>
+                                  checkIfNameFormValid(password,"address_nickname"),
                               controller: addressController
                                   .nicknameTextEditingController.value,
                               decoration: InputDecoration(
@@ -383,6 +385,7 @@ class _AuditAddressPage_AddressState extends State<AuditAddressPage_Address> {
     if (addressController.areaId.value == -1 ||
         addressController.blockId.value == -1 ||
         addressController.streetTextEditingController.value.text =="" ||
+        addressController.nicknameTextEditingController.value.text =="" ||
         addressController.houseNumberTextEditingController.value.text =="") {
       if (addressController.areaId.value == -1) {
         showSnackbar(Get.context!, "select_area".tr, "error");
