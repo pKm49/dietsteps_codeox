@@ -1,9 +1,9 @@
- 
+
+import 'package:dietsteps/feature_modules/my_subscription/services/meal_selection.helper.services.dart';
 import 'package:dietsteps/shared_module/constants/asset_urls.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/style_params.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/valid_subscription_day_status.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/widget_styles.constants.shared.dart';
-import 'package:dietsteps/shared_module/services/utility-services/date_conversion.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/widget_generator.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/widget_properties_generator.service.shared.dart';
 import 'package:flutter/material.dart';
@@ -14,20 +14,18 @@ import 'package:ionicons/ionicons.dart';
 class MealCalendarDateComponent_MySubscription extends StatelessWidget {
 
   Color borderColor;
-  DateTime dateTime;
   String dateText;
   String status;
   bool isSelected;
   bool isMonthDay;
+  DateTime dateTime;
 
   bool isSubscriptionDay;
   MealCalendarDateComponent_MySubscription({super.key,required this.isSubscriptionDay,required this.isSelected,required this.isMonthDay,
-    required this.borderColor ,  required this.status , required this.dateTime ,   required this.dateText});
-
+    required this.borderColor ,  required this.status ,  required this.dateTime ,   required this.dateText});
 
   @override
   Widget build(BuildContext context) {
-
     DateTime threeDaysBefore = DateTime.now().add(Duration(days: -3));
 
     return Container(
@@ -51,7 +49,12 @@ class MealCalendarDateComponent_MySubscription extends StatelessWidget {
                   style: getLabelLargeStyle(context)
                       .copyWith(
                       color:isSelected?APPSTYLE_BackgroundWhite:
-                      (isSubscriptionDay && isMonthDay)? APPSTYLE_PrimaryColor:
+                      status==VALIDSUBSCRIPTIONDAY_STATUS.offDay && (isSubscriptionDay && isMonthDay)?APPSTYLE_GuideRed:
+                      status==VALIDSUBSCRIPTIONDAY_STATUS.freezed  && (isSubscriptionDay && isMonthDay)?APPSTYLE_GuideOrange:
+                      status==VALIDSUBSCRIPTIONDAY_STATUS.delivered && dateTime.isAfter(threeDaysBefore)  && (isSubscriptionDay && isMonthDay)?APPSTYLE_GuideGreen:
+                      status==VALIDSUBSCRIPTIONDAY_STATUS.delivered && dateTime.isBefore(threeDaysBefore)  && (isSubscriptionDay && isMonthDay)?APPSTYLE_GuideRed:
+                      status==VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected && isTodayTomorrow(dateTime)  && (isSubscriptionDay && isMonthDay)?APPSTYLE_WhatsappGreen:
+                      status==VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected && !isTodayTomorrow(dateTime)  && (isSubscriptionDay && isMonthDay) ?APPSTYLE_GuideRed:
                       isMonthDay ? APPSTYLE_Grey80:APPSTYLE_BackgroundWhite
                   ),
                 ),
@@ -69,7 +72,7 @@ class MealCalendarDateComponent_MySubscription extends StatelessWidget {
               child: FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text("off-day_single".tr,style: getLabelSmallStyle(context).copyWith(
-                  color:isSelected?APPSTYLE_BackgroundWhite: APPSTYLE_GuideRed
+                    color:isSelected?APPSTYLE_BackgroundWhite: APPSTYLE_GuideRed
                 ),),
               ),
             ),
@@ -139,13 +142,13 @@ class MealCalendarDateComponent_MySubscription extends StatelessWidget {
 
             // Today And Tomorrow
             Visibility(
-              visible: (dateTime.isBefore(DateTime.now().add(Duration(days: 2)))) &&
-                  status==VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected
-                  &&  (isMonthDay && isSubscriptionDay)  ,
+                visible: (isTodayTomorrow(dateTime)) &&
+                    status==VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected
+                    &&  (isMonthDay && isSubscriptionDay)  ,
                 child: SvgPicture.asset(ASSETS_FOODPLATE,height: 13,color: isSelected?APPSTYLE_BackgroundWhite:APPSTYLE_WhatsappGreen)
             ),
             Visibility(
-              visible: (dateTime.isBefore(DateTime.now().add(Duration(days: 2))))&&
+              visible: (isTodayTomorrow(dateTime))&&
                   status==VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected
                   &&  (isMonthDay && isSubscriptionDay) ,
               child: FittedBox(
@@ -158,12 +161,12 @@ class MealCalendarDateComponent_MySubscription extends StatelessWidget {
 
             // Meal Not Selected & After tommorrow
             Visibility(
-                visible: (dateTime.isAfter(DateTime.now().add(Duration(days: 2)))) &&
+                visible: (!isTodayTomorrow(dateTime)) &&
                     status==VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected  &&  (isMonthDay && isSubscriptionDay)  ,
                 child: SvgPicture.asset(ASSETS_SELECTHAND,height: 13,color: isSelected?APPSTYLE_BackgroundWhite:APPSTYLE_PrimaryColor,)
             ),
             Visibility(
-              visible: (dateTime.isAfter(DateTime.now().add(Duration(days: 2))))  &&
+              visible: (!isTodayTomorrow(dateTime)) &&
                   (status==VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected ) &&  (isMonthDay && isSubscriptionDay) ,
               child: FittedBox(
                 fit: BoxFit.scaleDown,

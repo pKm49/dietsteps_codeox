@@ -600,27 +600,37 @@ class _HomePage_CoreState extends State<HomePage_Core> {
                                   onPressed: () {
                                     if(sharedController.mySubscriptions
                                         .where((p0) =>
-                                    p0.status == "paid").toList()
+                                    p0.status == "in_progress").toList()
                                         .isNotEmpty){
-                                      if (!sharedController
-                                          .isPlanActivating.value) {
-                                        sharedController.activatePlan(sharedController.mySubscriptions
-                                            .where((p0) =>
-                                        p0.status == "paid").toList()[0].id);
-                                      }
-                                    }else if(sharedController.mySubscriptions
-                                        .where((p0) =>
-                                    p0.status == "not paid").toList()
-                                        .isNotEmpty){
-                                      if (!sharedController
-                                          .isOrderDetailsFetching.value) {
-                                        sharedController.getPaymentLink(sharedController.mySubscriptions
-                                            .where((p0) =>
-                                        p0.status == "not paid").toList()[0].id);
-                                      }
-                                    }else{
                                       Get.toNamed(AppRouteNames
                                           .planPurchaseSubscriptionPlansCategoryListRoute);
+                                    }else{
+                                      if(sharedController.mySubscriptions
+                                          .where((p0) =>
+                                      p0.status == "paid").toList()
+                                          .isNotEmpty){
+                                        if (!sharedController
+                                            .isPlanActivating.value) {
+                                          sharedController.activatePlan(sharedController.mySubscriptions
+                                              .where((p0) =>
+                                          p0.status == "paid").toList()[0].id);
+                                        }
+                                      }
+                                      else if(sharedController.mySubscriptions
+                                          .where((p0) =>
+                                      p0.status == "not paid").toList()
+                                          .isNotEmpty){
+                                        if (!sharedController
+                                            .isOrderDetailsFetching.value) {
+                                          sharedController.getPaymentLink(sharedController.mySubscriptions
+                                              .where((p0) =>
+                                          p0.status == "not paid").toList()[0].id);
+                                        }
+                                      }else{
+                                        Get.toNamed(AppRouteNames
+                                            .planPurchaseSubscriptionPlansCategoryListRoute);
+                                      }
+
                                     }
 
                                   })),

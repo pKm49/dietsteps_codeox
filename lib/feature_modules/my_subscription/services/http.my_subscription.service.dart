@@ -1,12 +1,15 @@
 import 'package:dietsteps/feature_modules/my_subscription/constants/http_request_endpoints.constants.my_subscription.dart';
+import 'package:dietsteps/feature_modules/my_subscription/models/subscription_date.model.my_subscription.dart';
 import 'package:dietsteps/feature_modules/my_subscription/models/subscription_mealconfig.model.my_subscription.dart';
+import 'package:dietsteps/shared_module/constants/default_values.constants.shared.dart';
 import 'package:dietsteps/shared_module/models/http_response.model.shared.dart';
 import 'package:dietsteps/shared_module/services/http-services/http_request_handler.service.shared.dart';
+import 'package:dietsteps/shared_module/services/utility-services/date_conversion.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/toaster_snackbar_shower.service.shared.dart';
 import 'package:get/get.dart';
 class MySubsHttpService {
 
-  Future<Map<DateTime, String>> getSubscriptionDates(String mobile) async {
+  Future<List<SubscriptoinDate>> getSubscriptionDates(String mobile) async {
 
     try{
       Map<String, dynamic> params = {};
@@ -14,28 +17,27 @@ class MySubsHttpService {
       AppHttpResponse response =
       await getRequest(MySubscriptionHttpRequestEndpoint_GetSubscriptionDates,params);
 
-      Map<DateTime, String> tDates = {};
-      if(response.data != null && response.data is Map){
-        response.data.forEach((key, value) {
-          DateTime dateTime;
-          try {
-            dateTime = getParsableDate(key);
-          } catch (e) {
-            dateTime = DateTime(1900,1,1);
+      print("getSubscriptionDates");
+      print(response.statusCode);
+      print(response.data);
+      final List<SubscriptoinDate> subscriptoinDates = [];
+
+      if (response.statusCode == 200 && response.data != null) {
+        for (var i = 0; i < response.data.length; i++) {
+          SubscriptoinDate subscriptoinDate = mapSubscriptoinDate(response.data[i]);
+          List<SubscriptoinDate> subSameDate = subscriptoinDates.where((element) => isSameDay(element.date,subscriptoinDate.date)).toList();
+          if(!isSameDay(subscriptoinDate.date, DefaultInvalidDate) && subSameDate.isEmpty){
+            subscriptoinDates.add(mapSubscriptoinDate(response.data[i]));
           }
-          tDates[dateTime]=value;
-        });
-        return tDates;
+        }
       }
 
-
-
-      return tDates;
+      return subscriptoinDates;
 
     }catch  (e,st){
       print(e);
       print(st);
-      return {};
+      return [];
     }
   }
 
@@ -63,14 +65,19 @@ class MySubsHttpService {
       AppHttpResponse response =
       await getRequest(MySubscriptionHttpRequestEndpoint_GetSubscriptionMealsByDate+mobile,params);
 
+      print("getMealsByDay");
+      print(response.statusCode);
+      print(response.data);
       if (response.statusCode == 200 && response.data != null) {
-         return mapSubscriptoinMealConfig(response.data[0], date);
+        return mapSubscriptoinMealConfig(response.data[0], date);
       }
+      print("reached hereeeeeee");
       return mapSubscriptoinMealConfig({}, date);
 
     }catch (e,st){
       print(e);
       print(st);
+      print("reached error");
       return mapSubscriptoinMealConfig({}, date);
     }
   }
@@ -117,6 +124,7 @@ class MySubsHttpService {
       return false;
     }
   }
+
   Future<bool> rateMeals(String mobile, int mealId, int rating) async {
 
     try{
@@ -132,6 +140,5 @@ class MySubsHttpService {
       return false;
     }
   }
-
 
 }

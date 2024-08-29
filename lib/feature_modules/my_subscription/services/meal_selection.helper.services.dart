@@ -56,3 +56,17 @@ int getPercentage(
   }
   return percentage.round();
 }
+
+bool isTodayTomorrow(DateTime dateTime){
+  DateTime nowDateTime = DateTime.now();
+  DateTime checkDateTime = DateTime(dateTime.year,dateTime.month,dateTime.day,4,30,00);
+  DateTime todayDateStartTimeDate = DateTime(nowDateTime.year,nowDateTime.month,nowDateTime.day,4,30,00);
+  DateTime twoDaysAfterTodayDate = todayDateStartTimeDate.add(Duration(hours: 48));
+  DateTime threeDaysAfterTodayDate = todayDateStartTimeDate.add(Duration(hours: 72));
+
+  if(nowDateTime.isBefore(todayDateStartTimeDate)){
+    return checkDateTime.isBefore(twoDaysAfterTodayDate);
+  }else{
+    return checkDateTime.isBefore(threeDaysAfterTodayDate);
+  }
+}

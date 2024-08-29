@@ -1,6 +1,7 @@
 import 'package:dietsteps/feature_modules/my_subscription/controller/my_subscription.controller.dart';
 import 'package:dietsteps/feature_modules/my_subscription/services/meal_selection.helper.services.dart';
 import 'package:dietsteps/feature_modules/my_subscription/ui/components/meal_calendar_date_mealselection.my_subscription.dart';
+import 'package:dietsteps/feature_modules/my_subscription/ui/components/meal_selection_frozenoffday_info.page.my_subscription.dart';
 import 'package:dietsteps/feature_modules/my_subscription/ui/components/meal_selection_itemcard_selected.component.my_subscription.dart';
 import 'package:dietsteps/feature_modules/my_subscription/ui/components/meal_selection_itemsloader.component.my_subscription.dart';
 import 'package:dietsteps/feature_modules/my_subscription/ui/components/meal_selection_titleloader.component.my_subscription.dart';
@@ -33,26 +34,23 @@ class MealSelectionPage_MySubscription extends StatefulWidget {
       _MealSelectionPage_MySubscriptionState();
 }
 
-
 class _MealSelectionPage_MySubscriptionState
     extends State<MealSelectionPage_MySubscription> {
   final mySubscriptionController = Get.find<MySubscriptionController>();
-  final sharedController = Get.find<SharedController>();
   ScrollController _scrollController = ScrollController();
   bool isScrolled = false;
   DateTime threeDaysBefore = DateTime.now().add(Duration(hours: -72));
+  final sharedController = Get.find<SharedController>();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
     if (!mySubscriptionController.isMealsFetching.value &&
         mySubscriptionController.subscriptoinMealConfig.value.date == "") {
       mySubscriptionController.getMealsByDate(
           mySubscriptionController.selectedDate.value, false);
     }
-
   }
 
   //         itemScrollController.scrollTo(index: 2, duration: Duration(seconds: 2));
@@ -67,14 +65,14 @@ class _MealSelectionPage_MySubscriptionState
     return PopScope(
       canPop: false,
       onPopInvoked : (didPop){
-
+        print("onPopInvoked");
+        print(didPop);
         if (didPop) {
           return;
         }else{
           if(ifSaveOperationAllowed() ){
-             int subscriptionId = sharedController.mySubscriptions.where((p0) => p0.status=='in_progress').toList().isNotEmpty?
-            sharedController.mySubscriptions.where((p0) => p0.status=='in_progress').toList()[0].id:-1;
-            mySubscriptionController.setMealsByDate(false,subscriptionId);
+            int subscriptionId = mySubscriptionController.getDaySubId(mySubscriptionController.selectedDate.value);
+            mySubscriptionController.setMealsByDate(false,subscriptionId, true);
             Navigator.pop(context);
           }else{
             Navigator.pop(context);
@@ -96,9 +94,9 @@ class _MealSelectionPage_MySubscriptionState
 
                     onDeleteSelected:(){
                       if(ifSaveOperationAllowed() ){
-                        int subscriptionId = sharedController.mySubscriptions.where((p0) => p0.status=='in_progress').toList().isNotEmpty?
-                        sharedController.mySubscriptions.where((p0) => p0.status=='in_progress').toList()[0].id:-1;
-                        mySubscriptionController.setMealsByDate(false,subscriptionId);
+                        int subscriptionId = mySubscriptionController.getDaySubId(mySubscriptionController.selectedDate.value);
+
+                        mySubscriptionController.setMealsByDate(false,subscriptionId,true);
                         Navigator.pop(context);
                       }else{
                         Navigator.pop(context);
@@ -123,26 +121,20 @@ class _MealSelectionPage_MySubscriptionState
                 visible: !mySubscriptionController.isDayMealSaving.value &&
                     !mySubscriptionController.isMealsFetching.value &&
                     !mySubscriptionController.isFreezing.value &&
-                    mySubscriptionController.selectedDate.value
-                        .isAfter(DateTime.now().add(const Duration(days: 2))) &&
-                    mySubscriptionController.subscriptionDates[
-                    mySubscriptionController.selectedDate.value] !=
-                        VALIDSUBSCRIPTIONDAY_STATUS.offDay &&
-                    mySubscriptionController.subscriptionDates[
-                    mySubscriptionController.selectedDate.value] !=
+                    !isTodayTomorrow(mySubscriptionController.selectedDate.value) &&
+                    mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value)
+                        != VALIDSUBSCRIPTIONDAY_STATUS.offDay &&
+                    mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) !=
                         VALIDSUBSCRIPTIONDAY_STATUS.delivered,
                 child: InkWell(
                   onTap: () {
                     if (!mySubscriptionController.isDayMealSaving.value &&
                         !mySubscriptionController.isMealsFetching.value &&
                         !mySubscriptionController.isFreezing.value &&
-                        mySubscriptionController.selectedDate.value.isAfter(
-                            DateTime.now().add(const Duration(days: 2))) &&
-                        mySubscriptionController.subscriptionDates[
-                        mySubscriptionController.selectedDate.value] !=
+                        !isTodayTomorrow(mySubscriptionController.selectedDate.value) &&
+                        mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) !=
                             VALIDSUBSCRIPTIONDAY_STATUS.offDay &&
-                        mySubscriptionController.subscriptionDates[
-                        mySubscriptionController.selectedDate.value] !=
+                        mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) !=
                             VALIDSUBSCRIPTIONDAY_STATUS.delivered) {
                       showFreezeConfirmDialogue(context);
                     }
@@ -176,9 +168,7 @@ class _MealSelectionPage_MySubscriptionState
                         : Row(
                       children: [
                         Icon(
-                            mySubscriptionController.subscriptionDates[
-                            mySubscriptionController
-                                .selectedDate.value] ==
+                            mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) ==
                                 VALIDSUBSCRIPTIONDAY_STATUS.freezed
                                 ? Ionicons.play
                                 : Ionicons.pause,
@@ -189,9 +179,7 @@ class _MealSelectionPage_MySubscriptionState
                           child: FittedBox(
                             fit: BoxFit.scaleDown,
                             child: Text(
-                              mySubscriptionController.subscriptionDates[
-                              mySubscriptionController
-                                  .selectedDate.value] ==
+                              mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) ==
                                   VALIDSUBSCRIPTIONDAY_STATUS.freezed
                                   ? "unpause".tr
                                   : "pause".tr,
@@ -220,50 +208,40 @@ class _MealSelectionPage_MySubscriptionState
                         child: Row(
                           children: [
                             for (var date in mySubscriptionController
-                                .subscriptionDates.keys)
+                                .subscriptionDates)
                               InkWell(
                                   onTap: () {
                                     mySubscriptionController.getMealsByDate(
-                                        date, false);
+                                        date.date, false);
                                   },
                                   child:
                                   MealCalendarDateMealSelectionComponent_MySubscription(
-                                      date: date,
+                                      date: date.date,
                                       isSelected: isSameDay(
-                                          date,
+                                          date.date,
                                           mySubscriptionController
                                               .selectedDate.value),
-                                      status: mySubscriptionController
-                                          .subscriptionDates[date] ??
-                                          ""))
+                                      status: mySubscriptionController.getDayStatus(date.date)))
                           ],
                         ),
                       ),
                     ),
                     addVerticalSpace(APPSTYLE_SpaceMedium),
 
-                    // Not Selected & Selected & paused (After) Day   Meals
+                    //   paused ((Not Selected || Selected) && aftertommorrow )
                     Visibility(
-                      visible: !mySubscriptionController.isMealsFetching.value &&
-                          !mySubscriptionController.isFreezing.value &&
-                          mySubscriptionController
-                              .subscriptoinMealConfig.value.meals.isNotEmpty &&
+                      visible: !mySubscriptionController.isMealsFetching.value && !mySubscriptionController.isFreezing.value &&
+                          mySubscriptionController.subscriptoinMealConfig.value.meals.isNotEmpty &&
+
                           (
-                              (mySubscriptionController.subscriptionDates[
-                              mySubscriptionController.selectedDate.value] ==
-                                  VALIDSUBSCRIPTIONDAY_STATUS.freezed && mySubscriptionController.selectedDate.value.isAfter(
-                                  DateTime.now().add(Duration(hours: 48))))
-                                  ||
-                              (
-                                 ( mySubscriptionController.subscriptionDates[
-                                  mySubscriptionController.selectedDate.value] ==
+                              (mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) ==
+                                  VALIDSUBSCRIPTIONDAY_STATUS.freezed ||
+                                  mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) ==
                                       VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected ||
-                                      mySubscriptionController.subscriptionDates[
-                                      mySubscriptionController.selectedDate.value] ==
-                                          VALIDSUBSCRIPTIONDAY_STATUS.mealSelected) &&
-                                     mySubscriptionController.selectedDate.value.isAfter(DateTime.now().add(Duration(hours: 48)))
-                              )
-                          ),
+                                  mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) ==
+                                      VALIDSUBSCRIPTIONDAY_STATUS.mealSelected)
+                                  && !isTodayTomorrow(mySubscriptionController.selectedDate.value)
+                          ) ,
                       child: Expanded(
                           child: ScrollablePositionedList.builder(
                             itemCount: mySubscriptionController
@@ -337,16 +315,7 @@ class _MealSelectionPage_MySubscriptionState
                                               .isNotEmpty,
                                           child: addHorizontalSpace(APPSTYLE_SpaceSmall)),
                                       Visibility(
-                                        visible:mySubscriptionController.subscriptionDates[
-                                        mySubscriptionController
-                                            .selectedDate.value] !=
-                                            VALIDSUBSCRIPTIONDAY_STATUS.delivered &&
-                                            mySubscriptionController.subscriptionDates[
-                                            mySubscriptionController
-                                                .selectedDate.value] !=
-                                                VALIDSUBSCRIPTIONDAY_STATUS.offDay &&
-                                            mySubscriptionController.selectedDate.value.isAfter(
-                                                DateTime.now().add(Duration(days: 1))) && mySubscriptionController
+                                        visible:  mySubscriptionController
                                             .selectedMealConfig
                                             .value
                                             .meals[index]
@@ -385,47 +354,7 @@ class _MealSelectionPage_MySubscriptionState
                                     ],
                                   ),
                                 ),
-                                content: mySubscriptionController.subscriptoinMealConfig
-                                    .value.meals[index].isAlreadySelected &&
-                                    mySubscriptionController.subscriptionDates[
-                                    mySubscriptionController
-                                        .selectedDate.value] ==
-                                        VALIDSUBSCRIPTIONDAY_STATUS.mealSelected
-                                    ? Padding(
-                                  padding: APPSTYLE_LargePaddingHorizontal.copyWith(
-                                      top: APPSTYLE_SpaceMedium),
-                                  child: GridView.builder(
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemCount: mySubscriptionController
-                                        .selectedMealConfig
-                                        .value
-                                        .meals[index]
-                                        .items
-                                        .length,
-                                    gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        mainAxisSpacing: 0,
-                                        crossAxisSpacing: APPSTYLE_SpaceSmall,
-                                        mainAxisExtent: screenheight * 0.35),
-                                    itemBuilder: (context, indx) {
-                                      return MealSelectionItemCardSelectedComponent_MySubscription(
-                                          isSelectable: false,
-                                          selectedCount:0,
-                                          subscriptoinDailyMealItem:
-                                          mySubscriptionController
-                                              .selectedMealConfig
-                                              .value
-                                              .meals[index].items[indx],
-                                          onAdded: (int count){
-
-                                          });
-
-                                    },
-                                  ),
-                                )
-                                    : Padding(
+                                content:  Padding(
                                   padding: APPSTYLE_LargePaddingHorizontal.copyWith(
                                       top: APPSTYLE_SpaceMedium),
                                   child: GridView.builder(
@@ -528,26 +457,22 @@ class _MealSelectionPage_MySubscriptionState
                           )),
                     ),
 
-                    // Delivered Day Meals
+                    // Delivered Day Meals & Today & Tomorrow
                     Visibility(
                       visible: !mySubscriptionController.isMealsFetching.value &&
                           !mySubscriptionController.isFreezing.value &&
                           mySubscriptionController
                               .subscriptoinMealConfig.value.meals.isNotEmpty &&
                           (
-                              mySubscriptionController.subscriptionDates[
-                              mySubscriptionController.selectedDate.value] ==
-                                  VALIDSUBSCRIPTIONDAY_STATUS.delivered
-                                  ||(
-                                  (mySubscriptionController.subscriptionDates[
-                                  mySubscriptionController.selectedDate.value] ==
+                              mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) ==
+                                  VALIDSUBSCRIPTIONDAY_STATUS.delivered || (
+                                  (mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) ==
                                       VALIDSUBSCRIPTIONDAY_STATUS.mealSelected  ||
-                                      mySubscriptionController.subscriptionDates[
-                                      mySubscriptionController.selectedDate.value] ==
-                                          VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected )&&
-                                      mySubscriptionController.selectedDate.value.isBefore(DateTime.now().add(Duration(hours: 48)))
+                                      mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) ==
+                                          VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected )
+                                      && isTodayTomorrow(mySubscriptionController.selectedDate.value)
                               )
-                          ) ,
+                          ),
                       child: Expanded(
                         child: ListView.builder(
                             itemCount: mySubscriptionController
@@ -618,12 +543,11 @@ class _MealSelectionPage_MySubscriptionState
                                       return MealSelectionItemCardSelectedComponent_MySubscription(
                                           isSelectable: true,
                                           selectedCount:mySubscriptionController.selectedDate.value
-                                              .isBefore(threeDaysBefore) ?-1:0,
-                                          subscriptoinDailyMealItem:
-                                          mySubscriptionController
-                                              .selectedMealConfig
-                                              .value
-                                              .meals[index].items[indx],
+                                              .isBefore(threeDaysBefore) ?-1:1,                                      subscriptoinDailyMealItem:
+                                      mySubscriptionController
+                                          .selectedMealConfig
+                                          .value
+                                          .meals[index].items[indx],
                                           onAdded: (int count){
                                             if(mySubscriptionController.selectedDate.value
                                                 .isBefore(threeDaysBefore)){
@@ -646,84 +570,22 @@ class _MealSelectionPage_MySubscriptionState
                     Visibility(
                       visible: !mySubscriptionController.isMealsFetching.value &&
                           !mySubscriptionController.isFreezing.value &&
-                          mySubscriptionController.subscriptionDates[
-                          mySubscriptionController.selectedDate.value] ==
+                          mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) ==
                               VALIDSUBSCRIPTIONDAY_STATUS.offDay,
                       child: Expanded(
-                          child: Padding(
-                            padding: APPSTYLE_LargePaddingAll,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(1000),
-                                        color: APPSTYLE_Grey20,
-                                      ),
-                                      width: screenwidth * .3,
-                                      height: screenwidth * .3,
-                                      child: Center(
-                                        child: Icon(Ionicons.close_circle_outline,
-                                            size: screenwidth * .15,
-                                            color: APPSTYLE_Grey80),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                addVerticalSpace(APPSTYLE_SpaceLarge),
-                                Text("off-day".tr,
-                                    textAlign: TextAlign.center,
-                                    style: getHeadlineMediumStyle(context)),
-                              ],
-                            ),
-                          )),
+                          child: MealSelectionFrozenOffDayInfoPage_MySubscriptions(isFrozen: false)),
                     ),
+
 
                     // Frozen - Day Info
                     Visibility(
                       visible: !mySubscriptionController.isMealsFetching.value &&
                           !mySubscriptionController.isFreezing.value &&
-                          !mySubscriptionController.selectedDate.value.isAfter(
-                              DateTime.now().add(Duration(days: 1)))&&
-                          mySubscriptionController.subscriptionDates[
-                          mySubscriptionController.selectedDate.value] ==
+                          isTodayTomorrow(mySubscriptionController.selectedDate.value) &&
+                          mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) ==
                               VALIDSUBSCRIPTIONDAY_STATUS.freezed,
                       child: Expanded(
-                          child: Padding(
-                            padding: APPSTYLE_LargePaddingAll,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(1000),
-                                        color: APPSTYLE_Grey20,
-                                      ),
-                                      width: screenwidth * .3,
-                                      height: screenwidth * .3,
-                                      child: Center(
-                                        child: Icon(Ionicons.pause_circle_outline,
-                                            size: screenwidth * .15,
-                                            color: APPSTYLE_Grey80),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                addVerticalSpace(APPSTYLE_SpaceLarge),
-                                Text("freezed".tr,
-                                    textAlign: TextAlign.center,
-                                    style: getHeadlineMediumStyle(context)),
-                              ],
-                            ),
-                          )),
+                          child: MealSelectionFrozenOffDayInfoPage_MySubscriptions(isFrozen: true)),
                     ),
 
                     // Title Loader
@@ -747,16 +609,11 @@ class _MealSelectionPage_MySubscriptionState
                           !mySubscriptionController.isFreezing.value &&
                           mySubscriptionController
                               .subscriptoinMealConfig.value.meals.isNotEmpty &&
-                          mySubscriptionController.subscriptionDates[
-                          mySubscriptionController.selectedDate.value] !=
-                              VALIDSUBSCRIPTIONDAY_STATUS.offDay &&
-                          ( mySubscriptionController.subscriptionDates[
-                          mySubscriptionController.selectedDate.value] !=
-                              VALIDSUBSCRIPTIONDAY_STATUS.freezed ||
-                              (mySubscriptionController.subscriptionDates[
-                              mySubscriptionController.selectedDate.value] ==
-                                  VALIDSUBSCRIPTIONDAY_STATUS.freezed && mySubscriptionController.selectedDate.value.isAfter(
-                                  DateTime.now().add(Duration(days: 1)))) ) ,
+                          (mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) !=
+                              VALIDSUBSCRIPTIONDAY_STATUS.offDay ||
+                              (mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) ==
+                                  VALIDSUBSCRIPTIONDAY_STATUS.freezed
+                                  && !isTodayTomorrow(mySubscriptionController.selectedDate.value))) ,
                       child: Container(
                         decoration: BoxDecoration(
                             boxShadow: APPSTYLE_ContainerTopShadow,
@@ -798,16 +655,13 @@ class _MealSelectionPage_MySubscriptionState
                                   style: getHeadlineLargeStyle(context),
                                 )),
                             Visibility(
-                              visible: (mySubscriptionController.subscriptionDates[
-                              mySubscriptionController
-                                  .selectedDate.value] !=
-                                  VALIDSUBSCRIPTIONDAY_STATUS.delivered &&
-                                  mySubscriptionController.subscriptionDates[
-                                  mySubscriptionController
-                                      .selectedDate.value] !=
-                                      VALIDSUBSCRIPTIONDAY_STATUS.offDay &&
-                                  mySubscriptionController.selectedDate.value.isAfter(
-                                      DateTime.now().add(Duration(days: 1)))),
+                              visible: (mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) ==
+                                  VALIDSUBSCRIPTIONDAY_STATUS.freezed ||
+                                  mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) ==
+                                      VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected ||
+                                  mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) ==
+                                      VALIDSUBSCRIPTIONDAY_STATUS.mealSelected)
+                                  && !isTodayTomorrow(mySubscriptionController.selectedDate.value),
                               child: SizedBox(
                                   width: screenwidth * .4,
                                   child: ElevatedButton(
@@ -829,9 +683,9 @@ class _MealSelectionPage_MySubscriptionState
                                             .isDayMealSaving.value &&
                                             !mySubscriptionController
                                                 .isMealsFetching.value) {
-                                          int subscriptionId = sharedController.mySubscriptions.where((p0) => p0.status=='in_progress').toList().isNotEmpty?
-                                          sharedController.mySubscriptions.where((p0) => p0.status=='in_progress').toList()[0].id:-1;
-                                          mySubscriptionController.setMealsByDate(true,subscriptionId);
+                                          int subscriptionId = mySubscriptionController.getDaySubId(mySubscriptionController.selectedDate.value);
+
+                                          mySubscriptionController.setMealsByDate(true,subscriptionId,false);
                                         }
                                       })),
                             ),
@@ -850,9 +704,8 @@ class _MealSelectionPage_MySubscriptionState
   Future<void> scrollToDate(double screenwidth) async {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (_scrollController.hasClients) {
-        _scrollController.jumpTo(mySubscriptionController.subscriptionDates.keys
-            .toList()
-            .indexOf(mySubscriptionController.selectedDate.value) *
+        _scrollController.jumpTo(mySubscriptionController.subscriptionDates
+            .indexWhere((element) => isSameDay(mySubscriptionController.selectedDate.value,element.date)) *
             (screenwidth * .15));
         isScrolled = true;
         setState(() {});
@@ -862,19 +715,16 @@ class _MealSelectionPage_MySubscriptionState
 
   void showFreezeConfirmDialogue(BuildContext context) async {
     final dialogTitleWidget = Text(
-        mySubscriptionController.subscriptionDates[
-        mySubscriptionController.selectedDate.value] !=
+        mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) !=
             VALIDSUBSCRIPTIONDAY_STATUS.freezed
             ? 'sub_freeze_title'.tr
             : 'sub_unfreeze_title'.tr,
         style: getHeadlineMediumStyle(context).copyWith(
             color: APPSTYLE_Grey80, fontWeight: APPSTYLE_FontWeightBold));
-    final dialogTextWidget = Text(
-      mySubscriptionController.subscriptionDates[
-      mySubscriptionController.selectedDate.value] !=
-          VALIDSUBSCRIPTIONDAY_STATUS.freezed
-          ? 'sub_freeze_content'.tr
-          : 'sub_unfreeze_content'.tr,
+    final dialogTextWidget = Text(mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) !=
+        VALIDSUBSCRIPTIONDAY_STATUS.freezed
+        ? 'sub_freeze_content'.tr
+        : 'sub_unfreeze_content'.tr,
       style: getBodyMediumStyle(context),
     );
 
@@ -890,8 +740,7 @@ class _MealSelectionPage_MySubscriptionState
     updateLogoutAction() async {
       mySubscriptionController.freezeSubscription(
           mySubscriptionController.selectedDate.value,
-          mySubscriptionController.subscriptionDates[
-          mySubscriptionController.selectedDate.value] !=
+          mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) !=
               VALIDSUBSCRIPTIONDAY_STATUS.freezed);
       Get.back();
     }
@@ -994,7 +843,6 @@ class _MealSelectionPage_MySubscriptionState
       },
     );
   }
-
 
   showRateDialog(int mealId) async {
     showDialog(
@@ -1109,12 +957,11 @@ class _MealSelectionPage_MySubscriptionState
     );
   }
 
-
   bool ifSaveOperationAllowed(){
     final selectedDate = mySubscriptionController.selectedDate.value;
-    final subscriptionDates = mySubscriptionController.subscriptionDates[selectedDate];
+    final subscriptionDates = mySubscriptionController.getDayStatus(selectedDate);
     final isDateBeforeTwoDays = selectedDate.isBefore(DateTime.now().add(const Duration(days: 2)));
-
+    print("ifSaveOperationAllowed 1");
     if (mySubscriptionController.isDayMealSaving.value ||
         mySubscriptionController.isMealsFetching.value ||
         mySubscriptionController.isFreezing.value ||
@@ -1125,9 +972,9 @@ class _MealSelectionPage_MySubscriptionState
         isDateBeforeTwoDays) {
       return false;
     }
-
+    print("ifSaveOperationAllowed 2");
     return true;
   }
 
-
 }
+
