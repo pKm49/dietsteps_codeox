@@ -146,7 +146,7 @@ class AppUpdateChecker {
     final dialogTextWidget = Text( 'app_update_content'.tr,style: getBodyMediumStyle(context),
     );
 
-    final updateButtonTextWidget = Text('app_update_button_text'.tr);
+    final updateButtonTextWidget = Text('app_update_button_text'.tr,style: TextStyle(color: APPSTYLE_BackgroundWhite),);
 
     updateAction() {
       launchAppStore(storeLink);
