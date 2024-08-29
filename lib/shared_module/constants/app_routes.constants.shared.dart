@@ -199,15 +199,8 @@ AppPages() => [
     page: () =>   CheckoutPage_Shared(),
   ),
 
-  GetPage(
-    name: AppRouteNames.paymentCompletePageRoute,
-    page: () =>   PaymentGatewayWebView_Shared(),
-  ),
 
-  GetPage(
-    name: AppRouteNames.paymentCompleteCheckoutRoute,
-    page: () =>   CheckoutPage_Shared(),
-  ),
+
 
 ];
 
