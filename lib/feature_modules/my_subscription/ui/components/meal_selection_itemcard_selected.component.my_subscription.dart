@@ -245,7 +245,7 @@ class _MealSelectionItemCardSelectedComponent_MySubscriptionState extends State<
                           visible: widget.selectedCount==-1,
                           child: Container(
                             decoration: APPSTYLE_BorderedContainerExtraSmallDecoration.
-                            copyWith(color: APPSTYLE_PrimaryColor),
+                            copyWith(color: APPSTYLE_GuideRed),
                             padding: APPSTYLE_ExtraSmallPaddingVertical.copyWith(left: APPSTYLE_SpaceSmall,right: APPSTYLE_SpaceSmall),
                             child: Text("rate_meal".tr,style: getLabelLargeStyle(context).copyWith(color: APPSTYLE_BackgroundWhite)),
                           ),

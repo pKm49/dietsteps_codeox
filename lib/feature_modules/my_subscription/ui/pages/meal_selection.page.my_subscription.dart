@@ -40,7 +40,7 @@ class _MealSelectionPage_MySubscriptionState
   final sharedController = Get.find<SharedController>();
   ScrollController _scrollController = ScrollController();
   bool isScrolled = false;
-  DateTime threeDaysBefore = DateTime.now().add(Duration(days: -3));
+  DateTime threeDaysBefore = DateTime.now().add(Duration(hours: -72));
 
   @override
   void initState() {
@@ -52,6 +52,7 @@ class _MealSelectionPage_MySubscriptionState
       mySubscriptionController.getMealsByDate(
           mySubscriptionController.selectedDate.value, false);
     }
+
   }
 
   //         itemScrollController.scrollTo(index: 2, duration: Duration(seconds: 2));
@@ -66,8 +67,7 @@ class _MealSelectionPage_MySubscriptionState
     return PopScope(
       canPop: false,
       onPopInvoked : (didPop){
-        print("onPopInvoked");
-        print(didPop);
+
         if (didPop) {
           return;
         }else{
@@ -252,7 +252,8 @@ class _MealSelectionPage_MySubscriptionState
                               (mySubscriptionController.subscriptionDates[
                               mySubscriptionController.selectedDate.value] ==
                                   VALIDSUBSCRIPTIONDAY_STATUS.freezed && mySubscriptionController.selectedDate.value.isAfter(
-                                  DateTime.now().add(Duration(days: 2)))) ||
+                                  DateTime.now().add(Duration(hours: 48))))
+                                  ||
                               (
                                  ( mySubscriptionController.subscriptionDates[
                                   mySubscriptionController.selectedDate.value] ==
@@ -260,8 +261,9 @@ class _MealSelectionPage_MySubscriptionState
                                       mySubscriptionController.subscriptionDates[
                                       mySubscriptionController.selectedDate.value] ==
                                           VALIDSUBSCRIPTIONDAY_STATUS.mealSelected) &&
-                                     mySubscriptionController.selectedDate.value.isAfter(DateTime.now().add(Duration(days: 2)))
-                              )),
+                                     mySubscriptionController.selectedDate.value.isAfter(DateTime.now().add(Duration(hours: 48)))
+                              )
+                          ),
                       child: Expanded(
                           child: ScrollablePositionedList.builder(
                             itemCount: mySubscriptionController
@@ -535,21 +537,21 @@ class _MealSelectionPage_MySubscriptionState
                           (
                               mySubscriptionController.subscriptionDates[
                               mySubscriptionController.selectedDate.value] ==
-                                  VALIDSUBSCRIPTIONDAY_STATUS.delivered ||(
+                                  VALIDSUBSCRIPTIONDAY_STATUS.delivered
+                                  ||(
                                   (mySubscriptionController.subscriptionDates[
                                   mySubscriptionController.selectedDate.value] ==
                                       VALIDSUBSCRIPTIONDAY_STATUS.mealSelected  ||
                                       mySubscriptionController.subscriptionDates[
                                       mySubscriptionController.selectedDate.value] ==
                                           VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected )&&
-                                      mySubscriptionController.selectedDate.value.isBefore(DateTime.now().add(Duration(days: 2)))
+                                      mySubscriptionController.selectedDate.value.isBefore(DateTime.now().add(Duration(hours: 48)))
                               )
-                          )
-                      ,
+                          ) ,
                       child: Expanded(
                         child: ListView.builder(
                             itemCount: mySubscriptionController
-                                .subscriptoinMealConfig.value.meals.length,
+                                .selectedMealConfig.value.meals.length,
                             itemBuilder: (context, index) {
                               return StickyHeader(
                                 header: Container(
@@ -570,12 +572,12 @@ class _MealSelectionPage_MySubscriptionState
                                                   .toString() ==
                                                   'ar'
                                                   ? mySubscriptionController
-                                                  .subscriptoinMealConfig
+                                                  .selectedMealConfig
                                                   .value
                                                   .meals[index]
                                                   .arabicName
                                                   : mySubscriptionController
-                                                  .subscriptoinMealConfig
+                                                  .selectedMealConfig
                                                   .value
                                                   .meals[index]
                                                   .name,
@@ -601,12 +603,10 @@ class _MealSelectionPage_MySubscriptionState
                                     shrinkWrap: true,
                                     physics: NeverScrollableScrollPhysics(),
                                     itemCount: mySubscriptionController
-                                        .subscriptoinMealConfig
+                                        .selectedMealConfig
                                         .value
                                         .meals[index]
                                         .items
-                                        .where((element) => element.isSelected)
-                                        .toList()
                                         .length,
                                     gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
@@ -621,14 +621,14 @@ class _MealSelectionPage_MySubscriptionState
                                               .isBefore(threeDaysBefore) ?-1:0,
                                           subscriptoinDailyMealItem:
                                           mySubscriptionController
-                                              .subscriptoinMealConfig
+                                              .selectedMealConfig
                                               .value
                                               .meals[index].items[indx],
                                           onAdded: (int count){
                                             if(mySubscriptionController.selectedDate.value
                                                 .isBefore(threeDaysBefore)){
                                               showRateDialog( mySubscriptionController
-                                                  .subscriptoinMealConfig
+                                                  .selectedMealConfig
                                                   .value
                                                   .meals[index].items[indx].id);
                                             }
@@ -1114,7 +1114,7 @@ class _MealSelectionPage_MySubscriptionState
     final selectedDate = mySubscriptionController.selectedDate.value;
     final subscriptionDates = mySubscriptionController.subscriptionDates[selectedDate];
     final isDateBeforeTwoDays = selectedDate.isBefore(DateTime.now().add(const Duration(days: 2)));
-    print("ifSaveOperationAllowed 1");
+
     if (mySubscriptionController.isDayMealSaving.value ||
         mySubscriptionController.isMealsFetching.value ||
         mySubscriptionController.isFreezing.value ||
@@ -1125,7 +1125,7 @@ class _MealSelectionPage_MySubscriptionState
         isDateBeforeTwoDays) {
       return false;
     }
-    print("ifSaveOperationAllowed 2");
+
     return true;
   }
 
