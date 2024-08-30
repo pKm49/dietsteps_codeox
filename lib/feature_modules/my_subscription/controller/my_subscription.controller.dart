@@ -310,7 +310,7 @@ class MySubscriptionController extends GetxController {
 
     if(getDayStatus(selectedDate.value) ==
         VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected &&
-        selectedMealConfig.value.meals.where((element) => element.items.isNotEmpty).toList().isEmpty){
+        selectedMealConfig.value.meals.where((element) => element.items.isNotEmpty).toList().isEmpty && !isFromBackbutton){
       showSnackbar(Get.context!, "please_select_meals_for_all_categories".tr, "error");
       return false;
     }
@@ -319,7 +319,7 @@ class MySubscriptionController extends GetxController {
     if(getDayStatus(selectedDate.value) ==
         VALIDSUBSCRIPTIONDAY_STATUS.mealSelected &&
         selectedMealConfig.value.meals.where((element) => element.items.length==element.itemCount).toList().length
-            !=selectedMealConfig.value.meals.length && isNavigateBack){
+            !=selectedMealConfig.value.meals.length && isNavigateBack && !isFromBackbutton){
       showSnackbar(Get.context!, "please_select_meals_for_all_categories".tr, "error");
       return false;
     }
@@ -364,7 +364,9 @@ class MySubscriptionController extends GetxController {
             if(isSuccess){
               if(isNavigateBack){
                 Get.back();
-                showSnackbar(Get.context!, "selection_saved".tr, "info");
+                if(!isFromBackbutton){
+                  showSnackbar(Get.context!, "selection_saved".tr, "info");
+                }
               }
 
               getSubscriptionDates(false,false);
@@ -373,13 +375,18 @@ class MySubscriptionController extends GetxController {
 
             isDayMealSaving.value = false;
           }else {
-            showSnackbar(Get.context!, "no_subscription".tr, "error");
+            if(!isFromBackbutton){
+              showSnackbar(Get.context!, "no_subscription".tr, "error");
+            }
           }
 
         } else {
-          showSnackbar(Get.context!, "couldnt_load_profiledata".tr, "error");
-          showSnackbar(Get.context!, "login_message".tr, "error");
-          Get.offAllNamed(AppRouteNames.loginRoute);
+          if(!isFromBackbutton){
+            showSnackbar(Get.context!, "couldnt_load_profiledata".tr, "error");
+            showSnackbar(Get.context!, "login_message".tr, "error");
+            Get.offAllNamed(AppRouteNames.loginRoute);
+          }
+
         }
 
       }

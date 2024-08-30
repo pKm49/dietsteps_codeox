@@ -241,7 +241,7 @@ class ProfileController extends GetxController {
   }
 
   updateDislikes(bool isRegisterComplete) async {
-    if(! isDislikesUpdating.value && dislikes.isNotEmpty){
+    if(! isDislikesUpdating.value){
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? tMobile = prefs.getString('mobile');
       if (tMobile != null && tMobile != '') {

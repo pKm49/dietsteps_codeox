@@ -278,7 +278,6 @@ class _MyDislikesListPage_ProfileState
                             onPressed: () {
                               if(!profileController.isDislikesUpdating.value){
                                 profileController.updateDislikes(profileController.isAllregyDislikeForRegisterComplete.value);
-
                               }
                             },
                             style: getElevatedButtonStyle(context),
