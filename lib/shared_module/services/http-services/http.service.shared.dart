@@ -1,6 +1,7 @@
  
 import 'package:dietsteps/env.dart' as env;
 import 'package:dietsteps/feature_modules/plan_purchase/models/payment_data.model.plan_purchase.dart';
+import 'package:dietsteps/shared_module/constants/default_values.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/http_request_endpoints.constants.shared.dart';
 import 'package:dietsteps/shared_module/models/http_response.model.shared.dart';
 import 'package:dietsteps/shared_module/models/my_subscription.model.shared.dart';
@@ -151,11 +152,11 @@ class SharedHttpService {
       if(response.statusCode == 200){
         return response.data;
       }
-      return "";
+      return DefaultSupportNumber;
     }catch  (e,st){
       print(e);
       print(st);
-      return "";
+      return DefaultSupportNumber;
     }
   }
 

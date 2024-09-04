@@ -27,7 +27,7 @@ class SharedController extends GetxController {
   var userData = mapUserData({}).obs;
   var notifications = <AppNotification>[].obs;
   var mySubscriptions = <MySubscription>[].obs;
-  var supportNumber = "".obs;
+  var supportNumber = "+96522283543".obs;
 
   //  Mobile Verification
   var isOtpVerifying = false.obs;
@@ -325,6 +325,7 @@ class SharedController extends GetxController {
   getSupportNumber() async {
     var sharedHttpService = SharedHttpService();
     String tSupoortNumber = await sharedHttpService.getSupportNumber( );
+
     if(tSupoortNumber !=""){
       supportNumber.value = tSupoortNumber;
     }else{

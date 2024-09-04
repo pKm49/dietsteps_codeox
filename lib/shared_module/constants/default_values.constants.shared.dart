@@ -1,6 +1,6 @@
 
 
-final String DefaultSupportNumber = "+96512312312";
+final String DefaultSupportNumber = "+96522283543";
 final DateTime DOBCalendarStartDate = DateTime(1975, 11, 12);
 final DateTime DefaultInvalidDate = DateTime(1900, 11, 12);
 final DateTime DefaultMinimumDate = DateTime(1900, 11, 11);

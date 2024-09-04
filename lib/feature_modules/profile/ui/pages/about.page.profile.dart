@@ -26,6 +26,7 @@ class AboutPage_Profile extends StatefulWidget {
 }
 
 class _AboutPage_ProfileState extends State<AboutPage_Profile> {
+  final sharedController = Get.find<SharedController>();
 
   bool isAccountDeleteVisible = false;
   @override
@@ -178,7 +179,7 @@ class _AboutPage_ProfileState extends State<AboutPage_Profile> {
                     children: [
                       InkWell(
                       onTap: (){
-                        handleRequestSupportClick(context,false);
+                        openDialer();
                       },
                         child: Container(
                           decoration: APPSTYLE_BorderedContainerLargeDecoration.copyWith(
@@ -204,7 +205,7 @@ class _AboutPage_ProfileState extends State<AboutPage_Profile> {
                       addHorizontalSpace(APPSTYLE_SpaceSmall),
                       InkWell(
                         onTap: (){
-                          handleRequestSupportClick(context,true);
+                        openWhatsapp();
 
                         },
                         child: Container(
@@ -300,28 +301,41 @@ class _AboutPage_ProfileState extends State<AboutPage_Profile> {
     );
   }
 
-  Future<void> handleRequestSupportClick(
-      BuildContext buildContext, bool isWhatsapp) async {
-    final sharedController = Get.find<SharedController>();
+  openWhatsapp() async {
+    String contact = sharedController.supportNumber.value;
 
-    final Uri callUrl =
-    Uri(scheme: 'tel', path: sharedController.supportNumber.value);
-    final whatsappUrl =
-    Uri.parse("https://wa.me/${sharedController.supportNumber.value}");
-    var canLaunch = false;
-    if (isWhatsapp) {
-      canLaunch = await UrlLauncher.canLaunchUrl(whatsappUrl);
-    } else {
-      canLaunch = await UrlLauncher.canLaunchUrl(callUrl);
+    final Uri whatsappUrl = Uri(
+      scheme: 'whatsapp',
+      path: contact,
+    );
+
+    String webUrl = 'https://api.whatsapp.com/send/?phone=$contact&text=hi';
+
+    try {
+      await UrlLauncher.launchUrl(whatsappUrl);
+    } catch (e) {
+      print('object');
+      await UrlLauncher.launchUrl(
+          Uri.parse(webUrl), mode: UrlLauncher.LaunchMode.externalApplication);
     }
-    if (canLaunch) {
-      if (isWhatsapp) {
-        UrlLauncher.launchUrl(whatsappUrl);
-      } else {
-        UrlLauncher.launchUrl(callUrl);
-      }
-    } else {
-      showSnackbar(buildContext, "not_able_to_connect".tr, "error");
+  }
+
+  openDialer() async {
+    String contact = sharedController.supportNumber.value;
+
+    final Uri dialerUrl = Uri(
+      scheme: 'tel',
+      path: contact,
+    );
+    String webUrl = 'tel:$contact';
+
+
+    try {
+      await UrlLauncher.launchUrl(dialerUrl);
+    } catch (e) {
+      print('object');
+      await UrlLauncher.launchUrl(Uri.parse(webUrl),
+          mode: UrlLauncher.LaunchMode.externalApplication);
     }
   }
 
