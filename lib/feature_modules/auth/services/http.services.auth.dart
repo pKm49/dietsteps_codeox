@@ -67,44 +67,29 @@ class AuthHttpService {
     }
   }
 
-  Future<List<GeneralItem>> getMealCategories() async {
+  Future<List<MealCategory>> getMealsByDay(String day ) async {
 
     try{
       Map<String, dynamic> params = {};
-      AppHttpResponse response =
-      await getRequest(AuthHttpRequestEndpoint_GetMealCategories, params);
-
-      List<GeneralItem> tempMealCategories = [];
-
-      if (response.statusCode == 200 && response.data != null) {
-        for (var i = 0; i < response.data.length; i++) {
-          tempMealCategories.add(mapGeneralItem(response.data[i]));
-        }
-      }
-      return tempMealCategories;
-
-    }catch  (e,st){
-      print(e);
-      print(st);
-      return [];
-    }
-  }
-
-  Future<List<MealItem>> getMealsByCategory(int categoryId ) async {
-
-    try{
+      params["day"]=day;
       AppHttpResponse response = await getRequest(
-          '$AuthHttpRequestEndpoint_GetMealsByCatory${categoryId}', null);
+          AuthHttpRequestEndpoint_GetMealsByDay, params);
 
-      List<MealItem> tempSubscriptionPlans = [];
-
+      List<MealCategory> tempMealCategories = [];
+      print("response");
+      print(response.data);
+      print(response.statusCode);
+      print(response.message);
       if (response.statusCode == 200 && response.data != null) {
         for (var i = 0; i < response.data.length; i++) {
-          tempSubscriptionPlans.add(mapMealItem(response.data[i]));
+          MealCategory mealCategory = mapMealCategory(response.data[i]);
+          if(mealCategory.meals.isNotEmpty){
+            tempMealCategories.add(mapMealCategory(response.data[i]));
+          }
         }
       }
 
-      return tempSubscriptionPlans;
+      return tempMealCategories;
 
     }catch  (e,st){
       print(e);

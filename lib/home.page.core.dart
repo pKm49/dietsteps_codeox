@@ -15,6 +15,7 @@ import 'package:ionicons/ionicons.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 
 class HomePage_Core extends StatefulWidget {
   HomePage_Core({super.key});
@@ -772,23 +773,30 @@ class _HomePage_CoreState extends State<HomePage_Core> {
     );
   }
 
+
   openWhatsapp() async {
+
     String contact = sharedController.supportNumber.value;
 
-    final Uri whatsappUrl = Uri(
-      scheme: 'whatsapp',
-      path: contact,
+    // final Uri whatsappUrl = Uri(
+    //   scheme: 'whatsapp',
+    //   path: contact,
+    // );
+    final whatsappUrl = WhatsAppUnilink(
+      phoneNumber: contact,
+      text: "Hey",
     );
 
     String webUrl = 'https://api.whatsapp.com/send/?phone=$contact&text=hi';
 
     try {
-      await UrlLauncher.launchUrl(whatsappUrl);
+      await UrlLauncher.launchUrl(whatsappUrl.asUri());
     } catch (e) {
       print('object');
       await UrlLauncher.launchUrl(
           Uri.parse(webUrl), mode: UrlLauncher.LaunchMode.externalApplication);
     }
+
   }
 
   openDialer() async {

@@ -15,6 +15,7 @@ import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 
 class LoginPage_Auth extends StatefulWidget {
   const LoginPage_Auth({super.key});
@@ -164,6 +165,29 @@ class _LoginPage_AuthState extends State<LoginPage_Auth> {
                                     onPressed: () {
                                       Get.toNamed(AppRouteNames.registerEnglishNameRoute);
                                     })),
+
+                            addVerticalSpace(APPSTYLE_SpaceMedium),
+                            SizedBox(
+
+                                width: double.infinity,
+                                child: OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                      side: const BorderSide(width: 2.0, color: APPSTYLE_BackgroundWhite),
+                                    ),
+                                    child:   Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(ASSETS_MEALS,width: 30),
+                                        addHorizontalSpace(APPSTYLE_SpaceMedium),
+                                        Text('Show our menu',
+                                            style: getHeadlineMediumStyle(context).copyWith(
+                                                color: APPSTYLE_BackgroundWhite,fontWeight: APPSTYLE_FontWeightBold),
+                                            textAlign: TextAlign.center),
+                                      ],
+                                    ),
+                                    onPressed: () {
+                                      Get.toNamed(AppRouteNames.menuListRoute);
+                                    })),
                           ],
                         ),
                       ),
@@ -177,19 +201,18 @@ class _LoginPage_AuthState extends State<LoginPage_Auth> {
       ),
     );
   }
-
   openWhatsapp() async {
     String contact = sharedController.supportNumber.value;
 
-    final Uri whatsappUrl = Uri(
-      scheme: 'whatsapp',
-      path: contact,
+    final whatsappUrl = WhatsAppUnilink(
+      phoneNumber: contact,
+      text: "Hey",
     );
 
     String webUrl = 'https://api.whatsapp.com/send/?phone=$contact&text=hi';
 
     try {
-      await UrlLauncher.launchUrl(whatsappUrl);
+      await UrlLauncher.launchUrl(whatsappUrl.asUri());
     } catch (e) {
       print('object');
       await UrlLauncher.launchUrl(

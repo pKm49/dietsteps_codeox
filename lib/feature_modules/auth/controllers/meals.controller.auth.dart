@@ -10,45 +10,23 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MealsController extends GetxController {
-  
-  var isCategoriesFetching = false.obs;
+
   var isMealsLoading = false.obs;
-  var mealCategories = <GeneralItem>[].obs;
-  var meals = <MealItem>[].obs;
-  var currentMealCategoryId = (-1).obs;
+  var mealCategories = <MealCategory>[].obs;
+  var currentDay = "monday".obs;
   var currentMeal = mapMealItem({}).obs;
 
-  Future<void> getMealCategories() async {
-    if(!isCategoriesFetching.value && !isMealsLoading.value){
-      isCategoriesFetching.value = true;
+
+
+  Future<void> getMealsByDay(String day) async {
+    if(  !isMealsLoading.value && day != ""){
       isMealsLoading.value = true;
+      currentDay.value = day;
+      currentMeal.value = mapMealItem({});
       mealCategories.value = [];
       var planPurchaseHttpService = new AuthHttpService();
       mealCategories.value =
-      await planPurchaseHttpService.getMealCategories();
-      isCategoriesFetching.value = false;
-      isMealsLoading.value = false;
-      currentMealCategoryId.value = -1;
-      update();
-      if (mealCategories.isEmpty) {
-        currentMeal.value = mapMealItem({});
-        meals.value = [];
-      }else{
-        getMealsByCategory(mealCategories[0].id);
-      }
-    }
-
-  }
-
-  Future<void> getMealsByCategory(int categoryId) async {
-    if(!isCategoriesFetching.value && !isMealsLoading.value && categoryId !=-1){
-      isMealsLoading.value = true;
-      currentMealCategoryId.value = categoryId;
-      currentMeal.value = mapMealItem({});
-      meals.value = [];
-      var planPurchaseHttpService = new AuthHttpService();
-      meals.value =
-      await planPurchaseHttpService.getMealsByCategory(categoryId);
+      await planPurchaseHttpService.getMealsByDay(day);
       isMealsLoading.value = false;
 
     }

@@ -1,11 +1,10 @@
- 
+
 import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dietsteps/feature_modules/auth/controllers/meals.controller.auth.dart';
-import 'package:dietsteps/feature_modules/auth/ui/meals_subs/components/meal_category_card.component.auth.dart';
-import 'package:dietsteps/feature_modules/auth/ui/meals_subs/components/meal_category_card_loader.component.auth.dart';
+import 'package:dietsteps/feature_modules/auth/ui/meals_subs/components/meal_day_selection.auth.dart';
 import 'package:dietsteps/feature_modules/auth/ui/meals_subs/components/meal_itemcard.component.auth.dart';
 import 'package:dietsteps/feature_modules/auth/ui/meals_subs/components/meal_itemsloader.component.auth.dart';
 import 'package:dietsteps/feature_modules/plan_purchase/controllers/plan_purchase.controller.dart';
@@ -14,6 +13,7 @@ import 'package:dietsteps/shared_module/constants/app_route_names.constants.shar
 import 'package:dietsteps/shared_module/constants/asset_urls.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/style_params.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/widget_styles.constants.shared.dart';
+import 'package:dietsteps/shared_module/services/utility-services/calendar_utilities.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/widget_generator.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/widget_properties_generator.service.shared.dart';
 import 'package:dietsteps/shared_module/ui/components/custom_back_button.component.shared.dart';
@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class MealsListPage_Auth extends StatefulWidget {
   const MealsListPage_Auth({super.key});
@@ -34,12 +35,12 @@ class MealsListPage_Auth extends StatefulWidget {
 class _MealsListPage_AuthState
     extends State<MealsListPage_Auth> {
   final mealsController = Get.find<MealsController>();
-
+  ScrollController _scrollController = ScrollController();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    mealsController.getMealCategories();
+    mealsController.getMealsByDay("monday");
   }
 
   @override
@@ -82,58 +83,30 @@ class _MealsListPage_AuthState
               child: Column(
                 children: [
                   addVerticalSpace(APPSTYLE_SpaceLarge ),
-                  Visibility(
-                    visible: mealsController.isCategoriesFetching.value,
-                    child: Container(
-                      height: 36,
-                      width: screenwidth,
-                      alignment: Alignment.center,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
+                  Padding(
+                    padding: APPSTYLE_LargePaddingHorizontal.copyWith(bottom: APPSTYLE_SpaceSmall),
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
                         children: [
-                          addHorizontalSpace(APPSTYLE_SpaceMedium),
-                          MealCategoryCardLoaderComponent(),
-                          addHorizontalSpace(APPSTYLE_SpaceMedium),
-                          MealCategoryCardLoaderComponent(),
-                          addHorizontalSpace(APPSTYLE_SpaceMedium),
-                          MealCategoryCardLoaderComponent(),
-                          addHorizontalSpace(APPSTYLE_SpaceMedium),
-                          MealCategoryCardLoaderComponent(),
-                          addHorizontalSpace(APPSTYLE_SpaceMedium),
+                          for (var i =1;i<8;i++)
+                            InkWell(
+                                onTap: () {
+                                  mealsController.getMealsByDay(getDayByIndex(i) );
+                                },
+                                child:
+                                MealDaySelectionComponent_Auth(
+                                    index:i,
+                                    day: getDayNameByIndex(i),
+                                    isSelected: getDayByIndex(i)==mealsController.currentDay.value))
                         ],
                       ),
                     ),
                   ),
+                  addVerticalSpace(APPSTYLE_SpaceSmall),
                   Visibility(
-                    visible: !mealsController.isCategoriesFetching.value && mealsController.mealCategories.isNotEmpty,
-                    child: Container(
-                      height: 36,
-                      width: screenwidth,
-                      alignment: Alignment.center,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          addHorizontalSpace(APPSTYLE_SpaceMedium),
-                          for (var i = 0; i < mealsController.mealCategories.length; i++)
-                            Container(
-                              margin: EdgeInsets.only(right: APPSTYLE_SpaceSmall),
-                              child: MealCategoryCardComponent(
-                                  label:Localizations.localeOf(context)
-                                      .languageCode
-                                      .toString() ==
-                                      'ar'?mealsController.mealCategories[i].arabicName:
-                                  mealsController.mealCategories[i].name,
-                                  isSelected: mealsController.currentMealCategoryId.value == mealsController.mealCategories[i].id,
-                                  onClick: () {
-                                    mealsController.getMealsByCategory(mealsController.mealCategories[i].id);
-                                  }),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Visibility(
-                    visible: mealsController.meals.isEmpty &&
+                    visible: mealsController.mealCategories.isEmpty &&
                         !mealsController.isMealsLoading.value ,
                     child: Expanded(
                         child: Column(
@@ -168,38 +141,86 @@ class _MealsListPage_AuthState
                       child: MealItemsLoader(),
                     ),
                   ),
-
                   Visibility(
-                      visible: mealsController.meals.isNotEmpty &&
+                      visible: mealsController.mealCategories.isNotEmpty &&
                           !mealsController.isMealsLoading.value ,
-                      child: Expanded(child: Padding(
-                        padding:APPSTYLE_LargePaddingAll,
-                        child: GridView.builder(
-                                            shrinkWrap: true,
-                                            itemCount: mealsController
-                          .meals
-                          .length,
-                                            gridDelegate:
-                                            SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 0,
-                          crossAxisSpacing: APPSTYLE_SpaceSmall,
-                          mainAxisExtent: screenheight * 0.35),
-                                            itemBuilder: (context, indx) {
-                        return MealItemCardComponent_Auth(
-                            isSelectable: false,
-                            selectedCount:0,
-                            subscriptoinDailyMealItem:
-                            mealsController
-                                .meals [indx],
-                            onAdded: (int count){
-                                mealsController.viewMeal( mealsController
-                                    .meals[indx]);
-                            });
+                      child: Expanded(
+                          child: ListView.builder(
+                              itemCount: mealsController
+                                  .mealCategories.length,
+                              itemBuilder: (context, index) {
+                                return StickyHeader(
+                                  header: Container(
+                                    color: APPSTYLE_PrimaryColorBgLight,
+                                    padding: APPSTYLE_LargePaddingHorizontal.copyWith(
+                                        top: APPSTYLE_SpaceMedium,
+                                        bottom: APPSTYLE_SpaceMedium),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                                Localizations.localeOf(context)
+                                                    .languageCode
+                                                    .toString() ==
+                                                    'ar'
+                                                    ? mealsController
+                                                    .mealCategories
+                                                    .value
+                                                [index]
+                                                    .arabicName
+                                                    : mealsController
+                                                    .mealCategories
+                                                [index]
+                                                    .name,
+                                                style: getHeadlineMediumStyle(context)
+                                                    .copyWith(
+                                                    fontSize: APPSTYLE_FontSize20,
+                                                    fontWeight:
+                                                    APPSTYLE_FontWeightBold)),
+                                            Container(
+                                              width: 30,
+                                              height: 2,
+                                              color: APPSTYLE_Grey80,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  content: Padding(
+                                    padding: APPSTYLE_LargePaddingHorizontal.copyWith(
+                                        top: APPSTYLE_SpaceMedium),
+                                    child: GridView.builder(
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount: mealsController
+                                          .mealCategories [index]
+                                          .meals
+                                          .length,
+                                      gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          mainAxisSpacing: 0,
+                                          crossAxisSpacing: APPSTYLE_SpaceMedium,
+                                          mainAxisExtent: screenheight * 0.35),
+                                      itemBuilder: (context, indx) {
+                                        return MealItemCardComponent_Auth(
+                                            isSelectable: true,
+                                            selectedCount:0,                                      subscriptoinDailyMealItem:
+                                        mealsController
+                                            .mealCategories [index].meals[indx],
+                                            onAdded: (int count){
+                                            });
+                                      },
+                                    ),
+                                  ),
+                                );
+                              }))),
 
-                                            },
-                                          ),
-                      )))
                 ],
               ),
             ),

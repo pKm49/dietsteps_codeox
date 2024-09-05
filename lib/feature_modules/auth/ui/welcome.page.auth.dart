@@ -13,7 +13,7 @@ import 'package:ionicons/ionicons.dart';
 class WelcomePage_Auth extends StatelessWidget {
   WelcomePage_Auth({super.key});
 
-  MealsController mealsController = Get.put(MealsController());
+
 
   @override
   Widget build(BuildContext context) {
@@ -74,28 +74,7 @@ class WelcomePage_Auth extends StatelessWidget {
                           onPressed: () {
                             Get.toNamed(AppRouteNames.loginRoute);
                           })),
-                  addVerticalSpace(APPSTYLE_SpaceMedium),
-                  SizedBox(
 
-                      width: double.infinity,
-                      child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            side: const BorderSide(width: 2.0, color: APPSTYLE_BackgroundWhite),
-                          ),
-                          child:   Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(ASSETS_MEALS,width: 30),
-                              addHorizontalSpace(APPSTYLE_SpaceMedium),
-                              Text(' مشاهدة المنيو / Show our menu',
-                                  style: getHeadlineMediumStyle(context).copyWith(
-                                      color: APPSTYLE_BackgroundWhite,fontWeight: APPSTYLE_FontWeightBold),
-                                  textAlign: TextAlign.center),
-                            ],
-                          ),
-                          onPressed: () {
-                            Get.toNamed(AppRouteNames.menuListRoute);
-                          })),
                   // addVerticalSpace(APPSTYLE_SpaceMedium),
                   // SizedBox(
                   //

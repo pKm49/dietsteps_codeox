@@ -1,11 +1,51 @@
 
-
 import 'package:dietsteps/shared_module/constants/asset_urls.constants.shared.dart';
+
+class MealCategory {
+
+  final int id;
+  final String name;
+  final String arabicName;
+  final List<MealItem> meals;
+
+  MealCategory({
+    required this.id,
+    required this.name,
+    required this.arabicName,
+    required this.meals,
+  });
+
+
+}
+
+MealCategory mapMealCategory(dynamic payload){
+
+  List<MealItem> meals = [];
+
+  if(payload["meals"] != null && payload["meals"] is! String ){
+    payload["meals"].forEach((element) {
+      if(element != null){
+        meals.add(mapMealItem(element));
+      }
+    });
+  }
+
+  return MealCategory(
+      id :payload["id"]??-1,
+      name :payload["name"]!= null && payload["name"]!= false?payload["name"] :"",
+      arabicName :payload["arabic_name"]!= null && payload["arabic_name"]!= false?payload["arabic_name"] :"",
+      meals:meals
+  );
+}
+
+
+
 
 class MealItem {
 
   final int id;
   final String imageUrl;
+  final String tags;
   final String name;
   final String description;
   final String arabicName;
@@ -14,7 +54,7 @@ class MealItem {
   final double protein;
   final double carbs;
   final double fat;
-  final int rating;
+  final double rating;
   final int rating_count;
   final double price;
   final List<MealIngredient> ingredients;
@@ -22,6 +62,7 @@ class MealItem {
   MealItem({
     required this.id,
     required this.imageUrl,
+    required this.tags,
     required this.name,
     required this.arabicName,
     required this.description,
@@ -53,6 +94,7 @@ MealItem mapMealItem(dynamic payload){
 
   return MealItem(
       id :payload["id"]??-1,
+      tags :payload["tags"]!= null?payload["tags"].toString():"",
       imageUrl :payload["image"]!= null?payload["image"].toString():ASSETS_SAMPLEFOOD,
       name :payload["name"]!= null && payload["name"]!= false?payload["name"] :"",
       arabicName :payload["arabic_name"]!= null && payload["arabic_name"]!= false?payload["arabic_name"] :"",
@@ -62,7 +104,7 @@ MealItem mapMealItem(dynamic payload){
       protein :payload["protein"]??0.0,
       carbs :payload["carbs"]??0.0,
       fat :payload["fat"]??0.0,
-      rating :payload["rating"] !=null?int.parse(payload["rating"].toString()):0,
+      rating :payload["rating"]??0.0,
       rating_count :payload["rating_count"] !=null?int.parse(payload["rating_count"].toString()):0,
       price :payload["price"]??0.0,
       ingredients:ingredients
