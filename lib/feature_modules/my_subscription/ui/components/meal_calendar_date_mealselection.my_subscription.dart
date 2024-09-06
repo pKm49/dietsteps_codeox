@@ -69,8 +69,8 @@ class MealCalendarDateMealSelectionComponent_MySubscription extends StatelessWid
                             color: isSelected?APPSTYLE_BackgroundWhite:
                             status==VALIDSUBSCRIPTIONDAY_STATUS.offDay?APPSTYLE_GuideRed:
                             status==VALIDSUBSCRIPTIONDAY_STATUS.freezed?APPSTYLE_GuideOrange:
-                            status==VALIDSUBSCRIPTIONDAY_STATUS.delivered && date.isAfter(threeDaysBefore) ?APPSTYLE_GuideGreen:
-                            status==VALIDSUBSCRIPTIONDAY_STATUS.delivered && date.isBefore(threeDaysBefore) ?APPSTYLE_GuideRed:
+                            status==VALIDSUBSCRIPTIONDAY_STATUS.delivered && date.isBefore(threeDaysBefore) ?APPSTYLE_GuideGreen:
+                            status==VALIDSUBSCRIPTIONDAY_STATUS.delivered && date.isAfter(threeDaysBefore) ?APPSTYLE_GuideRed:
                             status==VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected && isTodayTomorrow(date)?APPSTYLE_WhatsappGreen:
                             status==VALIDSUBSCRIPTIONDAY_STATUS.mealNotSelected && !isTodayTomorrow(date)?APPSTYLE_GuideRed:
                             APPSTYLE_WhatsappGreen
@@ -101,7 +101,7 @@ class MealCalendarDateMealSelectionComponent_MySubscription extends StatelessWid
                   // Delivered & Before 3 days - rating enabled
                   Visibility(
                       visible: status==VALIDSUBSCRIPTIONDAY_STATUS.delivered &&
-                          date.isBefore(threeDaysBefore)  ,
+                          date.isAfter(threeDaysBefore)  ,
                       child:   Padding(
                         padding: const EdgeInsets.only(bottom: APPSTYLE_SpaceExtraSmall),
                         child: Icon(Ionicons.star,color: isSelected?APPSTYLE_BackgroundWhite:APPSTYLE_GuideRed,size: 17),
@@ -109,7 +109,7 @@ class MealCalendarDateMealSelectionComponent_MySubscription extends StatelessWid
                   ),
                   Visibility(
                     visible: (status==VALIDSUBSCRIPTIONDAY_STATUS.delivered ) &&
-                        date.isBefore(threeDaysBefore)  ,
+                        date.isAfter(threeDaysBefore)  ,
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text("rate".tr,style: getLabelSmallStyle(context).copyWith(
@@ -120,14 +120,14 @@ class MealCalendarDateMealSelectionComponent_MySubscription extends StatelessWid
 
                   // Delivered & After 3 days - no action
                   Visibility(
-                      visible:  status==VALIDSUBSCRIPTIONDAY_STATUS.delivered && date.isAfter(threeDaysBefore)  ,
+                      visible:  status==VALIDSUBSCRIPTIONDAY_STATUS.delivered && date.isBefore(threeDaysBefore)  ,
                       child:  Padding(
                         padding: const EdgeInsets.only(bottom: APPSTYLE_SpaceExtraSmall),
                         child: SvgPicture.asset(ASSETS_FOODTRUCK,height: 13,color: isSelected?APPSTYLE_BackgroundWhite: APPSTYLE_WhatsappGreen),
                       )
                   ),
                   Visibility(
-                    visible: (status==VALIDSUBSCRIPTIONDAY_STATUS.delivered ) && date.isAfter(threeDaysBefore) ,
+                    visible: (status==VALIDSUBSCRIPTIONDAY_STATUS.delivered ) && date.isBefore(threeDaysBefore) ,
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text("delivered_single".tr,style: getLabelSmallStyle(context).copyWith(

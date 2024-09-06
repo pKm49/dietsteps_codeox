@@ -542,15 +542,17 @@ class _MealSelectionPage_MySubscriptionState
                                     itemBuilder: (context, indx) {
                                       return MealSelectionItemCardSelectedComponent_MySubscription(
                                           isSelectable: true,
-                                          selectedCount:mySubscriptionController.selectedDate.value
-                                              .isBefore(threeDaysBefore) ?-1:1,                                      subscriptoinDailyMealItem:
+                                          selectedCount:mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) ==
+                                              VALIDSUBSCRIPTIONDAY_STATUS.delivered && mySubscriptionController.selectedDate.value
+                                              .isAfter(threeDaysBefore) ?-1:1,                                      subscriptoinDailyMealItem:
                                       mySubscriptionController
                                           .selectedMealConfig
                                           .value
                                           .meals[index].items[indx],
                                           onAdded: (int count){
-                                            if(mySubscriptionController.selectedDate.value
-                                                .isBefore(threeDaysBefore)){
+                                            if(mySubscriptionController.getDayStatus(mySubscriptionController.selectedDate.value) ==
+                                                VALIDSUBSCRIPTIONDAY_STATUS.delivered && mySubscriptionController.selectedDate.value
+                                                .isAfter(threeDaysBefore)){
                                               showRateDialog( mySubscriptionController
                                                   .selectedMealConfig
                                                   .value
