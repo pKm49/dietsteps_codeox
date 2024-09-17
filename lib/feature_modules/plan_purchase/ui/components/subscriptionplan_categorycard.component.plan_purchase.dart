@@ -88,7 +88,8 @@ class SubscriptionPlanCategoryCardComponent_PlanPurchase extends StatelessWidget
                                   .toString() ==
                                   'ar'?subscriptionPlanCategory.arabicDescription
                                   :subscriptionPlanCategory.description,
-                                style: getLabelSmallStyle(context).copyWith(
+                                style: getBodyMediumStyle(context).copyWith(
+                                  fontWeight: APPSTYLE_FontWeightBold,
                                     color: APPSTYLE_BackgroundWhite
                                 ),)
                             ],

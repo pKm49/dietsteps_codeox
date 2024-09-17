@@ -85,7 +85,7 @@ class _OtpVerificationMobileInputPage_SharedState extends State<OtpVerificationM
                     TextFormField(
                       controller: sharedController.mobileTextEditingController.value,
                         validator: (value) => checkIfMobileNumberValid(value),
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
                         decoration: InputDecoration(
                             labelText: 'mobile_number'.tr ,
                             hintText: 'enter_mobile_number'.tr

@@ -3,6 +3,7 @@
     "name": "English",
     "code": "en_US",
     "texts": {
+      "dislike_qtn": "What are your dislikes ?",
 
       "welcome_message_title": "Fast delivery at Your doorstep",
       "welcome_message_description": "A few taps on your phone, and a world of culinary delights arrives. With a diverse array of cuisines just a click away, you can savor global flavors from the comfort of home.",
@@ -290,6 +291,7 @@
     "name": "Arabic",
     "code": "ar_AE",
     "texts": {
+      "dislike_qtn": "ما هي الأشياء التي لا تحبها؟",
 
       "welcome_message_title": "التسليم السريع على عتبة داركم",
       "welcome_message_description": "فقط بضع نقرات على هاتفك، وسوف تحصل على عالم من المأكولات اللذيذة. مع مجموعة متنوعة من المأكولات بنقرة واحدة فقط، يمكنك تذوق النكهات العالمية وأنت مرتاح في منزلك.",

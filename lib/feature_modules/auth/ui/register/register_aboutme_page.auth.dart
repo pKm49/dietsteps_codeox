@@ -5,7 +5,9 @@ import 'package:dietsteps/shared_module/constants/asset_urls.constants.shared.da
 import 'package:dietsteps/shared_module/constants/available_genders.shared.constant.dart';
 import 'package:dietsteps/shared_module/constants/style_params.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/widget_styles.constants.shared.dart';
+import 'package:dietsteps/shared_module/services/utility-services/date_conversion.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/form_validator.service.shared.dart';
+import 'package:dietsteps/shared_module/services/utility-services/toaster_snackbar_shower.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/widget_generator.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/widget_properties_generator.service.shared.dart';
 import 'package:dietsteps/shared_module/ui/components/custom_back_button.component.shared.dart';
@@ -198,7 +200,7 @@ class _RegisterAboutmePage_AuthState
                                 controller: registerController.heightTextEditingController.value,
                               validator: (password) =>
                                   checkIfNameFormValid(password,"height"),
-                              keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
                               decoration: InputDecoration(
                                 hintText: 'height_in_cm'.tr,
                                 label: Row(
@@ -231,7 +233,6 @@ class _RegisterAboutmePage_AuthState
                             style: getBodyMediumStyle(context).copyWith(  fontWeight: APPSTYLE_FontWeightBold),
                             textAlign: TextAlign.start,
                           ),
-
                           addVerticalSpace(APPSTYLE_SpaceMedium),
                           Row(children: [
                             Expanded(
@@ -240,7 +241,7 @@ class _RegisterAboutmePage_AuthState
                                 controller: registerController.weightTextEditingController.value,
                               validator: (password) =>
                                   checkIfNameFormValid(password,"weight"),
-                              keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
                               decoration: InputDecoration(
                                 hintText: 'weight_in_kg'.tr,
                                 label: Row(
@@ -281,8 +282,13 @@ class _RegisterAboutmePage_AuthState
                       child: ElevatedButton(
                         onPressed: () {
                           FocusManager.instance.primaryFocus?.unfocus();
-                          if (registerEnglishNameFormKey.currentState!.validate() ) {
+                          if (registerEnglishNameFormKey.currentState!.validate() &&
+                              !isSameDay(registerController.selectedDOB.value,DateTime.now())) {
                             Get.toNamed(AppRouteNames.registerOriginRoute);
+                          }else{
+                            if(isSameDay(registerController.selectedDOB.value,DateTime.now())){
+                              showSnackbar(context, "when_bday_q".tr, "info");
+                            }
                           }
                         },
                         style: getElevatedButtonStyle(context),

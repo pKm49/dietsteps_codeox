@@ -241,26 +241,35 @@ class ProfileController extends GetxController {
   }
 
   updateDislikes(bool isRegisterComplete) async {
-    if(! isDislikesUpdating.value){
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      final String? tMobile = prefs.getString('mobile');
-      if (tMobile != null && tMobile != '') {
-        isDislikesUpdating.value = true;
-        var profileHttpService = ProfileHttpService();
-        bool isSuccess = await profileHttpService.updateDislikes(dislikes,tMobile);
-        isDislikesUpdating.value = false;
-        if(isSuccess){
-          if(isRegisterComplete){
-            Get.toNamed(AppRouteNames.planPurchaseSubscriptionPlansCategoryListRoute);
-          }else{
-            Get.back();
+    if(dislikes.isEmpty){
+      if(isRegisterComplete){
+        Get.toNamed(AppRouteNames.planPurchaseSubscriptionPlansCategoryListRoute);
+      }else{
+        Get.back();
+      }
+    }else{
+      if(! isDislikesUpdating.value){
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        final String? tMobile = prefs.getString('mobile');
+        if (tMobile != null && tMobile != '') {
+          isDislikesUpdating.value = true;
+          var profileHttpService = ProfileHttpService();
+          bool isSuccess = await profileHttpService.updateDislikes(dislikes,tMobile);
+          isDislikesUpdating.value = false;
+          if(isSuccess){
+            if(isRegisterComplete){
+              Get.toNamed(AppRouteNames.planPurchaseSubscriptionPlansCategoryListRoute);
+            }else{
+              Get.back();
+            }
+            showSnackbar(Get.context!, "dislikes_updated_successfully".tr, "info");
           }
-          showSnackbar(Get.context!, "dislikes_updated_successfully".tr, "info");
+        }else {
+          showSnackbar(Get.context!, "couldnt_load_profiledata".tr, "error");
+          showSnackbar(Get.context!, "login_message".tr, "error");
+          Get.offAllNamed(AppRouteNames.loginRoute);
         }
-      }else {
-        showSnackbar(Get.context!, "couldnt_load_profiledata".tr, "error");
-        showSnackbar(Get.context!, "login_message".tr, "error");
-        Get.offAllNamed(AppRouteNames.loginRoute);
+
       }
 
     }

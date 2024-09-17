@@ -64,7 +64,7 @@ class _MyDislikesListPage_ProfileState
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
-                    'dislikes'.tr,
+                    'dislike_qtn'.tr,
                     style: getHeadlineLargeStyle(context)
                         .copyWith(fontWeight: APPSTYLE_FontWeightBold),
                     textAlign: TextAlign.center,

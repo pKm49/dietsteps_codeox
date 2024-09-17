@@ -178,7 +178,7 @@ class _SelectPlanCategoryPage_PlanPurchaseState
                                       border: Border.all(
                                           color:
                                           planPurchaseController.currentCategory.value.id ==element.id?
-                                          APPSTYLE_PrimaryColor:Colors.transparent, width: 2)),
+                                          APPSTYLE_PrimaryColor:Colors.transparent, width: 3)),
                                   height: screenheight * .28,
                                   width: screenwidth,
                                   padding:  EdgeInsets.all(APPSTYLE_SpaceExtraSmall*.5),

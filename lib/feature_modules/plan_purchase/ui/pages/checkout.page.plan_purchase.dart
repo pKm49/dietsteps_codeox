@@ -5,6 +5,7 @@ import 'package:dietsteps/feature_modules/plan_purchase/controllers/plan_purchas
 import 'package:dietsteps/shared_module/constants/style_params.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/widget_styles.constants.shared.dart';
 import 'package:dietsteps/shared_module/controllers/controller.shared.dart';
+import 'package:dietsteps/shared_module/services/utility-services/date_conversion.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/toaster_snackbar_shower.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/widget_generator.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/widget_properties_generator.service.shared.dart';
@@ -117,14 +118,12 @@ class _CheckoutPage_PlanPurchaseState
                               ),
                               addVerticalSpace(APPSTYLE_SpaceMedium),
                               Container(
-                                height: 100,
                                 width: screenwidth,
                                 decoration: APPSTYLE_ShadowedContainerSmallDecoration,
                                 padding: APPSTYLE_MediumPaddingAll,
                                 margin: APPSTYLE_LargePaddingHorizontal,
                                 alignment: Alignment.center,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                child: Wrap(
                                   children: [
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -176,7 +175,37 @@ class _CheckoutPage_PlanPurchaseState
                                         ),
                                       ],
                                     ),
-
+                                    addVerticalSpace(APPSTYLE_SpaceMedium),
+                                    Row(
+                                      children: List.generate(
+                                          600 ~/ 10,
+                                              (index) => Expanded(
+                                            child: Container(
+                                              color: index % 2 == 0
+                                                  ? Colors.transparent
+                                                  : Colors.grey,
+                                              height: 2,
+                                            ),
+                                          )),
+                                    ),
+                                    addVerticalSpace(APPSTYLE_SpaceMedium),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Icon(Icons.calendar_month,size: APPSTYLE_FontSize20,),
+                                        addHorizontalSpace(APPSTYLE_SpaceExtraSmall),
+                                        Expanded(
+                                          child: FittedBox(
+                                            alignment: Alignment.centerLeft,
+                                            fit:BoxFit.scaleDown,
+                                            child: Text(
+                                              getFormattedDate(planPurchaseController.selectedDate.value) ,
+                                              style: getBodyMediumStyle(context),textAlign: TextAlign.start,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ),
