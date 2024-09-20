@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -91,23 +92,13 @@ class PushNotificationService {
     debugPrint("FirebaseMessaging onMessage triggered");
     debugPrint("payload is " + message!.data.toString());
 
-    final RemoteNotification? notification = message.notification;
     final Map<String, dynamic> data = message.data;
-    final AndroidNotification? android = message.notification?.android;
-    final AppleNotification? apple = message.notification?.apple;
     String logoPath =
         "https://lh3.googleusercontent.com/FxupMGq1izU8YhGmhU1lCubOapWjv3tc2D248zBPJo2oYxum0Hy0CduuKkzhV_VpYtw";
     String imageUrl = logoPath;
 
-    if(android != null){
-      if(android.imageUrl != null){
-        imageUrl = android.imageUrl??logoPath;
-      }
-    }
-    if(apple != null){
-      if(apple.imageUrl != null){
-        imageUrl = apple.imageUrl??logoPath;
-      }
+    if(data["image"] != null){
+      imageUrl = data["image"];
     }
 
     String bigPicturePath = "";
@@ -123,12 +114,12 @@ class PushNotificationService {
     BigPictureStyleInformation(FilePathAndroidBitmap(bigPicturePath));
     // If `onMessage` is triggered with a notification, construct our own
 // local notification to show to users using the created channel.
+    await notificationsPlugin.cancelAll();
 
-    if(notification != null){
-      notificationsPlugin.show(
-        notification.hashCode,
-        notification.title,
-        notification.body,
+    notificationsPlugin.show(
+        getRandomId(),
+        data['title'],
+        data['body'],
         flutter_local_notifications.NotificationDetails(
           android: AndroidNotificationDetails(
               channel.id,
@@ -140,9 +131,13 @@ class PushNotificationService {
         ),
         payload: message.data.toString(),
       );
-    }
 
 
+
+  }
+
+  getRandomId(){
+    return 100000 + Random().nextInt(999999 - 100000);
   }
 
 }

@@ -85,7 +85,7 @@ class RegisterController extends GetxController {
     address.value = tAddress;
   }
 
-  handleRegistration() async {
+  handleRegistration(String tSource) async {
 
     isRegisterSubmitting.value = true;
     var authHttpService = new AuthHttpService();
@@ -101,7 +101,7 @@ class RegisterController extends GetxController {
         gender: gender.value,
         height: double.parse(heightTextEditingController.value.text.toString().trim()),
         weight: double.parse(weightTextEditingController.value.text.toString().trim()),
-        source: source.value,
+        source: tSource,
         nickname: address.value.nickname,
         area: address.value.areaId,
         block: address.value.blockId,
@@ -112,7 +112,7 @@ class RegisterController extends GetxController {
         apartmentNumber:address.value.apartmentNo,
         comments:address.value.comments,
         profile_picture:isFileSelected.value? profilePictureUrl.value:"",
-        other_source: otherSourceTextEditingController.value.text));
+        other_source:tSource!=""? otherSourceTextEditingController.value.text:""));
     isRegisterSubmitting.value = false;
     if (isSuccess) {
       var sharedPreferences = await SharedPreferences.getInstance();

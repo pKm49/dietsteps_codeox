@@ -138,6 +138,25 @@ class _RegisterOriginPage_AuthState
                       ],
                     ),
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                          child: Text('skip'.tr,
+                              textAlign: TextAlign.center,
+                              style: getBodyMediumStyle(context)
+                                  .copyWith(fontWeight: FontWeight.bold,
+                                  color: APPSTYLE_BackgroundWhite)),
+                          onPressed: () {
+
+                            FocusManager.instance.primaryFocus?.unfocus();
+                            if (  !registerController.isRegisterSubmitting.value) {
+                              registerController.handleRegistration("");
+                            }
+                          }),
+                    ],
+                  ),
+                  addVerticalSpace(APPSTYLE_SpaceMedium),
                   Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: 0,vertical: APPSTYLE_SpaceSmall),
@@ -147,7 +166,7 @@ class _RegisterOriginPage_AuthState
                         onPressed: () {
                           FocusManager.instance.primaryFocus?.unfocus();
                           if (  !registerController.isRegisterSubmitting.value) {
-                            registerController.handleRegistration();
+                            registerController.handleRegistration(registerController.source.value);
                           }
                         },
                         style: getElevatedButtonStyle(context),

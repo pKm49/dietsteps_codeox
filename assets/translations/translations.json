@@ -283,7 +283,8 @@
       "rate": "Rate",
       "rating_saved": "Submitted Succesfully",
       "order_reference": "Order Reference",
-      "payment_reference": "Payment Reference"
+      "payment_reference": "Payment Reference",
+      "skip": "Skip"
 
     }
   },
@@ -574,7 +575,9 @@
       "rate": "التقييم",
       "rating_saved": "تم تقديم التقديم بنجاح",
       "order_reference": "معرف الطلب",
-      "payment_reference": "معرف الدفع"
+      "payment_reference": "معرف الدفع",
+      "skip": "تخطي"
+
     }
   }
 ]

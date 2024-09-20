@@ -7,6 +7,7 @@ const String SharedHttpRequestEndpoint_VerifyOTP = "/verify_otp";
 const String SharedHttpRequestEndpoint_GetSupportNumber = "/support";
 const String SharedHttpRequestEndpoint_BookDietitianAppointment = "/dietitian_appointment";
 const String SharedHttpRequestEndpoint_SaveDeviceToken = "/device_token";
+const String SharedHttpRequestEndpoint_RemoveDeviceToken = "/remove_device_token";
 const String SharedHttpRequestEndpoint_ActivateSubscription =  "/activate_subscription";
 const String SharedHttpRequestEndpoint_GetPaymentLink =  "/subscription_payment_link";
 const String SharedHttpRequestEndpoint_CheckOrderStatus =  "/subscription_payment_status";

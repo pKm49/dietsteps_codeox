@@ -191,11 +191,22 @@ class SharedController extends GetxController {
   }
 
   Future<void> handleLogout() async {
-    saveAuthTokenAndMobileToSharedPreference("","");
+
     userData.value = mapUserData({});
     notifications.value = [];
+    saveAuthTokenAndMobileToSharedPreference("","");
     Get.offAllNamed(AppRouteNames.loginRoute);
+    removeToken();
+
   }
+
+  Future<void> removeToken() async {
+    var sharedHttpService = SharedHttpService();
+    String deviceToken = await getFirebaseMessagingToken();
+    await sharedHttpService.removeDeviceToken(deviceToken);
+
+  }
+
 
   Future<void> setDeviceToken() async {
     isDeviceTokenUpdating.value = true;
