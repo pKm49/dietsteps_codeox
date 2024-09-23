@@ -6,9 +6,11 @@ import 'package:get/get.dart';
 
 class CustomCurveShapeComponent_Shared extends StatelessWidget {
 
-  const CustomCurveShapeComponent_Shared({super.key, required this.title, required this.color});
+  const CustomCurveShapeComponent_Shared({super.key, required this.title, required this.subtitle, required this.color});
+
 
   final String title;
+  final String subtitle;
   final Color color;
 
   @override
@@ -29,18 +31,33 @@ class CustomCurveShapeComponent_Shared extends StatelessWidget {
         width: size.width,
         child: Padding(
           padding: const EdgeInsets.only(bottom: 50,left: APPSTYLE_SpaceLarge,right: APPSTYLE_SpaceLarge),
-          child: Center(
-            child: FittedBox(
+          child: Column(children: [
+            FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
                 title,
                 style: getHeadlineLargeStyle(context).copyWith(
-                  fontSize: APPSTYLE_FontSize24*1.1,
-                  color: APPSTYLE_BackgroundWhite
+                    fontSize: APPSTYLE_FontSize24*1.1,
+                    color: APPSTYLE_BackgroundWhite
                 ),
               ),
             ),
-          ),
+            Visibility(
+              visible: subtitle!="",
+              child: Padding(
+                padding: EdgeInsets.only(top: APPSTYLE_SpaceSmall),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    subtitle,
+                    style: getHeadlineMediumStyle(context).copyWith(
+                        color: APPSTYLE_BackgroundWhite
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],)
         ),
       ),
     );

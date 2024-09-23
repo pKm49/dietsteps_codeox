@@ -121,6 +121,7 @@ class ProfileController extends GetxController {
           UserData(
             id: userData.value.id,
             gender:  gender.value,
+              deliveryTime:"",
             height: userData.value.height,
             birthday: birthDayController.value.text,
             weight: userData.value.weight,
@@ -240,14 +241,12 @@ class ProfileController extends GetxController {
 
   }
 
+  skipDislikesUpdate(){
+    Get.toNamed(AppRouteNames.planPurchaseSubscriptionPlansCategoryListRoute);
+  }
+
   updateDislikes(bool isRegisterComplete) async {
-    if(dislikes.isEmpty){
-      if(isRegisterComplete){
-        Get.toNamed(AppRouteNames.planPurchaseSubscriptionPlansCategoryListRoute);
-      }else{
-        Get.back();
-      }
-    }else{
+
       if(! isDislikesUpdating.value){
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         final String? tMobile = prefs.getString('mobile');
@@ -272,7 +271,6 @@ class ProfileController extends GetxController {
 
       }
 
-    }
 
   }
 

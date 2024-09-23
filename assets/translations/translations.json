@@ -228,6 +228,7 @@
       "freezed_single": "Paused",
       "delivered": "We have successfully delivered the meals to your selected address",
       "delivered_single": "Delivered",
+      "delivery_time": "Delivery Time",
       "meal-selected": "Meals selected successfully for the day",
       "meal-selected_single": "Selected",
       "meal-not-selected": "Meals not selected for the day, please select",
@@ -285,6 +286,7 @@
       "order_reference": "Order Reference",
       "payment_reference": "Payment Reference",
       "skip": "Skip"
+
 
     }
   },
@@ -521,6 +523,8 @@
       "freezed": "لقد قمت بتجميد اشتراكك لليوم المحدد",
       "delivered": "لقد نجحنا في توصيل الوجبات إلى عنوانك الذي اخترته",
       "delivered_single": "تم التوصيل",
+      "delivery_time": "موعد التسليم",
+
       "meal-selected": "لقد تم اختيار الوجبات لهذا اليوم بنجاح",
       "meal-not-selected": "ليس هناك وجبات مقررة لهذا اليوم، يرجى التحديد",
 

@@ -38,6 +38,7 @@ class PrivacyPage_Core extends StatelessWidget {
                 CustomCurveShapeComponent_Shared(
                   color: APPSTYLE_PrimaryColor,
                   title: "privacy_policies".tr ,
+                  subtitle: '',
                 ),
                 Expanded(
                   child: ListView(

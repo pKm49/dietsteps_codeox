@@ -63,6 +63,7 @@ class _MealCalendarPage_MySubscriptionState extends State<MealCalendarPage_MySub
             CustomCurveShapeComponent_Shared(
               color: APPSTYLE_PrimaryColorBg,
               title: "meal_calendar".tr ,
+              subtitle: " ${sharedController.userData.value.deliveryTime.toString()}",
             ),
             Expanded(
               child: Obx(
@@ -98,6 +99,7 @@ class _MealCalendarPage_MySubscriptionState extends State<MealCalendarPage_MySub
                         ],
                       ),
                     ),
+
                     Visibility(
                       visible: mySubscriptionController.subscriptionDates.isNotEmpty &&
                            !mySubscriptionController.isSubscriptionDatesLoading.value,

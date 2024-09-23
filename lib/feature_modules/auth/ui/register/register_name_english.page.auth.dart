@@ -69,6 +69,7 @@ class _RegisterNameEnglishPage_AuthState extends State<RegisterNameEnglishPage_A
                           CustomCurveShapeComponent_Shared(
                             color: APPSTYLE_PrimaryColor,
                             title: "sign_up".tr,
+                            subtitle: '',
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,

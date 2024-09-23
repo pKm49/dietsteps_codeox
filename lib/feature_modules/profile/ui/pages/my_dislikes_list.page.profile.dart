@@ -59,7 +59,9 @@ class _MyDislikesListPage_ProfileState
           elevation: 0.0,
           title: Row(
             children: [
-              CustomBackButton(isPrimaryMode: false),
+              Visibility(
+                  visible: !profileController.isAllregyDislikeForRegisterComplete.value,
+                  child: CustomBackButton(isPrimaryMode: false)),
               Expanded(
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
@@ -73,6 +75,24 @@ class _MyDislikesListPage_ProfileState
               )
             ],
           ),
+          actions: [
+            Visibility(
+              visible: profileController.isAllregyDislikeForRegisterComplete.value,
+              child:    TextButton(
+                child: Text('skip'.tr,
+                    textAlign: TextAlign.center,
+                    style: getBodyMediumStyle(context)
+                        .copyWith(fontWeight: FontWeight.bold,
+                        color: APPSTYLE_PrimaryColor)),
+                onPressed: () {
+
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  profileController.skipDislikesUpdate();
+                }),),
+            Visibility(
+              visible: profileController.isAllregyDislikeForRegisterComplete.value,
+              child:   addHorizontalSpace(APPSTYLE_SpaceMedium)),
+          ],
         ),
         body: SafeArea(
           child: Obx(

@@ -64,7 +64,7 @@ class _HomePage_CoreState extends State<HomePage_Core> {
               children: [
                 Container(
                   width: screenwidth,
-                  height: (screenwidth * .13) + (APPSTYLE_SpaceMedium * 2),
+                  height: (screenwidth * .2) + (APPSTYLE_SpaceMedium * 2),
                   padding: EdgeInsets.all(APPSTYLE_SpaceMedium),
                   margin: EdgeInsets.only(bottom: APPSTYLE_SpaceMedium),
                   child: Row(
@@ -89,17 +89,16 @@ class _HomePage_CoreState extends State<HomePage_Core> {
                             fit: BoxFit.scaleDown,
                             child: Text(
                               (Localizations.localeOf(context)
-                                          .languageCode
-                                          .toString() ==
-                                      'ar')
-                                  ? "${sharedController
+                                  .languageCode
+                                  .toString() ==
+                                  'ar')?"${sharedController
                                   .userData.value.firstNameArabic} ${sharedController
                                   .userData.value.lastNameArabic}"
-                                  :  "${sharedController
+                                  :"${sharedController
                                   .userData.value.firstName} ${sharedController
                                   .userData.value.lastName}",
                               textAlign: TextAlign.start,
-                              style: getHeadlineMediumStyle(context).copyWith(
+                              style: getHeadlineLargeStyle(context).copyWith(
                                   color: APPSTYLE_BackgroundWhite,
                                   fontWeight: APPSTYLE_FontWeightBold),
                             ),
@@ -119,7 +118,21 @@ class _HomePage_CoreState extends State<HomePage_Core> {
                             child: Text("ID : ${sharedController.userData.value.customerCode.toString()}",
                               textAlign: TextAlign.start,
                               style: getBodyMediumStyle(context).copyWith(
-                                color: APPSTYLE_BackgroundWhite,
+                                  color: APPSTYLE_BackgroundWhite,
+                                  fontWeight: APPSTYLE_FontWeightBold
+                              ),
+                            ),
+                          ),
+                          Visibility(
+                            visible: sharedController.userData.value.deliveryTime!="",
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text("${sharedController.userData.value.deliveryTime.toString()}",
+                                textAlign: TextAlign.start,
+                                style: getBodyMediumStyle(context).copyWith(
+                                    color: APPSTYLE_BackgroundWhite,
+                                    fontWeight: APPSTYLE_FontWeightBold
+                                ),
                               ),
                             ),
                           ),

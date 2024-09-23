@@ -6,6 +6,7 @@ class UserData {
   final int id;
   final String customerCode;
   final String firstName;
+  final String deliveryTime;
   final String lastName;
   final String firstNameArabic;
   final String lastNameArabic;
@@ -41,6 +42,7 @@ class UserData {
         required this.subscriptionEndDate,
         required this.subscriptionName,
         required this.subscriptionNameArabic,
+        required this.deliveryTime,
         required this.subscriptionRemainingDays });
 
   Map toJson(){
@@ -107,6 +109,7 @@ UserData mapUserData(dynamic payload) {
     firstNameArabic: payload["first_name_arabic"]!=null && payload["first_name_arabic"] != false?payload["first_name_arabic"] : "",
     lastName: payload["last_name"]!=null && payload["last_name"] != false?payload["last_name"] : "",
     lastNameArabic: payload["last_name_arabic"]!=null && payload["last_name_arabic"] != false?payload["last_name_arabic"] : "",
+    deliveryTime: payload["delivery_time"]!=null && payload["delivery_time"] != false?payload["delivery_time"] : "",
 
     gender: payload["gender"] != null ? payload["gender"].toString() : "",
     birthday: payload["date_of_birth"] != null ? payload["date_of_birth"].toString() : "",

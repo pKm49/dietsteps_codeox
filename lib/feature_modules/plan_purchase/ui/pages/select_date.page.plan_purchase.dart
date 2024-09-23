@@ -62,6 +62,7 @@ class _SelectInitialDatePage_PlanPurchaseState extends State<SelectInitialDatePa
               CustomCurveShapeComponent_Shared(
                 color: APPSTYLE_PrimaryColorBg,
                 title: "select_starting_date".tr ,
+                subtitle: '',
               ),
               Expanded(
                 child:  Column(

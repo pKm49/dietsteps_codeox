@@ -4,6 +4,7 @@ import 'package:dietsteps/shared_module/constants/app_route_names.constants.shar
 import 'package:dietsteps/shared_module/constants/style_params.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/valid_addressauthor_modes.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/widget_styles.constants.shared.dart';
+import 'package:dietsteps/shared_module/models/general_item.model.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/dropdown_selected_item_getter.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/form_validator.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/toaster_snackbar_shower.service.shared.dart';
@@ -229,6 +230,26 @@ class _AuditAddressPage_AddressState extends State<AuditAddressPage_Address> {
                                 ],
                               ),
                             ),
+                            Visibility(visible: addressController.blockId.value !=-1 && getDeliveryTime(
+                                addressController
+                                    .blockId.value,
+                                addressController.blocks) !="",
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: APPSTYLE_SpaceLarge),
+                                child: Row(
+
+                                  children: [
+
+                                    Text('delivery_time'.tr,
+                                        style: getHeadlineMediumStyle(context)),
+                                  Text(getDeliveryTime(
+                                      addressController
+                                          .blockId.value,
+                                      addressController.blocks),
+                                  style: getHeadlineMediumStyle(context))
+                                ],),
+                              ),
+                            ),
                             addVerticalSpace(APPSTYLE_SpaceMedium),
                             Row(
                               children: [
@@ -426,5 +447,16 @@ class _AuditAddressPage_AddressState extends State<AuditAddressPage_Address> {
         }
       }
     }
+  }
+
+  String getDeliveryTime(int value, RxList<GeneralItem> blocks) {
+    List<GeneralItem> tBlocks = blocks.where((p0) => p0.id==value).toList();
+    if(tBlocks.isNotEmpty){
+      print(tBlocks[0].name);
+      print(tBlocks[0].arabicName);
+      print(tBlocks[0].deliveryTime);
+      return tBlocks[0].deliveryTime;
+    }
+    return "";
   }
 }

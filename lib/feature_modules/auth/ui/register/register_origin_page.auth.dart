@@ -146,7 +146,7 @@ class _RegisterOriginPage_AuthState
                               textAlign: TextAlign.center,
                               style: getBodyMediumStyle(context)
                                   .copyWith(fontWeight: FontWeight.bold,
-                                  color: APPSTYLE_BackgroundWhite)),
+                                  color: APPSTYLE_PrimaryColor)),
                           onPressed: () {
 
                             FocusManager.instance.primaryFocus?.unfocus();

@@ -39,6 +39,7 @@ class TermsPage_Core extends StatelessWidget {
             CustomCurveShapeComponent_Shared(
               color: APPSTYLE_PrimaryColor,
               title: "terms_n_conditions".tr ,
+              subtitle: '',
             ),
             Expanded(
               child: ListView(

@@ -55,6 +55,7 @@ class RegisterOtherDataPage_Auth extends StatelessWidget {
                           CustomCurveShapeComponent_Shared(
                             color: APPSTYLE_PrimaryColor,
                             title: "sign_up".tr,
+                            subtitle: '',
                           ),
                           Padding(
                             padding: APPSTYLE_LargePaddingHorizontal,
