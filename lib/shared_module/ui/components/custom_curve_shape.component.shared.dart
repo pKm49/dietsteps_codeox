@@ -30,7 +30,7 @@ class CustomCurveShapeComponent_Shared extends StatelessWidget {
         height: size.height * 0.15,
         width: size.width,
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 50,left: APPSTYLE_SpaceLarge,right: APPSTYLE_SpaceLarge),
+          padding: const EdgeInsets.only(bottom: 0,left: APPSTYLE_SpaceLarge,right: APPSTYLE_SpaceLarge),
           child: Column(children: [
             FittedBox(
               fit: BoxFit.scaleDown,

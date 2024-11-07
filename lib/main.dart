@@ -1,5 +1,6 @@
 import 'package:dietsteps/feature_modules/address/controllers/address.controller.dart';
 import 'package:dietsteps/feature_modules/auth/controllers/meals.controller.auth.dart';
+import 'package:dietsteps/feature_modules/e_shop/controllers/controller.eshop.dart';
  import 'package:dietsteps/feature_modules/my_subscription/controller/my_subscription.controller.dart';
 import 'package:dietsteps/feature_modules/plan_purchase/controllers/plan_purchase.controller.dart';
 import 'package:dietsteps/feature_modules/profile/controllers/profile.controller.dart';
@@ -74,6 +75,7 @@ class _MyAppState extends State<MyApp> {
     Get.put(MySubscriptionController());
     Get.put(PlanPurchaseController());
     Get.put(MealsController());
+    Get.put(EshopController());
 
     super.initState();
   }

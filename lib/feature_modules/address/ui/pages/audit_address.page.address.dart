@@ -237,7 +237,7 @@ class _AuditAddressPage_AddressState extends State<AuditAddressPage_Address> {
                               child: Padding(
                                 padding: const EdgeInsets.only(top: APPSTYLE_SpaceLarge),
                                 child: Row(
-
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
 
                                     Text('delivery_time'.tr,
@@ -295,7 +295,7 @@ class _AuditAddressPage_AddressState extends State<AuditAddressPage_Address> {
                             ),
                             addVerticalSpace(APPSTYLE_SpaceMedium),
                             TextFormField(
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.text,
                               controller: addressController
                                   .houseNumberTextEditingController.value,
                               validator: (password) =>
@@ -320,7 +320,7 @@ class _AuditAddressPage_AddressState extends State<AuditAddressPage_Address> {
                             ),
                             addVerticalSpace(APPSTYLE_SpaceMedium),
                             TextFormField(
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.text,
 
                               controller: addressController
                                   .floorNumberTextEditingController.value ,
@@ -332,7 +332,7 @@ class _AuditAddressPage_AddressState extends State<AuditAddressPage_Address> {
                             ),
                             addVerticalSpace(APPSTYLE_SpaceMedium),
                             TextFormField(
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.text,
                               controller: addressController
                                   .apartmentNumberTextEditingController.value,
                               decoration: InputDecoration(
@@ -421,6 +421,7 @@ class _AuditAddressPage_AddressState extends State<AuditAddressPage_Address> {
           Address(
               id: -1,
               name: "Default",
+              eShopDeliveryTime:'',
               areaId: addressController.areaId.value,
               areaName: "",
               areaNameArabic: "",
@@ -432,12 +433,10 @@ class _AuditAddressPage_AddressState extends State<AuditAddressPage_Address> {
               comments:
                   addressController.commentsTextEditingController.value.text,
               street: addressController.streetTextEditingController.value.text,
-              houseNumber:
-                  int.parse(addressController.houseNumberTextEditingController.value.text.toString().trim()),
-            floorNumber:addressController.floorNumberTextEditingController.value.text.toString().trim()==""?-1:
-            int.parse(addressController.floorNumberTextEditingController.value.text.toString().trim()),
-            apartmentNo:addressController.apartmentNumberTextEditingController.value.text.toString().trim()==""?-1:
-            int.parse(addressController.apartmentNumberTextEditingController.value.text.toString().trim()),
+              houseNumber:addressController.houseNumberTextEditingController.value.text.toString(),
+              floorNumber:addressController.floorNumberTextEditingController.value.text.toString() ,
+              apartmentNo:addressController.apartmentNumberTextEditingController.value.text.toString()
+
           ),
           mobile
         ]);

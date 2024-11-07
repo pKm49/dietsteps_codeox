@@ -32,6 +32,17 @@ class  AppRouteNames {
   static const String menuListRoute = '/menu-list';
   static const String menuItemDetailsRoute = '/menu-details';
 
+
+  //eshop list
+  static const String eshopMenuListRoute = '/menu-list-eshop';
+  static const String eshopMenuItemDetailsRoute = '/menu-details-eshop';
+  static const String eshopCartRoute = '/cart-eshop';
+  static const String eshopCheckoutRoute = '/checkout-eshop';
+  static const String eshopAddressRoute = '/address-eshop';
+  static const String eshopPaymentPageRoute = '/payment-eshop';
+  static const String eshopOrdersPageRoute = '/orders-eshop';
+  static const String eshopOrderDetailsPageRoute = '/order-details-eshop';
+
   //subscription list
 
   //subscription list

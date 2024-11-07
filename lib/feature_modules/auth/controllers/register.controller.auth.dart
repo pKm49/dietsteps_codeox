@@ -58,7 +58,11 @@ class RegisterController extends GetxController {
 
   var profilePictureUrl = ASSETS_DEFAULTPROFILEPIC.obs;
   var isFileSelected = false.obs;
+  var from= "".obs;
 
+  updateFrom(String tFrom){
+    from.value = tFrom;
+  }
   void updateProfilePicture(String base64encode) {
     isFileSelected.value = true;
     profilePictureUrl.value = base64encode;
@@ -119,10 +123,15 @@ class RegisterController extends GetxController {
       sharedPreferences.setString(
           "mobile", mobile.value);
       showSnackbar(Get.context!, "account_created".tr, "info");
-      final sharedController = Get.find<SharedController>();
-      sharedController.fetchUserData(
-          AppRouteNames.dislikeAuditRoute,
-          mobile.value);
+      if(from.value == AppRouteNames.eshopCartRoute){
+        Get.toNamed(AppRouteNames.eshopAddressRoute);
+      }else{
+        final sharedController = Get.find<SharedController>();
+        sharedController.fetchUserData(
+            AppRouteNames.dislikeAuditRoute,
+            mobile.value);
+      }
+
     }
   }
 

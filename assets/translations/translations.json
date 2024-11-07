@@ -285,9 +285,22 @@
       "rating_saved": "Submitted Succesfully",
       "order_reference": "Order Reference",
       "payment_reference": "Payment Reference",
-      "skip": "Skip"
-
-
+      "skip": "Skip",
+      "orders": "Orders",
+      "menu": "Menu",
+      "eshop": "E-Shop",
+      "ingredients": "Ingredients",
+      "purchase_success": "Checkout Success",
+      "purchase_success_info": "Meals successfully purchased.",
+      "shopping_cart": "Shopping Cart",
+      "cart_items": "Shopping Cart",
+      "empty_cart": "Empty Cart",
+      "please_select_address": "Please select address",
+      "please_select_time": "Please select time",
+      "select_shift": "Select Time",
+      "login_register_message": "Please login or register to continue!",
+      "show_menu": "Show Menu",
+      "shop_now": "Shop Now"
     }
   },
   {
@@ -580,7 +593,22 @@
       "rating_saved": "تم تقديم التقديم بنجاح",
       "order_reference": "معرف الطلب",
       "payment_reference": "معرف الدفع",
-      "skip": "تخطي"
+      "skip": "تخطي",
+      "orders": "أوامر الشراء",
+      "menu": "قائمة طعام",
+      "eshop": "تبضع",
+      "ingredients": "مكونات",
+      "purchase_success": "نجاح الشراء",
+      "purchase_success_info": "تم شراء الوجبات بنجاح.",
+      "shopping_cart": "سلة التسوق",
+      "cart_items": "عناصر السلة",
+      "empty_cart": "عربة فارغة",
+      "please_select_address": "الرجاء تحديد العنوان",
+      "please_select_time": "الرجاء تحديد الوقت",
+      "select_shift": "حدد الوقت",
+      "login_register_message": "الرجاء تسجيل الدخول أو التسجيل للمتابعة!",
+      "show_menu": "عرض الطعام",
+      "shop_now": "تسوق الآن"
 
     }
   }

@@ -214,6 +214,8 @@ class _MealsListPage_AuthState
                                         mealsController
                                             .mealCategories [index].meals[indx],
                                             onAdded: (int count){
+                                              mealsController.viewMeal(mealsController
+                                                  .mealCategories [index].meals[indx]);
                                             });
                                       },
                                     ),

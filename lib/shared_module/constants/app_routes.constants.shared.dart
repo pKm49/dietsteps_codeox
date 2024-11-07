@@ -10,6 +10,13 @@ import 'package:dietsteps/feature_modules/auth/ui/register/register_other_data.p
 import 'package:dietsteps/feature_modules/auth/ui/reset-password/reset_password.page.auth.dart';
 import 'package:dietsteps/feature_modules/auth/ui/reset-password/reset_password_aboutme_page.auth.dart';
 import 'package:dietsteps/feature_modules/auth/ui/welcome.page.auth.dart';
+import 'package:dietsteps/feature_modules/e_shop/ui/address_select.page.eshop.dart';
+import 'package:dietsteps/feature_modules/e_shop/ui/cart.page.eshop.dart';
+import 'package:dietsteps/feature_modules/e_shop/ui/checkout.page.eshop.dart';
+import 'package:dietsteps/feature_modules/e_shop/ui/meals_details.page.eshop.dart';
+import 'package:dietsteps/feature_modules/e_shop/ui/meals_list.page.eshop.dart';
+import 'package:dietsteps/feature_modules/e_shop/ui/order_list.page.eshop.dart';
+import 'package:dietsteps/feature_modules/e_shop/ui/payment_gateway_webview.page.eshop.dart';
 import 'package:dietsteps/feature_modules/my_subscription/ui/pages/freeze_subscription.page.my_subscription.dart';
 import 'package:dietsteps/feature_modules/my_subscription/ui/pages/meal_selection.page.my_subscription.dart';
 import 'package:dietsteps/feature_modules/plan_purchase/ui/pages/payment_gateway_webview.page.plan_purchase.dart';
@@ -200,6 +207,38 @@ AppPages() => [
   ),
 
 
+  GetPage(
+    name: AppRouteNames.eshopMenuListRoute,
+    page: () =>   MealsListPage_Eshop(),
+  ),
+  GetPage(
+    name: AppRouteNames.eshopMenuItemDetailsRoute,
+    page: () =>   MealsDetailsPage_Eshop(),
+  ),
+  GetPage(
+    name: AppRouteNames.eshopCartRoute,
+    page: () =>   CartPage_Eshop(),
+  ),
+
+  GetPage(
+    name: AppRouteNames.eshopCheckoutRoute,
+    page: () =>   CheckoutPage_Eshop(),
+  ),
+
+  GetPage(
+    name: AppRouteNames.eshopAddressRoute,
+    page: () =>   AddressSelect_Eshop(),
+  ),
+
+  GetPage(
+    name: AppRouteNames.eshopPaymentPageRoute,
+    page: () =>   PaymentGatewayWebView_Eshop(),
+  ),
+
+  GetPage(
+    name: AppRouteNames.eshopOrdersPageRoute,
+    page: () =>   OrderListPage_Eshop() ,
+  ),
 
 
 ];

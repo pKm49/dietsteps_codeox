@@ -1,4 +1,5 @@
 
+import 'package:dietsteps/feature_modules/e_shop/controllers/controller.eshop.dart';
 import 'package:dietsteps/feature_modules/plan_purchase/controllers/plan_purchase.controller.dart';
 import 'package:dietsteps/shared_module/constants/style_params.constants.shared.dart';
 import 'package:dietsteps/shared_module/ui/components/confirm_dialogue.component.shared.dart';
@@ -6,15 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
  import 'package:get/get.dart';
 
-class PaymentGatewayWebView_PlanPurchase extends StatefulWidget {
+class PaymentGatewayWebView_Eshop extends StatefulWidget {
 
-  const PaymentGatewayWebView_PlanPurchase({Key? key }) : super(key: key);
+  const PaymentGatewayWebView_Eshop({Key? key }) : super(key: key);
 
   @override
-  _PaymentGatewayWebView_PlanPurchaseState createState() => _PaymentGatewayWebView_PlanPurchaseState();
+  _PaymentGatewayWebView_EshopState createState() => _PaymentGatewayWebView_EshopState();
 }
 
-class _PaymentGatewayWebView_PlanPurchaseState extends State<PaymentGatewayWebView_PlanPurchase> {
+class _PaymentGatewayWebView_EshopState extends State<PaymentGatewayWebView_Eshop> {
 
   late InAppWebViewController controller;
 
@@ -24,7 +25,7 @@ class _PaymentGatewayWebView_PlanPurchaseState extends State<PaymentGatewayWebVi
   bool isConfirmationReached = false;
 
   var getArguments = Get.arguments;
-  final subscriptionsController = Get.find<PlanPurchaseController>();
+  final subscriptionsController = Get.find<EshopController>();
 
 
 
@@ -78,7 +79,7 @@ class _PaymentGatewayWebView_PlanPurchaseState extends State<PaymentGatewayWebVi
                 },
                 onUpdateVisitedHistory: (InAppWebViewController controller, Uri? url, bool? flag) {
 
-                  // if(url.toString().contains("https://erp.dietstepskw.com/subscription/payment/status") ){
+                  // if(url.toString().contains("https://erp.donekw.com/subscription/payment/status") ){
                   if(url.toString().contains("http://146.190.2.55:9880/subscription/payment/status") ){
                     isConfirmationReached = true;
                     setState(() {
@@ -192,4 +193,7 @@ class _PaymentGatewayWebView_PlanPurchaseState extends State<PaymentGatewayWebVi
     subscriptionsController.paymentGatewayGoback(status);
 
   }
+  
+  
+  
 }

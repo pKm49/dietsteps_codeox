@@ -257,39 +257,41 @@ class MySubscriptionController extends GetxController {
   DateTime getDate(DateTime d) => DateTime(d.year, d.month, d.day);
 
   Future<void> getMealsByDate(  DateTime tSelectedDay,bool isNavigationRequired ) async {
-    if(isSubscriptionDay(tSelectedDay)){
-      selectedDate.value = tSelectedDay;
+    if(!isMealsFetching.value) {
+      if(isSubscriptionDay(tSelectedDay)){
+        selectedDate.value = tSelectedDay;
 
-      if( getDayStatus(tSelectedDay) != VALIDSUBSCRIPTIONDAY_STATUS.offDay
+        if( getDayStatus(tSelectedDay) != VALIDSUBSCRIPTIONDAY_STATUS.offDay
 
-          && !isMealsFetching.value){
+            && !isMealsFetching.value){
 
 
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        final String? tMobile = prefs.getString('mobile');
-        if (tMobile != null && tMobile != '') {
-          isMealsFetching.value = true;
-          if(isNavigationRequired){
-            Get.toNamed(AppRouteNames.mealSelectionRoute);
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          final String? tMobile = prefs.getString('mobile');
+          if (tMobile != null && tMobile != '') {
+            isMealsFetching.value = true;
+            if(isNavigationRequired){
+              Get.toNamed(AppRouteNames.mealSelectionRoute);
+            }
+            final f = new DateFormat('yyyy-MM-dd');
+
+            var mySubsHttpService = MySubsHttpService();
+            subscriptoinMealConfig.value =  await mySubsHttpService.getMealsByDay(tMobile,f.format(selectedDate.value));
+
+            initializeMealSelection(f.format(selectedDate.value));
+            isMealsFetching.value = false;
+
+          } else {
+            showSnackbar(Get.context!, "couldnt_load_profiledata".tr, "error");
+            showSnackbar(Get.context!, "login_message".tr, "error");
+            Get.offAllNamed(AppRouteNames.loginRoute);
           }
-          final f = new DateFormat('yyyy-MM-dd');
 
-          var mySubsHttpService = MySubsHttpService();
-          subscriptoinMealConfig.value =  await mySubsHttpService.getMealsByDay(tMobile,f.format(selectedDate.value));
-
-          initializeMealSelection(f.format(selectedDate.value));
-          isMealsFetching.value = false;
-
-        } else {
-          showSnackbar(Get.context!, "couldnt_load_profiledata".tr, "error");
-          showSnackbar(Get.context!, "login_message".tr, "error");
-          Get.offAllNamed(AppRouteNames.loginRoute);
+        }else{
+          subscriptoinMealConfig.value = mapSubscriptoinMealConfig({},  "");
+          selectedMealConfig.value = mapSubscriptoinMealConfig({},  "");
+          Get.toNamed(AppRouteNames.mealSelectionRoute);
         }
-
-      }else{
-        subscriptoinMealConfig.value = mapSubscriptoinMealConfig({},  "");
-        selectedMealConfig.value = mapSubscriptoinMealConfig({},  "");
-        Get.toNamed(AppRouteNames.mealSelectionRoute);
       }
     }
 
@@ -400,9 +402,7 @@ class MySubscriptionController extends GetxController {
 
   void initializeMealSelection(String date) {
     print("initializeMealSelection data recieved");
-    print(subscriptoinMealConfig.value.recommendedCalories);
-    print(subscriptoinMealConfig.value.meals.length);
-    print(subscriptoinMealConfig.value.meals[0].items.length);
+
     try{
       List<SubscriptoinDailyMeal> meals = [];
       double recommendedCalories = 0.0;

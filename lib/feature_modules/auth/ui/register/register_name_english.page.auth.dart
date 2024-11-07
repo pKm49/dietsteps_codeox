@@ -30,6 +30,16 @@ class _RegisterNameEnglishPage_AuthState extends State<RegisterNameEnglishPage_A
 
    RegisterController registerController =  Get.put(RegisterController());
   final GlobalKey<FormState> registerEnglishNameFormKey = GlobalKey<FormState>();
+   var getArguments = Get.arguments;
+  var from=AppRouteNames.loginRoute;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    from = getArguments[0]??AppRouteNames.loginRoute;
+    registerController.updateFrom(from);
+  }
 
   @override
   Widget build(BuildContext context) {

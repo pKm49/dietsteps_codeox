@@ -95,7 +95,7 @@ class _MealSelectionItemCardSelectedComponent_MySubscriptionState extends State<
                       },
                       child: Icon(Ionicons.close_circle,color: APPSTYLE_Grey60,size: APPSTYLE_FontSize24,)),
                 ],),
-              Expanded(child: Container()),
+              addVerticalSpace(APPSTYLE_SpaceSmall),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -115,7 +115,28 @@ class _MealSelectionItemCardSelectedComponent_MySubscriptionState extends State<
 
                 ],
               ),
-              Expanded(child: Container()),
+              addVerticalSpace(APPSTYLE_SpaceMedium),
+
+              Text('ingredients'.tr,style: getHeadlineMediumStyle(context).copyWith(fontWeight: APPSTYLE_FontWeightBold)),
+
+              addVerticalSpace(APPSTYLE_SpaceSmall),
+
+              Expanded(child: Container(
+                padding: APPSTYLE_SmallPaddingHorizontal,
+                child:  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: widget.subscriptoinDailyMealItem.ingredients.length,
+                    itemBuilder: (context, index) {
+                      return  Text(Localizations.localeOf(context)
+                          .languageCode
+                          .toString() ==
+                          'ar'?widget.subscriptoinDailyMealItem.ingredients[index].arabicName
+                          :widget.subscriptoinDailyMealItem.ingredients[index].name,
+                        style: getBodyMediumStyle(context).copyWith(
+                          color: APPSTYLE_Grey60,
+                        ),);
+                    }),
+              )),
             ],
           ):
           Stack(

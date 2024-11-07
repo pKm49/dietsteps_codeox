@@ -96,24 +96,55 @@ class _LoginPage_AuthState extends State<LoginPage_Auth> {
                             SizedBox(
 
                                 width: double.infinity,
-                                child: OutlinedButton(
-                                    style: OutlinedButton.styleFrom(
-                                      side: const BorderSide(width: 2.0, color: APPSTYLE_BackgroundWhite),
-                                    ),
-                                    child:   Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Image.asset(ASSETS_MEALS,width: 30),
-                                        addHorizontalSpace(APPSTYLE_SpaceMedium),
-                                        Text('Show our menu',
-                                            style: getHeadlineMediumStyle(context).copyWith(
-                                                color: APPSTYLE_BackgroundWhite,fontWeight: APPSTYLE_FontWeightBold),
-                                            textAlign: TextAlign.center),
-                                      ],
-                                    ),
-                                    onPressed: () {
-                                      Get.toNamed(AppRouteNames.menuListRoute);
-                                    })),
+                                child: Row(
+                                  children: [
+                                    Expanded(child:OutlinedButton(
+                                      style: OutlinedButton.styleFrom(
+                                        side: const BorderSide(width: 2.0, color: APPSTYLE_BackgroundWhite),
+                                      ),
+                                      onPressed: () { Get.toNamed(AppRouteNames.menuListRoute); },
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(ASSETS_MEALS,width: 20),
+                                          addHorizontalSpace(APPSTYLE_SpaceSmall),
+                                          Expanded(
+                                            child: FittedBox(
+                                              fit: BoxFit.scaleDown,
+                                              child: Text('show_menu'.tr,
+                                                  style: getHeadlineMediumStyle(context).copyWith(
+                                                      color: APPSTYLE_BackgroundWhite,fontWeight: APPSTYLE_FontWeightBold),
+                                                  textAlign: TextAlign.center),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),),
+                                    addHorizontalSpace(APPSTYLE_SpaceSmall),
+                                    Expanded(child: OutlinedButton(
+                                      style: OutlinedButton.styleFrom(
+                                        side: const BorderSide(width: 2.0, color: APPSTYLE_BackgroundWhite),
+                                      ),
+                                      onPressed: () { Get.toNamed(AppRouteNames.eshopMenuListRoute); },
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Ionicons.cart_outline,size: 22,color: APPSTYLE_BackgroundWhite),
+                                          addHorizontalSpace(APPSTYLE_SpaceSmall),
+                                          Expanded(
+                                            child: FittedBox(
+                                              fit: BoxFit.scaleDown,
+                                              child: Text('shop_now'.tr,
+                                                  style: getHeadlineMediumStyle(context).copyWith(
+                                                      color: APPSTYLE_BackgroundWhite,fontWeight: APPSTYLE_FontWeightBold),
+                                                  textAlign: TextAlign.center),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),),
+                                  ],
+                                )),
                             addVerticalSpace(APPSTYLE_SpaceLarge *2),
                             TextFormField(
                                 controller:
@@ -170,7 +201,7 @@ class _LoginPage_AuthState extends State<LoginPage_Auth> {
                                             color: APPSTYLE_PrimaryColor,fontWeight: APPSTYLE_FontWeightBold),
                                         textAlign: TextAlign.center),
                                     onPressed: () {
-                                      Get.toNamed(AppRouteNames.registerEnglishNameRoute);
+                                      Get.toNamed(AppRouteNames.registerEnglishNameRoute,arguments: [AppRouteNames.loginRoute]);
                                     })),
 
                             addVerticalSpace(APPSTYLE_SpaceLarge ),

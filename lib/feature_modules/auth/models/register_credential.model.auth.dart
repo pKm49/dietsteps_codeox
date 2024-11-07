@@ -19,9 +19,9 @@ class RegisterCredential {
   final int block;
   final String street;
   final String jedha;
-  final int houseNumber;
-  final int floorNumber;
-  final int apartmentNumber;
+  final String houseNumber;
+  final String floorNumber;
+  final String apartmentNumber;
   final String comments;
   final String profile_picture;
   final String other_source;

@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:dietsteps/feature_modules/auth/models/meal_item.model.auth.dart';
-import 'package:dietsteps/feature_modules/my_subscription/models/subscription_dailymeal.model.my_subscription.dart';
-import 'package:dietsteps/feature_modules/my_subscription/models/subscription_dailymeal_item.model.my_subscription.dart';
+import 'package:dietsteps/feature_modules/e_shop/models/meal_item.model.eshop.dart';
 import 'package:dietsteps/feature_modules/my_subscription/services/meal_selection.helper.services.dart';
 import 'package:dietsteps/shared_module/constants/style_params.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/widget_styles.constants.shared.dart';
@@ -12,25 +10,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
 
-class MealItemCardComponent_Auth extends StatefulWidget {
-  MealItem subscriptoinDailyMealItem;
+class MealItemCardComponent_Eshop extends StatefulWidget {
+  MealItem mealItem;
   final Function(int count) onAdded;      // <------------|
   int selectedCount;
   bool isSelectable;
-  MealItemCardComponent_Auth({super.key, required this.subscriptoinDailyMealItem,
+  MealItemCardComponent_Eshop({super.key, required this.mealItem,
     required this.selectedCount,    required this.isSelectable,
 
     required this.onAdded});
 
   @override
-  State<MealItemCardComponent_Auth> createState() => _MealItemCardComponent_AuthState();
+  State<MealItemCardComponent_Eshop> createState() => _MealItemCardComponent_EshopState();
 }
 
-class _MealItemCardComponent_AuthState extends State<MealItemCardComponent_Auth> {
+class _MealItemCardComponent_EshopState extends State<MealItemCardComponent_Eshop> {
 
   late Timer _timer;
   bool isLongPressed = false;
   bool isFlipped = false;
+
   @override
   Widget build(BuildContext context) {
 
@@ -48,8 +47,14 @@ class _MealItemCardComponent_AuthState extends State<MealItemCardComponent_Auth>
           _timer.cancel();
           if(!isLongPressed)
           {
-            widget.onAdded(1);
+            if(widget.isSelectable){
 
+              if(widget.selectedCount==0){
+                widget.onAdded(1);
+              }else{
+                widget.onAdded(-1);
+              }
+            }
           }else{
             isLongPressed = false;
             setState(() {
@@ -61,14 +66,14 @@ class _MealItemCardComponent_AuthState extends State<MealItemCardComponent_Auth>
           }
         }
 
-      } ,
+      },
       child: AnimatedContainer(
           decoration:
           APPSTYLE_BorderedContainerSmallDecoration
               .copyWith(
               color: APPSTYLE_Grey20,
-              border: Border.all(color:widget.selectedCount>0?APPSTYLE_GuideGreen: APPSTYLE_Grey40,
-                  width: widget.selectedCount>0? 3:.2)
+              border: Border.all(color:(widget.selectedCount>0|| widget.selectedCount==-1)?APPSTYLE_GuideGreen: APPSTYLE_Grey40,
+                  width: (widget.selectedCount>0|| widget.selectedCount==-1)? 3:.2)
           ),
           curve: Curves.bounceIn,
           duration: Duration(milliseconds: 500),
@@ -90,23 +95,41 @@ class _MealItemCardComponent_AuthState extends State<MealItemCardComponent_Auth>
                       child: Icon(Ionicons.close_circle,color: APPSTYLE_Grey60,size: APPSTYLE_FontSize24,)),
                 ],),
               addVerticalSpace(APPSTYLE_SpaceSmall),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  InkWell(
+                      onTap: (){
+                        widget.onAdded(-1);
+                      },
+                      child: Icon(Ionicons.remove_circle,color: APPSTYLE_GuideRed,size: APPSTYLE_FontSize24*1.5)),
+                  addHorizontalSpace(APPSTYLE_SpaceSmall),
+                  Text(widget.selectedCount.toString(),style: getHeadlineLargeStyle(context)),
+                  addHorizontalSpace(APPSTYLE_SpaceSmall),
+                  InkWell(
+                      onTap: (){
+                        widget.onAdded(1);
+                      },child: Icon(Ionicons.add_circle,color: APPSTYLE_GuideGreen,size: APPSTYLE_FontSize24*1.5,)),
+
+                ],
+              ),
+              addVerticalSpace(APPSTYLE_SpaceMedium),
 
               Text('ingredients'.tr,style: getHeadlineMediumStyle(context).copyWith(fontWeight: APPSTYLE_FontWeightBold)),
               addVerticalSpace(APPSTYLE_SpaceSmall),
-
               Expanded(child: Container(
                 padding: APPSTYLE_SmallPaddingHorizontal,
                 child:  ListView.builder(
                     shrinkWrap: true,
-                    itemCount: widget.subscriptoinDailyMealItem.ingredients.length,
+                    itemCount: widget.mealItem.ingredients.length,
                     itemBuilder: (context, index) {
                       return  Text(Localizations.localeOf(context)
                           .languageCode
                           .toString() ==
-                          'ar'?widget.subscriptoinDailyMealItem.ingredients[index].arabicName
-                          :widget.subscriptoinDailyMealItem.ingredients[index].name,
+                          'ar'?widget.mealItem.ingredients[index].arabicName
+                          :widget.mealItem.ingredients[index].name,
                         style: getBodyMediumStyle(context).copyWith(
-                          color: APPSTYLE_Grey60,
                         ),);
                     }),
               )),
@@ -130,8 +153,7 @@ class _MealItemCardComponent_AuthState extends State<MealItemCardComponent_Auth>
                               APPSTYLE_BorderRadiusSmall),
                           color:
                           APPSTYLE_Grey20,
-                          image: DecorationImage(image: getProductImage(widget.subscriptoinDailyMealItem
-                              .imageUrl),fit: BoxFit.cover),
+                          image: DecorationImage(image: getProductImage(widget.mealItem.imageUrl),fit: BoxFit.cover),
                           border: Border.all(
                               color:
                               APPSTYLE_BackgroundWhite,
@@ -145,10 +167,10 @@ class _MealItemCardComponent_AuthState extends State<MealItemCardComponent_Auth>
                       .languageCode
                       .toString() ==
                       'ar'
-                      ? widget.subscriptoinDailyMealItem
+                      ? widget.mealItem
                       .arabicName
-                      : widget.subscriptoinDailyMealItem
-                      .name} - ${widget.subscriptoinDailyMealItem.rating}⭐ (${widget.subscriptoinDailyMealItem.rating_count})',
+                      : widget.mealItem
+                      .name} - ${widget.mealItem.rating}⭐ (${widget.mealItem.rating_count})',
                     maxLines: 2,
                     textAlign: TextAlign.center,
                     style: getBodyMediumStyle(
@@ -159,8 +181,8 @@ class _MealItemCardComponent_AuthState extends State<MealItemCardComponent_Auth>
                         APPSTYLE_Grey80),
                   ),
                   Visibility(
-                    visible: widget.subscriptoinDailyMealItem.tags !="",
-                    child: Text( widget.subscriptoinDailyMealItem.tags,
+                    visible: widget.mealItem.tags !="",
+                    child: Text( widget.mealItem.tags,
                       maxLines: 1,
                       textAlign: TextAlign.center,
                       style: getLabelSmallStyle(
@@ -178,7 +200,7 @@ class _MealItemCardComponent_AuthState extends State<MealItemCardComponent_Auth>
                             alignment: Alignment.centerLeft,
                             fit: BoxFit.scaleDown,
                             child: Text(
-                                '${widget.subscriptoinDailyMealItem.carbs} ${'carbs'.tr}',
+                                '${widget.mealItem.carbs} ${'carbs'.tr}',
                                 style: getLabelLargeStyle(
                                     context) ),
                           )),
@@ -189,7 +211,7 @@ class _MealItemCardComponent_AuthState extends State<MealItemCardComponent_Auth>
                             alignment: Alignment.centerRight,
                             fit: BoxFit.scaleDown,
                             child: Text(
-                                '${widget.subscriptoinDailyMealItem.protein}  ${'protein'.tr}',
+                                '${widget.mealItem.protein} ${'protein'.tr}',
                                 style: getLabelLargeStyle(
                                     context) ),
                           )),
@@ -203,20 +225,31 @@ class _MealItemCardComponent_AuthState extends State<MealItemCardComponent_Auth>
                             alignment: Alignment.centerLeft,
                             fit: BoxFit.scaleDown,
                             child: Text(
-                                '${widget.subscriptoinDailyMealItem.calories} ${'calories'.tr}',
+                                '${widget.mealItem.calories} ${'calories'.tr}',
                                 style: getLabelLargeStyle(
                                     context) ),
                           )),
 
                       addHorizontalSpace(
                           APPSTYLE_SpaceSmall),
-
+                      // Expanded(
+                      //     child: FittedBox(
+                      //       alignment: Alignment.centerRight,
+                      //       fit: BoxFit.scaleDown,
+                      //       child: Text(
+                      //           '${widget.mealItem.rating}(${widget.mealItem.ratingCount}) ⭐',
+                      //           style: getBodyMediumStyle(
+                      //               context)
+                      //               .copyWith(
+                      //               fontWeight:
+                      //               APPSTYLE_FontWeightBold)),
+                      //     )),
                       Expanded(
                           child: FittedBox(
                             alignment: Alignment.centerRight,
                             fit: BoxFit.scaleDown,
                             child: Text(
-                                '${widget.subscriptoinDailyMealItem.fat} ${'fat'.tr}',
+                                '${widget.mealItem.fat} ${'fat'.tr}',
                                 style: getLabelLargeStyle(
                                     context) ),
                           )),
@@ -226,16 +259,30 @@ class _MealItemCardComponent_AuthState extends State<MealItemCardComponent_Auth>
                 ],
               ),
               Column(
+                mainAxisAlignment:  MainAxisAlignment.start,
+
                 children: [
                   Visibility(
-                    visible: widget.selectedCount>0,
+                    visible:true,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment:MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(Ionicons.checkmark_circle,color: APPSTYLE_GuideGreen,size: APPSTYLE_FontSize24)
+                        Container(
+                          decoration: APPSTYLE_BorderedContainerExtraSmallDecoration.
+                          copyWith(color: APPSTYLE_PrimaryColor),
+                          padding: APPSTYLE_ExtraSmallPaddingVertical.copyWith(left: APPSTYLE_SpaceSmall,right: APPSTYLE_SpaceSmall),
+                          child: Text('${widget.mealItem.price} KD',style: getLabelLargeStyle(context).copyWith(color: APPSTYLE_BackgroundWhite)),
+                        ),
+                        Visibility(
+                          visible: widget.selectedCount>0,
+                          child: Container(
+                              decoration: APPSTYLE_BorderedContainerLargeDecoration.copyWith(color: APPSTYLE_BackgroundWhite),
+                              child: Icon(Ionicons.checkmark_circle,color: APPSTYLE_GuideGreen,size: APPSTYLE_FontSize24)),
+                        )
                       ],
                     ),
-                  )
+                  ),
+
                 ],
               )
             ],
@@ -243,6 +290,7 @@ class _MealItemCardComponent_AuthState extends State<MealItemCardComponent_Auth>
       ),
     );
   }
+
   void _startOperation() {
     _timer = Timer(const Duration(seconds: 1), () {
       isLongPressed = true;
