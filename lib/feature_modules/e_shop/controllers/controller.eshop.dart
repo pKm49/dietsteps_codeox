@@ -215,8 +215,9 @@ class EshopController extends GetxController {
   }
 
   Future<void> getEshopMeals( ) async {
-    if (!isCategoriesFetching.value &&
-        !isMealsLoading.value ) {
+
+    print("getEshopMeals");
+    if (!isCategoriesFetching.value  ) {
       isMealsLoading.value = true;
       currentMeal.value = mapMealItem({});
       mealCategories.value = [];

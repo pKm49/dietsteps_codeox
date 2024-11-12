@@ -20,8 +20,8 @@ getRequest(endpoint, parameters) async {
     ]);
 
     final httpResponse = await http
-        .get(Uri.http(env.apiEndPoint, "$endpoint"),params: json.decode(json.encode(parameters)));
-    print(Uri.http(env.apiEndPoint, "$endpoint").toString());
+        .get(Uri.https(env.apiEndPoint, "$endpoint"),params: json.decode(json.encode(parameters)));
+    print(Uri.https(env.apiEndPoint, "$endpoint").toString());
     print(parameters);
 
     print("httpResponse");
@@ -57,14 +57,14 @@ getRequest(endpoint, parameters) async {
 postRequest(endpoint, body) async {
   print("postRequest called");
   print(endpoint);
-  print(Uri.http(env.apiEndPoint, "$endpoint").toString());
+  print(Uri.https(env.apiEndPoint, "$endpoint").toString());
   print(body);
   try {
     final http = InterceptedHttp.build(interceptors: [
       AppHttpInterceptor(),
     ]);
     print("postRequest called pass 1");
-    print(Uri.http(env.apiEndPoint, "$endpoint").toString());
+    print(Uri.https(env.apiEndPoint, "$endpoint").toString());
     print("update_customer_profile request");
     print(endpoint.toString().contains('update_customer_profile'));
     late var httpResponse;
@@ -72,12 +72,12 @@ postRequest(endpoint, body) async {
       // print("update_customer_profile contains update_customer_profile");
 
       httpResponse = await http.post(
-          Uri.http(env.apiEndPoint, "$endpoint"),
+          Uri.https(env.apiEndPoint, "$endpoint"),
           params:endpoint.toString().contains('update_customer_profile')? json.decode(json.encode(body)) : null
       );
     }else{
       httpResponse = await http.post(
-          Uri.http(env.apiEndPoint, "$endpoint"),
+          Uri.https(env.apiEndPoint, "$endpoint"),
           body:endpoint.toString().contains('update_customer_profile')?null: json.encode(body)
       );
     }
@@ -122,19 +122,19 @@ postRequest(endpoint, body) async {
 patchRequest(endpoint, body) async {
   print("patchRequest called");
   print(endpoint);
-  print(Uri.http(env.apiEndPoint, "$endpoint").toString());
+  print(Uri.https(env.apiEndPoint, "$endpoint").toString());
   print(body);
   try {
     final http = InterceptedHttp.build(interceptors: [
       AppHttpInterceptor(),
     ]);
     print("patchRequest called pass 1");
-    print(Uri.http(env.apiEndPoint, "$endpoint").toString());
+    print(Uri.https(env.apiEndPoint, "$endpoint").toString());
     print("update_customer_profile request");
     print(endpoint.toString().contains('update_customer_profile'));
     late var httpResponse;
     httpResponse = await http.patch(
-        Uri.http(env.apiEndPoint, "$endpoint"),
+        Uri.https(env.apiEndPoint, "$endpoint"),
         body:endpoint.toString().contains('update_customer_profile')?null: json.encode(body)
     );
 
@@ -180,9 +180,9 @@ deleteRequest(endpoint,parameters) async {
       AppHttpInterceptor(),
     ]);
     print("deleteRequest called pass 1");
-    print(Uri.http(env.apiEndPoint, "$endpoint").toString());
+    print(Uri.https(env.apiEndPoint, "$endpoint").toString());
     final httpResponse =
-    await http.delete(Uri.http(env.apiEndPoint, "/$endpoint"),params: json.decode(json.encode(parameters)));
+    await http.delete(Uri.https(env.apiEndPoint, "/$endpoint"),params: json.decode(json.encode(parameters)));
 
     var httpResponseBody = json.decode(httpResponse.body);
 
