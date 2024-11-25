@@ -38,7 +38,6 @@ class EshopHttpService {
     }
   }
 
-
   Future<List<GeneralItem>> getMealCategories() async {
 
     try{

@@ -206,6 +206,8 @@ class EshopController extends GetxController {
       if (mealCategorySingleItems.isEmpty) {
         currentMeal.value = mapMealItem({});
         mealCategorySingleItems.value = [];
+        isMealsLoading.value = false;
+
       } else {
         currentMealCategoryId.value = mealCategorySingleItems[0].id;
 

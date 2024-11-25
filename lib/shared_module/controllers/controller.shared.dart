@@ -46,6 +46,13 @@ class SharedController extends GetxController {
     super.onInit();
   }
 
+  Future<bool> getAccessToken()async{
+    print(    "getAccessToken called called");
+    var sharedHttpService = SharedHttpService();
+    await sharedHttpService.getAccessToken();
+    return true;
+  }
+
   Future<void> setInitialScreen() async {
     var sharedHttpService = SharedHttpService();
     await sharedHttpService.getAccessToken();

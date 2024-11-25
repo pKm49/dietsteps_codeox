@@ -15,7 +15,6 @@ class MealCategory {
     required this.meals,
   });
 
-
 }
 
 MealCategory mapMealCategory(dynamic payload){
