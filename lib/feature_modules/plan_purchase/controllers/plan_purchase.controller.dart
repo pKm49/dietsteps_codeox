@@ -121,7 +121,6 @@ class PlanPurchaseController extends GetxController {
     discount.value = 0.0;
     total.value = subTotal.value - discount.value;
   }
-
   Future<void> getSubscriptionsByCategory() async {
     isPaymentGatewayLoading.value = false;
     isSubscriptionsFetching.value = true;
@@ -181,33 +180,24 @@ class PlanPurchaseController extends GetxController {
       isOrderCreating.value = true;
       var planPurchaseHttpService = PlanPurchaseHttpService();
 
-      PaymentData tPaymentData = await planPurchaseHttpService.createOrder(
-          PurchaseData(
-              planCategoryId: currentCategory.value.id,
-              planId: currentSubscription.value.id,
-              startDate: selectedDate.value,
-              promoCode: couponCodeController.value.text,
-              mobile: mobile));
+      PaymentData tPaymentData = await planPurchaseHttpService.createOrder( PurchaseData(
+          planCategoryId: currentCategory.value.id,
+          planId: currentSubscription.value.id,
+          startDate: selectedDate.value, promoCode: couponCodeController.value.text,
+          mobile: mobile
+      ) );
       paymentData.value = tPaymentData;
 
       if (paymentData.value.paymentUrl == "" ||
           paymentData.value.redirectUrl == "") {
-        if ((total.value == 0 || total.value == 0.0) &&
-            (paymentData.value.refId != '' &&
-                paymentData.value.orderId != '')) {
+        if ((total.value == 0 || total.value == 0.0) && (paymentData.value.refId!='' && paymentData.value.orderId!='')) {
           showSnackbar(Get.context!, "payment_capture_success".tr, "info");
-          activatePlan(paymentData.value.subscriptionId);
-          Get.toNamed(AppRouteNames.otpVerificationSuccessRoute, arguments: [
-            ASSETS_SUCCESSMARK,
-            "subscription_success",
-            "subscription_success_info",
-            'home',
-            false,
-            AppRouteNames.homeRoute,
-            ""
-          ])?.then(
-              (value) => Get.toNamed(AppRouteNames.homeRoute, arguments: [0]));
-        } else {
+          activatePlan(paymentData.value.subscriptionId );
+          Get.toNamed(AppRouteNames.otpVerificationSuccessRoute,arguments: [
+            ASSETS_SUCCESSMARK,"subscription_success","subscription_success_info",
+            'home',false,AppRouteNames.homeRoute,""
+          ])?.then((value) => Get.toNamed(AppRouteNames.homeRoute,arguments: [0]));
+        }else{
           showSnackbar(Get.context!, "customer_support_message".tr, "error");
         }
 
@@ -234,8 +224,8 @@ class PlanPurchaseController extends GetxController {
       isDateChecking.value = true;
       var planPurchaseHttpService = PlanPurchaseHttpService();
       String dateString = DateFormat("yyyy-MM-dd").format(selectedDate.value);
-      bool isSuccess = await planPurchaseHttpService.checkDateAvailability(
-          dateString, mobile, currentSubscription.value.id);
+      bool isSuccess = await planPurchaseHttpService
+          .checkDateAvailability(dateString,mobile,currentSubscription.value.id);
       isDateChecking.value = false;
 
       if (isSuccess) {
@@ -249,8 +239,8 @@ class PlanPurchaseController extends GetxController {
     isOrderCreating.value = true;
     isPaymentGatewayLoading.value = true;
     var planPurchaseHttpService = PlanPurchaseHttpService();
-    bool isSuccess =
-        await planPurchaseHttpService.checkOrderStatus(paymentData.value.refId);
+    bool isSuccess = await planPurchaseHttpService
+        .checkOrderStatus(paymentData.value.refId);
     isOrderCreating.value = false;
 
     if (!isSuccess) {
@@ -258,24 +248,19 @@ class PlanPurchaseController extends GetxController {
       showSnackbar(Get.context!, "payment_capture_error".tr, "error");
     } else {
       showSnackbar(Get.context!, "payment_capture_success".tr, "info");
-      activatePlan(paymentData.value.subscriptionId);
-      Get.toNamed(AppRouteNames.otpVerificationSuccessRoute, arguments: [
-        ASSETS_SUCCESSMARK,
-        "subscription_success",
-        "subscription_success_info",
-        'home',
-        false,
-        AppRouteNames.homeRoute,
-        ""
-      ]);
+      activatePlan(paymentData.value.subscriptionId );
+      Get.toNamed(AppRouteNames.otpVerificationSuccessRoute,arguments: [
+        ASSETS_SUCCESSMARK,"subscription_success","subscription_success_info",
+        'home',false,AppRouteNames.homeRoute,""
+      ]) ;
     }
   }
 
-  void activatePlan(int subscriptionId) async {
-    if (subscriptionId != -1) {
+  void activatePlan(int subscriptionId ) async {
+    if(subscriptionId != -1){
       var planPurchaseHttpService = PlanPurchaseHttpService();
-      bool isSuccess =
-          await planPurchaseHttpService.activateSubscription(subscriptionId);
+      bool isSuccess = await planPurchaseHttpService
+          .activateSubscription(subscriptionId);
 
       resetData();
     }
@@ -312,28 +297,23 @@ class PlanPurchaseController extends GetxController {
   }
 
   void previousMonth() {
-    var newDate = DateTime(currentMonth.value.year,
-        currentMonth.value.month - 1, currentMonth.value.day);
+    var newDate = DateTime(currentMonth.value.year, currentMonth.value.month - 1, currentMonth.value.day);
     currentMonth.value = newDate;
     setCurrentMonthWeekDays();
   }
 
   void nextMonth() {
-    var newDate = DateTime(currentMonth.value.year,
-        currentMonth.value.month + 1, currentMonth.value.day);
+    var newDate = DateTime(currentMonth.value.year, currentMonth.value.month + 1, currentMonth.value.day);
     currentMonth.value = newDate;
     setCurrentMonthWeekDays();
   }
 
   setCurrentMonthWeekDays() {
     List<DateTime> weekDays = [];
-    DateTime weekStartDate = getDate(currentMonth.value
-        .subtract(Duration(days: currentMonth.value.weekday)));
-    DateTime weekEndDate = getDate(currentMonth.value.add(Duration(
-        days: DateTime.daysPerWeek - (currentMonth.value.weekday + 1))));
+    DateTime weekStartDate = getDate(currentMonth.value.subtract(Duration(days: currentMonth.value.weekday))) ;
+    DateTime weekEndDate = getDate(currentMonth.value.add(Duration(days: DateTime.daysPerWeek - (currentMonth.value.weekday+1))));
 
-    if (weekStartDate.month < currentMonth.value.month &&
-        weekEndDate.month < currentMonth.value.month) {
+    if(weekStartDate.month < currentMonth.value.month && weekEndDate.month < currentMonth.value.month){
       weekStartDate = currentMonth.value;
       weekEndDate = currentMonth.value.add(Duration(days: 6));
     }
@@ -345,22 +325,23 @@ class PlanPurchaseController extends GetxController {
     fifthWeekDays.clear();
     sixthWeekDays.clear();
     for (int index = 1; index <= 6; index++) {
-      weekDays = [];
+      weekDays=[];
       if (index != 1) {
-        weekStartDate = weekStartDate.add(Duration(days: 7));
-        weekEndDate = weekEndDate.add(Duration(days: 7));
+        weekStartDate = weekStartDate.add(Duration(days:   7));
+        weekEndDate = weekEndDate.add(Duration(days:   7));
       }
 
-      for (int i = 0; i <= weekEndDate.difference(weekStartDate).inDays; i++) {
+      for (int i = 0; i <= weekEndDate
+          .difference(weekStartDate)
+          .inDays; i++) {
         weekDays.add(weekStartDate.add(Duration(days: i)));
       }
 
-      switch (index) {
-        case 1:
-          {
-            firstWeekDays.addAll(weekDays);
-            break;
-          }
+      switch (index){
+        case 1:{
+          firstWeekDays.addAll(weekDays);
+          break;
+        }
         case 2:
           {
             secondWeekDays.addAll(weekDays);
@@ -398,7 +379,7 @@ class PlanPurchaseController extends GetxController {
 
     if (mobile != null && mobile != "") {
       Get.toNamed(AppRouteNames.planPurchaseSetInitialDateRoute);
-    } else {
+    }else{
       showSnackbar(Get.context!, "login_message".tr, "info");
       Get.toNamed(AppRouteNames.loginRoute);
     }

@@ -46,6 +46,13 @@ class SharedController extends GetxController {
     super.onInit();
   }
 
+  Future<bool> getAccessToken()async{
+    print(    "getAccessToken called called");
+    var sharedHttpService = SharedHttpService();
+    await sharedHttpService.getAccessToken();
+    return true;
+  }
+
   Future<void> setInitialScreen() async {
     var sharedHttpService = SharedHttpService();
     await sharedHttpService.getAccessToken();
@@ -203,16 +210,9 @@ class SharedController extends GetxController {
   }
 
   Future<void> removeToken() async {
-
-try {
-  paymentGatewayIsLoading.value=true;
-  var sharedHttpService = SharedHttpService();
-  String deviceToken = await getFirebaseMessagingToken();
-  await sharedHttpService.removeDeviceToken(deviceToken);
-}
-finally{
-  paymentGatewayIsLoading.value =false;
-}
+    var sharedHttpService = SharedHttpService();
+    String deviceToken = await getFirebaseMessagingToken();
+    await sharedHttpService.removeDeviceToken(deviceToken);
 
   }
 

@@ -54,8 +54,6 @@ class _PaymentGatewayWebView_PlanPurchaseState extends State<PaymentGatewayWebVi
           )
           ) ?? false;
 
-
-
         },
         child: Obx(
               ()=> Scaffold(

@@ -48,8 +48,8 @@ getRequest(endpoint, parameters) async {
     // print(stack.toString());
     return generateErrorResponse('Something went wrong, try again');
   } on Exception catch (e) {
-    // print("get exception");
-    // print(e.toString());
+    print("get exception");
+    print(e.toString());
     return generateErrorResponse('Something went wrong, try again');
   }
 }

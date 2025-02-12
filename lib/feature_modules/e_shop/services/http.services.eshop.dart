@@ -1,4 +1,3 @@
-
 import 'package:dietsteps/feature_modules/address/models/shipping_address.model.address.dart';
 import 'package:dietsteps/feature_modules/e_shop/constants/http_request_endpoints.constant.eshop.dart';
 import 'package:dietsteps/feature_modules/e_shop/models/cart.model.eshop.dart';
@@ -37,7 +36,6 @@ class EshopHttpService {
       return [];
     }
   }
-
 
   Future<List<GeneralItem>> getMealCategories() async {
 
