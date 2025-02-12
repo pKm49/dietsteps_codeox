@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyApiYhjE4v0kJlE17SiSx8vwtn-wjZs8_U</string>
+	<key>GCM_SENDER_ID</key>
+	<string>67194850029</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.codeox.dietsteps</string>
+	<key>PROJECT_ID</key>
+	<string>dietsteps-b8d70</string>
+	<key>STORAGE_BUCKET</key>
+	<string>dietsteps-b8d70.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:67194850029:ios:427c0eb2d2606ae6511ae4</string>
+</dict>
+</plist>

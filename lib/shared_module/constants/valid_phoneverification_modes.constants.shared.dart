@@ -1,0 +1,1 @@
+enum VALIDPHONEVERIFICATION_MODES { register,forgot_password, reset_password }
