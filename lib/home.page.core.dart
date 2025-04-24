@@ -123,6 +123,17 @@ class _HomePage_CoreState extends State<HomePage_Core> {
                               ),
                             ),
                           ),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(sharedController.userData.value.shift,
+                              textAlign: TextAlign.start,
+                              style: getBodyMediumStyle(context).copyWith(
+                                fontSize: 16,
+                                  color: APPSTYLE_BackgroundWhite,
+                                  fontWeight: APPSTYLE_FontWeightBold
+                              ),
+                            ),
+                          ),
                           Visibility(
                             visible: sharedController.userData.value.deliveryTime!="",
                             child: FittedBox(

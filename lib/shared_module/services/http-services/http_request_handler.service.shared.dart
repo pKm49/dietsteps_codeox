@@ -12,6 +12,7 @@ import 'http_interceptor.service.shared.dart';
 getRequest(endpoint, parameters) async {
   try {
     print("getRequest called");
+    print(Uri.https(env.apiEndPoint, "$endpoint").toString());
     print(endpoint);
     print(parameters);
 

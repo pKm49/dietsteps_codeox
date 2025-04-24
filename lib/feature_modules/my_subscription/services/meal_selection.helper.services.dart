@@ -2,6 +2,12 @@ import 'package:dietsteps/shared_module/constants/asset_urls.constants.shared.da
 import 'package:dietsteps/shared_module/constants/style_params.constants.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/calendar_utilities.service.shared.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+
+import '../controller/my_subscription.controller.dart';
 
 String getCalendarDayText(int index) {
   if (index < 7) {
@@ -57,16 +63,58 @@ int getPercentage(
   return percentage.round();
 }
 
-bool isTodayTomorrow(DateTime dateTime){
-  DateTime nowDateTime = DateTime.now();
-  DateTime checkDateTime = DateTime(dateTime.year,dateTime.month,dateTime.day,4,30,00);
-  DateTime todayDateStartTimeDate = DateTime(nowDateTime.year,nowDateTime.month,nowDateTime.day,4,30,00);
-  DateTime twoDaysAfterTodayDate = todayDateStartTimeDate.add(Duration(hours: 48));
-  DateTime threeDaysAfterTodayDate = todayDateStartTimeDate.add(Duration(hours: 72));
+bool isTodayTomorrow(DateTime dateTime) {
+  // Get access to the MySubscriptionController to use buffer time values
+  final mySubscriptionController = Get.find<MySubscriptionController>();
 
-  if(nowDateTime.isBefore(todayDateStartTimeDate)){
-    return checkDateTime.isBefore(twoDaysAfterTodayDate);
-  }else{
-    return checkDateTime.isBefore(threeDaysAfterTodayDate);
+  // Initialize Kuwait timezone
+  tz.initializeTimeZones();
+  final kuwaitTimeZone = tz.getLocation('Asia/Kuwait');
+  final nowInKuwait = tz.TZDateTime.now(kuwaitTimeZone);
+
+  // Convert all times to Kuwait timezone
+  DateTime checkDateTime = tz.TZDateTime(
+      kuwaitTimeZone,
+      dateTime.year,
+      dateTime.month,
+      dateTime.day,
+      4,
+      30,
+      00
+  );
+
+  DateTime todayDateStartTimeDate = tz.TZDateTime(
+      kuwaitTimeZone,
+      nowInKuwait.year,
+      nowInKuwait.month,
+      nowInKuwait.day,
+      4,
+      30,
+      00
+  );
+
+  // Check if today is Wednesday (where 3 is Wednesday in DateTime.weekday)
+  bool isWednesday = nowInKuwait.weekday == 2;
+
+  // Get buffer hours from controller instead of hardcoded values
+  int beforeFourThirtyHours = isWednesday
+      ? (mySubscriptionController.bufferBeforeFourThirtyWednesday ?? 72)
+      : (mySubscriptionController.bufferBeforeFourThirty ?? 48);
+
+  int afterFourThirtyHours = isWednesday
+      ? (mySubscriptionController.bufferAfterFourThirtyWednesday ?? 96)
+      : (mySubscriptionController.bufferAfterFourThirty ?? 72);
+
+  // Set durations based on buffer hours from controller
+  Duration twoDaysDuration = Duration(hours: beforeFourThirtyHours);
+  Duration threeDaysDuration = Duration(hours: afterFourThirtyHours);
+
+  DateTime futureDate1 = todayDateStartTimeDate.add(twoDaysDuration);
+  DateTime futureDate2 = todayDateStartTimeDate.add(threeDaysDuration);
+
+  if (nowInKuwait.isBefore(todayDateStartTimeDate)) {
+    return checkDateTime.isBefore(futureDate1);
+  } else {
+    return checkDateTime.isBefore(futureDate2);
   }
 }

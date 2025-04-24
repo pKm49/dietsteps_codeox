@@ -13,8 +13,15 @@ import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class MySubscriptionController extends GetxController {
+import '../models/buffer_response.dart';
 
+class MySubscriptionController extends GetxController {
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    getBufferTime();
+  }
   var isSubscriptionDatesLoading = false.obs;
   var subscriptionDates = <SubscriptoinDate>[].obs;
   var currentMonth = DateTime (DateTime.now().year,DateTime.now().month,1).obs;
@@ -37,6 +44,10 @@ class MySubscriptionController extends GetxController {
   var itemScrollController = ItemScrollController();
   var isRatingSubmitting = false.obs;
   var currentSelectedRating = (1).obs;
+  int? bufferBeforeFourThirty;
+  int? bufferAfterFourThirty;
+  int? bufferAfterFourThirtyWednesday;
+  int? bufferBeforeFourThirtyWednesday;
 
 
   getSubscriptionDates(bool setDate, bool getSubs) async {
@@ -69,7 +80,15 @@ class MySubscriptionController extends GetxController {
       isFreezing.value = false;
     }
   }
+  void getBufferTime()async{
+    var mySubsHttpService = MySubsHttpService();
+    BufferDetailsResponse response= await mySubsHttpService.getBufferTime();
+    bufferBeforeFourThirty=response.payload?.bufferBefore430??48;
+    bufferAfterFourThirty=response.payload?.bufferAfter430??72;
+    bufferAfterFourThirtyWednesday=response.payload?.wednesdayBufferAfter430??96;
+    bufferBeforeFourThirtyWednesday=response.payload?.wednesdayBufferBefore430??72;
 
+  }
   // isAlreadySelectedForFreezing(DateTime dateTime){
   //   final f = DateFormat('yyyy-MM-dd');
   //   return frozenDays.contains(f.format(dateTime));

@@ -171,6 +171,8 @@ class SharedController extends GetxController {
       isUserDataFetching.value = false;
       print("userData");
       print(userData.value.id);
+      print("userData.value.shift");
+      print(userData.value.shift);
       print(userData.value.profilePictureUrl);
       if (userData.value.id != -1) {
         saveDeviceToken();

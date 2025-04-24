@@ -61,139 +61,182 @@ class _NotificationsPage_CoreState extends State<NotificationsPage_Core> {
       ),
       body: SafeArea(
         child: Obx(
-          () => Container(
+              () => Container(
             child: Column(
               children: [
                 Visibility(
-                  visible:  sharedController.isNotificationsFetching.value,
+                  visible: sharedController.isNotificationsFetching.value,
                   child: Expanded(
                       child: ListView(
-                    children: [
-                      Container(
-                        decoration:
+                        children: [
+                          Container(
+                            decoration:
                             APPSTYLE_ShadowedContainerSmallDecoration.copyWith(
                                 color: APPSTYLE_BackgroundWhite),
-                        padding: APPSTYLE_MediumPaddingAll,
-                        margin: APPSTYLE_LargePaddingAll.copyWith(bottom: 0),
-                        width: screenwidth,
-                        child: Wrap(
-                          direction: Axis.vertical,
-                          children: [
-                            Shimmer.fromColors(
-                              baseColor: APPSTYLE_Grey20,
-                              highlightColor: APPSTYLE_Grey40,
-                              child: Container(
-                                  height: 50,
-                                  width: screenwidth -
-                                      ((APPSTYLE_SpaceMedium * 2) +
-                                          (APPSTYLE_SpaceLarge * 2)),
-                                decoration:
-                                APPSTYLE_BorderedContainerExtraSmallDecoration
-                                    .copyWith(
-                                  border: null,
-                                  color: APPSTYLE_Grey20,
-                                  borderRadius: BorderRadius.circular(
-                                      APPSTYLE_BlurRadiusSmall),
-                                ),),
+                            padding: APPSTYLE_MediumPaddingAll,
+                            margin: APPSTYLE_LargePaddingAll.copyWith(bottom: 0),
+                            width: screenwidth,
+                            child: Wrap(
+                              direction: Axis.vertical,
+                              children: [
+                                Shimmer.fromColors(
+                                  baseColor: APPSTYLE_Grey20,
+                                  highlightColor: APPSTYLE_Grey40,
+                                  child: Container(
+                                    height: 50,
+                                    width: screenwidth -
+                                        ((APPSTYLE_SpaceMedium * 2) +
+                                            (APPSTYLE_SpaceLarge * 2)),
+                                    decoration:
+                                    APPSTYLE_BorderedContainerExtraSmallDecoration
+                                        .copyWith(
+                                      border: null,
+                                      color: APPSTYLE_Grey20,
+                                      borderRadius: BorderRadius.circular(
+                                          APPSTYLE_BlurRadiusSmall),
+                                    ),
+                                  ),
+                                ),
+                                addVerticalSpace(APPSTYLE_SpaceSmall),
+                                Shimmer.fromColors(
+                                  baseColor: APPSTYLE_Grey20,
+                                  highlightColor: APPSTYLE_Grey40,
+                                  child: Container(
+                                    height: 20,
+                                    width: screenwidth * .3,
+                                    decoration:
+                                    APPSTYLE_BorderedContainerExtraSmallDecoration
+                                        .copyWith(
+                                      border: null,
+                                      color: APPSTYLE_Grey20,
+                                      borderRadius: BorderRadius.circular(
+                                          APPSTYLE_BlurRadiusSmall),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            addVerticalSpace(APPSTYLE_SpaceSmall),
-                            Shimmer.fromColors(
-                              baseColor: APPSTYLE_Grey20,
-                              highlightColor: APPSTYLE_Grey40,
-                              child: Container(
-                                  height: 20,
-                                  width: screenwidth * .3,
-                                decoration:
-                                APPSTYLE_BorderedContainerExtraSmallDecoration
-                                    .copyWith(
-                                  border: null,
-                                  color: APPSTYLE_Grey20,
-                                  borderRadius: BorderRadius.circular(
-                                      APPSTYLE_BlurRadiusSmall),
-                                ),),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  )),
+                          )
+                        ],
+                      )),
                 ),
-
                 Visibility(
                   visible: sharedController.notifications.isNotEmpty &&
                       !sharedController.isNotificationsFetching.value,
                   child: Expanded(
-                      child: ListView.builder(
-                          itemCount: sharedController.notifications.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              decoration:
-                              APPSTYLE_ShadowedContainerSmallDecoration.copyWith(
-                                  color: APPSTYLE_BackgroundWhite),
-                              padding: APPSTYLE_MediumPaddingAll,
-                              margin: APPSTYLE_LargePaddingAll.copyWith(bottom: 0),
-                              width: screenwidth,
-                              child: Wrap(
-                                direction: Axis.vertical,
-                                children: [
-
-                                  Container(
-                                    width: screenwidth -
-                                        ((APPSTYLE_SpaceMedium * 2) +
-                                            (APPSTYLE_SpaceLarge * 2)),
-                                    child: Text(sharedController.notifications[index].message,
-                                        style: getBodyMediumStyle(context)
-                                            .copyWith(color:APPSTYLE_Grey80 )),
-                                  ),
-                                  addVerticalSpace(APPSTYLE_SpaceSmall),
-                                  Container(
-                                    width: screenwidth -
-                                        ((APPSTYLE_SpaceMedium * 2) +
-                                            (APPSTYLE_SpaceLarge * 2)),
-                                    child: Text(getFormattedDate(sharedController.notifications[index].dateTime),
-                                        style:getLabelLargeStyle (context).copyWith(
+                    child: ListView.builder(
+                        itemCount: sharedController.notifications.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            decoration:
+                            APPSTYLE_ShadowedContainerSmallDecoration
+                                .copyWith(color: APPSTYLE_BackgroundWhite),
+                            padding: APPSTYLE_MediumPaddingAll,
+                            margin:
+                            APPSTYLE_LargePaddingAll.copyWith(bottom: 0),
+                            width: screenwidth,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: double.infinity,
+                                        child: Text(
+                                          sharedController
+                                              .notifications[index].title,
+                                          style: getBodyMediumStyle(context)
+                                              .copyWith(
+                                            color: APPSTYLE_Grey80,
+                                          ),
+                                        ),
+                                      ),
+                                      addVerticalSpace(APPSTYLE_SpaceSmall),
+                                      Container(
+                                        width: double.infinity,
+                                        child: Text(
+                                          sharedController
+                                              .notifications[index].message,
+                                          style: getLabelLargeStyle(context)
+                                              .copyWith(
                                             color: APPSTYLE_Grey40,
-                                            fontWeight: APPSTYLE_FontWeightLight)),
+                                            fontWeight:
+                                            APPSTYLE_FontWeightLight,
+                                          ),
+                                        ),
+                                      ),
+                                      addVerticalSpace(APPSTYLE_SpaceSmall),
+                                      Container(
+                                        width: double.infinity,
+                                        child: Text(
+                                          getFormattedDateTime(sharedController
+                                              .notifications[index].dateTime),
+                                          style: getLabelLargeStyle(context)
+                                              .copyWith(
+                                            color: APPSTYLE_Grey40,
+                                            fontWeight:
+                                            APPSTYLE_FontWeightLight,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            );
-                          }),),
+                                ),
+                                SizedBox(
+                                    width:
+                                    APPSTYLE_SpaceMedium), // Add spacing between text and image
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                      8), // Optional: Add rounded corners
+                                  child: Image.network(
+                                    sharedController.notifications[index].image,
+                                    height: 50,
+                                    width: 50, // Ensure a fixed width
+                                    fit: BoxFit
+                                        .cover, // Prevents overflow by cropping if necessary
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
+                  ),
                 ),
-
                 Visibility(
                   visible: sharedController.notifications.isEmpty &&
                       !sharedController.isNotificationsFetching.value,
                   child: Expanded(
                       child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(1000),
-                              color: APPSTYLE_Grey20,
-                            ),
-                            width: screenwidth * .3,
-                            height: screenwidth * .3,
-                            child: Center(
-                              child: Icon(Icons.notifications_off_outlined,
-                                  size: screenwidth * .15,
-                                  color: APPSTYLE_Grey80),
-                            ),
-                          )
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(1000),
+                                  color: APPSTYLE_Grey20,
+                                ),
+                                width: screenwidth * .3,
+                                height: screenwidth * .3,
+                                child: Center(
+                                  child: Icon(Icons.notifications_off_outlined,
+                                      size: screenwidth * .15,
+                                      color: APPSTYLE_Grey80),
+                                ),
+                              )
+                            ],
+                          ),
+                          addVerticalSpace(APPSTYLE_SpaceLarge),
+                          Text("no_notifications".tr,
+                              style: getHeadlineMediumStyle(context)),
                         ],
-                      ),
-                      addVerticalSpace(APPSTYLE_SpaceLarge),
-                      Text("no_notifications".tr,
-                          style: getHeadlineMediumStyle(context)),
-                    ],
-                  )),
+                      )),
                 )
-
               ],
             ),
           ),
@@ -201,6 +244,4 @@ class _NotificationsPage_CoreState extends State<NotificationsPage_Core> {
       ),
     );
   }
-
-
 }

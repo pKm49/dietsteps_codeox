@@ -15,43 +15,56 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:dietsteps/env.dart' as env;
 
 class AppUpdateChecker {
-
   Future<bool> checkStatus() async {
-    try{
+    try {
+      print("DEBUG: checkStatus called");
       if (Platform.isAndroid) {
+        print("DEBUG: Device is Android, checking Android update");
         return await checkAndroidUpdateStatus();
       }
+      print("DEBUG: Device is iOS, checking iOS update");
       return await checkIOSUpdateStatus();
-    }catch (e){
-      print(e);
+    } catch (e) {
+      print("DEBUG: Error in checkStatus: $e");
+      print("error in app update");
       return false;
     }
-
   }
 
   Future<bool> checkIOSUpdateStatus() async {
-
+    print("DEBUG: Starting iOS update check");
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String appVersionName = _getCleanVersion(packageInfo.version);
+    print("DEBUG: Local app version: $appVersionName");
 
-    VersionStatus versionStatus = await getIosStoreVersionName(packageInfo) ??
-        VersionStatus(
-            localVersion: packageInfo.version,
-            storeVersion: '0.0.0',
-            appStoreLink: 'appStoreLink');
+    print("DEBUG: Calling getIosStoreVersionName");
+    VersionStatus? versionStatus = await getIosStoreVersionName(packageInfo);
+    print("DEBUG: Result from getIosStoreVersionName: ${versionStatus != null ? 'Success' : 'Null'}");
+
+    if (versionStatus == null) {
+      print("DEBUG: versionStatus is null, using fallback version");
+      versionStatus = VersionStatus(
+          localVersion: packageInfo.version,
+          storeVersion: '0.0.0',
+          appStoreLink: 'appStoreLink');
+    }
+
+    print("DEBUG: Local version: ${versionStatus.localVersion}");
+    print("DEBUG: Store version: ${versionStatus.storeVersion}");
+    print("DEBUG: Can update: ${versionStatus.canUpdate}");
 
     if (versionStatus.canUpdate) {
+      print("DEBUG: Update available, showing dialog");
       FlutterNativeSplash.remove();
       showUpdateDialog(storeLink: versionStatus.appStoreLink);
       return true;
     } else {
+      print("DEBUG: No update needed");
       return false;
     }
-
   }
 
   Future<bool> checkAndroidUpdateStatus() async {
-
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
     int appVersionCode = int.parse(packageInfo.buildNumber);
@@ -71,31 +84,67 @@ class AppUpdateChecker {
   }
 
   Future<VersionStatus?> getIosStoreVersionName(PackageInfo packageInfo) async {
+    print("DEBUG: Inside getIosStoreVersionName");
     final id = env.appStorePackageId;
-    final parameters = {"bundleId": id};
-    String countryCode =
-    findCountryCodeEdited(context: MyApp.navigatorKey.currentContext!);
+    print("DEBUG: App Store Package ID: $id");
 
-    parameters.addAll({"country": countryCode});
+    final parameters = {"bundleId": id};
+
+    BuildContext? context = MyApp.navigatorKey.currentContext;
+    print("DEBUG: Context available: ${context != null}");
+
+    if (context == null) {
+      print("DEBUG: Context is null, can't get country code");
+      parameters.addAll({"country": "US"}); // Default to US
+    } else {
+      String countryCode = findCountryCodeEdited(context: context);
+      print("DEBUG: Country code: $countryCode");
+      parameters.addAll({"country": countryCode});
+    }
 
     var uri = Uri.https("itunes.apple.com", "/lookup", parameters);
-    final response = await http.get(uri);
-    if (response.statusCode != 200) {
-      print('Failed to query iOS App Store');
+    print("DEBUG: iTunes API URL: $uri");
+
+    try {
+      print("DEBUG: Making HTTP request to iTunes API");
+      final response = await http.get(uri);
+      print("DEBUG: Response status code: ${response.statusCode}");
+
+      if (response.statusCode != 200) {
+        print('DEBUG: Failed to query iOS App Store, status: ${response.statusCode}');
+        return null;
+      }
+
+      print("DEBUG: Response body length: ${response.body.length}");
+      print("DEBUG: Response body preview: ${response.body.substring(0, min(100, response.body.length))}...");
+
+      final jsonObj = json.decode(response.body);
+      final List results = jsonObj['results'];
+
+      if (results.isEmpty) {
+        print('DEBUG: Empty results from iTunes API. Can\'t find app with ID: $id');
+        return null;
+      }
+
+      print("DEBUG: Found app in store: ${jsonObj['results'][0]['trackName']}");
+      print("DEBUG: Store version: ${jsonObj['results'][0]['version']}");
+      print("DEBUG: Local version: ${_getCleanVersion(packageInfo.version)}");
+
+      VersionStatus status = VersionStatus(
+        localVersion: _getCleanVersion(packageInfo.version),
+        storeVersion: _getCleanVersion(jsonObj['results'][0]['version']),
+        appStoreLink: jsonObj['results'][0]['trackViewUrl'],
+        releaseNotes: jsonObj['results'][0]['releaseNotes'],
+      );
+
+      print("DEBUG: Can update (calculated): ${status.canUpdate}");
+      print("DEBUG: Can update two (alternative calculation): ${status.canUpdateTwo}");
+
+      return status;
+    } catch (e) {
+      print("DEBUG: Exception in getIosStoreVersionName: $e");
       return null;
     }
-    final jsonObj = json.decode(response.body);
-    final List results = jsonObj['results'];
-    if (results.isEmpty) {
-      print('Can\'t find an app in the App Store with the id: $id');
-      return null;
-    }
-    return VersionStatus(
-      localVersion: _getCleanVersion(packageInfo.version),
-      storeVersion: _getCleanVersion(jsonObj['results'][0]['version']),
-      appStoreLink: jsonObj['results'][0]['trackViewUrl'],
-      releaseNotes: jsonObj['results'][0]['releaseNotes'],
-    );
   }
 
   Future<String?> getAppStoreLink(String bundleID) async {
@@ -120,8 +169,11 @@ class AppUpdateChecker {
     return jsonObj['results'][0]['trackViewUrl'];
   }
 
-  String _getCleanVersion(String version) =>
-      RegExp(r'\d+\.\d+\.\d+').stringMatch(version) ?? '0.0.0';
+  String _getCleanVersion(String version) {
+    String? match = RegExp(r'\d+\.\d+\.\d+').stringMatch(version);
+    print("DEBUG: Cleaning version '$version', result: ${match ?? '0.0.0'}");
+    return match ?? '0.0.0';
+  }
 
   Future<int> getAndroidStoreVersion(int appVersionCode) async {
     try {
@@ -141,26 +193,35 @@ class AppUpdateChecker {
   void showUpdateDialog({
     required String storeLink,
   }) async {
+    print("DEBUG: Showing update dialog with link: $storeLink");
     BuildContext context = MyApp.navigatorKey.currentContext!;
-    final dialogTitleWidget = Text('app_update_title'.tr,style: getHeadlineLargeStyle(context).copyWith(color: APPSTYLE_Grey80));
-    final dialogTextWidget = Text( 'app_update_content'.tr,style: getBodyMediumStyle(context),
+    final dialogTitleWidget = Text('app_update_title'.tr,
+        style: getHeadlineLargeStyle(context).copyWith(color: APPSTYLE_Grey80));
+    final dialogTextWidget = Text(
+      'app_update_content'.tr,
+      style: getBodyMediumStyle(context),
     );
 
-    final updateButtonTextWidget = Text('app_update_button_text'.tr,style: TextStyle(color: APPSTYLE_BackgroundWhite),);
+    final updateButtonTextWidget = Text(
+      'app_update_button_text'.tr,
+      style: TextStyle(color: APPSTYLE_BackgroundWhite),
+    );
 
     updateAction() {
+      print("DEBUG: Update button pressed, launching: $storeLink");
       launchAppStore(storeLink);
     }
 
     List<Widget> actions = [
       Platform.isAndroid
-          ?  ElevatedButton(
-          onPressed:updateAction,
-          style: getElevatedButtonStyle(context).copyWith(padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-              EdgeInsets.symmetric(
-                  horizontal: APPSTYLE_SpaceLarge,
-                  vertical: APPSTYLE_SpaceSmall))),
-          child:  updateButtonTextWidget)
+          ? ElevatedButton(
+          onPressed: updateAction,
+          style: getElevatedButtonStyle(context).copyWith(
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                  EdgeInsets.symmetric(
+                      horizontal: APPSTYLE_SpaceLarge,
+                      vertical: APPSTYLE_SpaceSmall))),
+          child: updateButtonTextWidget)
           : CupertinoDialogAction(
         onPressed: updateAction,
         child: updateButtonTextWidget,
@@ -187,7 +248,6 @@ class AppUpdateChecker {
       },
     );
   }
-
 }
 
 class VersionStatus {
@@ -198,11 +258,15 @@ class VersionStatus {
   final String? releaseNotes;
 
   bool get canUpdate {
-
     final local = localVersion.split('.').map(int.parse).toList();
     final store = storeVersion.split('.').map(int.parse).toList();
 
     for (var i = 0; i < store.length; i++) {
+      if (i >= local.length) {
+        // If store has more version segments than local, consider it an update
+        return true;
+      }
+
       if (store[i] > local[i]) {
         return true;
       }
@@ -213,22 +277,20 @@ class VersionStatus {
     }
 
     return false;
-
   }
 
   bool get canUpdateTwo {
-
     final local = localVersion.split('.').join();
     final store = storeVersion.split('.').join();
     debugPrint("local version $local");
     debugPrint("store version $store");
-    if(int.parse(store)>int.parse(local)){
+    if (int.parse(store) > int.parse(local)) {
       return true;
     }
 
     return false;
-
   }
+
   VersionStatus({
     required this.localVersion,
     required this.storeVersion,
@@ -238,19 +300,24 @@ class VersionStatus {
 }
 
 Future<void> launchAppStore(String appStoreLink) async {
-  print(appStoreLink);
+  print("DEBUG: launchAppStore called with: $appStoreLink");
   if (await canLaunchUrl(Uri.parse(appStoreLink))) {
+    print("DEBUG: Can launch URL, launching app store");
     await launchUrl(Uri.parse(appStoreLink));
   } else {
+    print("DEBUG: Cannot launch URL: $appStoreLink");
     throw 'something_wrong'.tr;
   }
 }
 
 String findCountryCodeEdited({required BuildContext context}) {
   Locale? locale = Localizations.maybeLocaleOf(context);
-
   String code = (locale == null || locale.countryCode == null)
       ? 'US'
       : locale.countryCode!;
+  print("DEBUG: findCountryCodeEdited returning: $code");
   return code;
 }
+
+// Helper function for substring
+int min(int a, int b) => a < b ? a : b;

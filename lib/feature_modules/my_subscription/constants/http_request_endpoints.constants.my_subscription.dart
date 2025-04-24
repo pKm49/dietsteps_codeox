@@ -4,3 +4,4 @@ const String MySubscriptionHttpRequestEndpoint_SetSubscriptionMealsByDate = "/se
 const String MySubscriptionHttpRequestEndpoint_FreezeSubscriptionDays = "/freeze_subscription";
 const String MySubscriptionHttpRequestEndpoint_UnFreezeSubscriptionDays = "/unfreeze_subscription";
 const String MySubscriptionHttpRequestEndpoint_RateMeal = "/submit_meal_rating";
+const String MySubscriptionHttpRequestEndpoint_BufferTime = "/buffer_time";

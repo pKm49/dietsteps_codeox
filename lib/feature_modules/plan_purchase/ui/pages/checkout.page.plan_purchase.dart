@@ -12,6 +12,7 @@ import 'package:dietsteps/shared_module/services/utility-services/widget_propert
 import 'package:dietsteps/shared_module/ui/components/custom_back_button.component.shared.dart';
 import 'package:dietsteps/shared_module/ui/components/language_preview_button.component.shared.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -255,7 +256,10 @@ class _CheckoutPage_PlanPurchaseState
                                             Expanded(
                                               child:  TextFormField(
                                                   controller:planPurchaseController.couponCodeController.value,
-
+                                                  inputFormatters: [
+                                                    UpperCaseTextFormatter(),
+                                                  ],
+                                                  textCapitalization: TextCapitalization.characters,
                                                   decoration: noBorderInputDecoration.copyWith(
                                                     hintText:'enter_code'.tr,
                                                   )),
@@ -529,5 +533,14 @@ class _CheckoutPage_PlanPurchaseState
       await UrlLauncher.launchUrl(Uri.parse(webUrl),
           mode: UrlLauncher.LaunchMode.externalApplication);
     }
+  }
+}
+class UpperCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    return TextEditingValue(
+      text: newValue.text.toUpperCase(),
+      selection: newValue.selection,
+    );
   }
 }

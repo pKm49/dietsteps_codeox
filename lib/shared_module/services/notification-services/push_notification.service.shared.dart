@@ -118,20 +118,23 @@ class PushNotificationService {
     await notificationsPlugin.cancelAll();
 
     notificationsPlugin.show(
-        getRandomId(),
-        data['title'],
-        data['body'],
-        flutter_local_notifications.NotificationDetails(
-          android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              channelDescription: channel.description,
-              icon: '@mipmap/ic_launcher',
-              styleInformation: bigPictureStyleInformation),
-          iOS: const DarwinNotificationDetails(),
+      getRandomId(),
+      data['title'],
+      data['body'],
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            channelDescription: channel.description,
+            icon: '@mipmap/ic_launcher',
+            styleInformation: bigPictureStyleInformation
         ),
-        payload: message.data.toString(),
-      );
+        iOS: DarwinNotificationDetails(
+            attachments: [DarwinNotificationAttachment(bigPicturePath)]
+        ),
+      ),
+      payload: message.data.toString(),
+    );
 
 
 

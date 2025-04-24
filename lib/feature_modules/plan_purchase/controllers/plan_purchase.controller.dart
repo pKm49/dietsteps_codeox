@@ -16,6 +16,9 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../my_subscription/models/buffer_response.dart';
+import '../../my_subscription/services/http.my_subscription.service.dart';
+
 class PlanPurchaseController extends GetxController {
   Rx<TextEditingController> couponCodeController = TextEditingController().obs;
   final sharedController = Get.find<SharedController>();
@@ -40,7 +43,10 @@ class PlanPurchaseController extends GetxController {
   var isDateChecking = false.obs;
   var isPaymentGatewayLoading = false.obs;
   var paymentGatewayIsLoading = false.obs;
-
+  int? bufferBeforeFourThirty;
+  int? bufferAfterFourThirty;
+  int? bufferAfterFourThirtyWednesday;
+  int? bufferBeforeFourThirtyWednesday;
   // calendar
   var firstWeekDays = <DateTime>[].obs;
   var secondWeekDays = <DateTime>[].obs;
@@ -53,42 +59,73 @@ class PlanPurchaseController extends GetxController {
   var currentMonth = DateTime(DateTime.now().year, DateTime.now().month, 1).obs;
 
   @override
-  void onInit() {
+  void onInit()async {
     super.onInit();
-    setMinimumPossibleDate();
+    await getBufferTime();
+    await setMinimumPossibleDate();
     setCurrentMonthWeekDays();
     couponCodeController.value.addListener(() {
       resetCouponCode();
     });
   }
+ Future<void> getBufferTime()async{
+    print("buffer");
+    var mySubsHttpService = MySubsHttpService();
+    BufferDetailsResponse response= await mySubsHttpService.getBufferTime();
+    bufferBeforeFourThirty=response.payload?.bufferBefore430??48;
+    bufferAfterFourThirty=response.payload?.bufferAfter430??72;
+    bufferAfterFourThirtyWednesday=response.payload?.wednesdayBufferAfter430??96;
+    bufferBeforeFourThirtyWednesday=response.payload?.wednesdayBufferBefore430??72;
 
-  void setMinimumPossibleDate() {
+  }
+  Future<void> setMinimumPossibleDate() async {
     tz.initializeTimeZones();
-    print("DateTime.now");
-    print(DateTime.now());
     final kuwaitTimeZone = tz.getLocation('Asia/Kuwait');
     final nowInKuwait = tz.TZDateTime.now(kuwaitTimeZone);
-    print("nowInKuwait");
-    print(nowInKuwait);
-    final today430PM = tz.TZDateTime(
+
+    print("Current Kuwait time: $nowInKuwait");
+
+    // Create 4:30 AM threshold for today in Kuwait time
+    final today430AM = tz.TZDateTime(
       kuwaitTimeZone,
       nowInKuwait.year,
       nowInKuwait.month,
       nowInKuwait.day,
-      04, // 4:30 PM hour
-      30, // 4:30 PM minute
+      4,
+      30,
     );
 
-    Duration durationToAdd = nowInKuwait.isBefore(today430PM)
-        ? Duration(days: 2) // If before 4:30 PM, add 1 day
-        : Duration(days: 3); // If after 4:30 PM, add 2 days
+    print("Today's 4:30 AM threshold: $today430AM");
+    print("Is before 4:30 AM? ${nowInKuwait.isBefore(today430AM)}");
+
+    // Calculate days to add based on current time and day
+    Duration durationToAdd;
+    bool isWednesday = nowInKuwait.weekday == 2;
+
+    if (isWednesday) {
+      durationToAdd = nowInKuwait.isBefore(today430AM)
+          ? Duration(hours: bufferBeforeFourThirtyWednesday??72)
+          :  Duration(hours: bufferAfterFourThirtyWednesday??96);
+    } else {
+      durationToAdd = nowInKuwait.isBefore(today430AM)
+          ?  Duration(hours: bufferBeforeFourThirty??48)
+          :  Duration(hours: bufferAfterFourThirty??72);
+    }
+
+    // Calculate minimum date in Kuwait timezone
     final minSelectableDate = nowInKuwait.add(durationToAdd);
-    minimumPossibleDate.value = minSelectableDate;
-    print("nowInKuwait.isBefore(today430PM)");
-    print(nowInKuwait.isBefore(today430PM));
-    print("minimumPossibleDate.value");
-    print(minimumPossibleDate.value);
+
+    // Store as midnight in Kuwait timezone
+    minimumPossibleDate.value = tz.TZDateTime(
+      kuwaitTimeZone,
+      minSelectableDate.year,
+      minSelectableDate.month,
+      minSelectableDate.day,
+    );
+
+    print("📅 Calculated minimum date: ${minimumPossibleDate.value}");
   }
+
 
   Future<void> getSubscriptionCategories() async {
     isCategoriesFetching.value = true;
@@ -148,15 +185,17 @@ class PlanPurchaseController extends GetxController {
   Future<void> checkCouponValidity() async {
     isCouponChecking.value = true;
     isCouponCodeValid.value = false;
+    var sharedPreferences = await SharedPreferences.getInstance();
+    final String? mobile = sharedPreferences.getString('mobile');
 
     var planPurchaseHttpService = PlanPurchaseHttpService();
     DiscountData discountData = await planPurchaseHttpService.verifyCoupon(
-        currentSubscription.value.id, couponCodeController.value.text);
+        currentSubscription.value.id, couponCodeController.value.text,mobile??"");
 
     if (!discountData.isValid) {
       isCouponCodeValid.value = false;
 
-      showSnackbar(Get.context!, "coupon_code_not_valid".tr, "error");
+      // showSnackbar(Get.context!, "coupon_code_not_valid".tr, "error");
       subTotal.value = currentSubscription.value.price;
       discount.value = 0.0;
       total.value = subTotal.value;
@@ -292,8 +331,22 @@ class PlanPurchaseController extends GetxController {
     couponCodeController.value.text = "";
   }
 
+  // In PlanPurchaseController
   void setSelectedDate(DateTime date) {
-    selectedDate.value = date;
+    final kuwaitTimeZone = tz.getLocation('Asia/Kuwait');
+
+    // Create a new date in Kuwait timezone preserving the selected date
+    final selectedDateInKuwait = tz.TZDateTime(
+      kuwaitTimeZone,
+      date.year,
+      date.month,
+      date.day,
+    );
+
+    // print("Setting selected date: $date");
+    // print("In Kuwait timezone: $selectedDateInKuwait");
+
+    selectedDate.value = selectedDateInKuwait;
   }
 
   void previousMonth() {
@@ -372,6 +425,8 @@ class PlanPurchaseController extends GetxController {
   }
 
   DateTime getDate(DateTime d) => DateTime(d.year, d.month, d.day);
+
+
 
   Future<void> planChoiceSelected() async {
     var sharedPreferences = await SharedPreferences.getInstance();

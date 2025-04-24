@@ -7,6 +7,8 @@ import 'package:dietsteps/shared_module/services/http-services/http_request_hand
 import 'package:dietsteps/shared_module/services/utility-services/date_conversion.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/toaster_snackbar_shower.service.shared.dart';
 import 'package:get/get.dart';
+
+import '../models/buffer_response.dart';
 class MySubsHttpService {
 
   Future<List<SubscriptoinDate>> getSubscriptionDates(String mobile) async {
@@ -140,5 +142,41 @@ class MySubsHttpService {
       return false;
     }
   }
+  Future<BufferDetailsResponse> getBufferTime() async {
+    try {
+      // Empty parameters since no params needed
+      Map<String, dynamic> params = {};
 
+      // Make the GET request to the buffer time endpoint
+      AppHttpResponse response = await getRequest(
+          MySubscriptionHttpRequestEndpoint_BufferTime, params);
+
+
+
+      if (response.statusCode == 200 && response.data != null) {
+        // Check if the response is already the payload (not wrapped)
+        if (response.data is Map && response.data.containsKey("buffer_before_4_30")) {
+
+          // Create a wrapped response structure
+          Map<String, dynamic> wrappedResponse = {
+            "statusOk": true,
+            "statusCode": 200,
+            "message": [],
+            "payload": response.data,
+            "error": []
+          };
+
+          return BufferDetailsResponse.fromJson(wrappedResponse);
+        } else {
+          return BufferDetailsResponse.fromJson(response.data);
+        }
+      }
+
+      return BufferDetailsResponse();
+    } catch (e, st) {
+      print("❌ Error getting buffer time: $e");
+      print(st);
+      return BufferDetailsResponse(); // Return default/empty response on error
+    }
+  }
 }

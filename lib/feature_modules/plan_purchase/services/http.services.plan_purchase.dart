@@ -60,26 +60,31 @@ class PlanPurchaseHttpService {
     }
   }
 
-  Future<DiscountData> verifyCoupon(int planId, String couponCode) async {
-
-    try{
+  Future<DiscountData> verifyCoupon(int planId, String couponCode,String mobile) async {
+    try {
       Map<String, dynamic> params = {};
-      params['plan_choice_id']=planId;
-      params['coupon_code']=couponCode;
-      AppHttpResponse response =
-      await getRequest(SubscriptionsHttpRequestEndpoint_VerifyCoupon, params
-      );
+      params['plan_choice_id'] = planId;
+      params['coupon_code'] = couponCode;
+      params['mobile'] = mobile;
+      AppHttpResponse response = await getRequest(
+          SubscriptionsHttpRequestEndpoint_VerifyCoupon, params);
 
-      if (response.statusCode == 200 && response.data != null) {
-        return mapDiscountData(response.data[0],true);
+      if (response.data != null && response.data.isNotEmpty && response.statusCode==200) {
+
+        return mapDiscountData(response.data[0], response.statusCode==200);
+      }
+      else{
+
+        showSnackbar(Get.context!, response.message , "error");
+        return mapDiscountData(response.data[0], false);
       }
 
-      return mapDiscountData({},false);
 
-    }catch  (e,st){
+      return mapDiscountData({}, false);
+    } catch (e, st) {
       print(e);
       print(st);
-      return mapDiscountData({},false);
+      return mapDiscountData({}, false);
     }
   }
 
