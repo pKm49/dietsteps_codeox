@@ -1,9 +1,10 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:dietsteps/shared_module/models/http_response.model.shared.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as httpForMultipart;
-import 'package:http_interceptor/http_interceptor.dart'; 
+import 'package:http_interceptor/http_interceptor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dietsteps/env.dart' as env;
 
@@ -20,21 +21,21 @@ getRequest(endpoint, parameters) async {
       AppHttpInterceptor(),
     ]);
 
-    final httpResponse = await http
-        .get(Uri.https(env.apiEndPoint, "$endpoint"),params: json.decode(json.encode(parameters)));
+    final httpResponse = await http.get(Uri.https(env.apiEndPoint, "$endpoint"),
+        params: json.decode(json.encode(parameters)));
     print(Uri.https(env.apiEndPoint, "$endpoint").toString());
     print(parameters);
 
     print("httpResponse");
     print(httpResponse.body);
     print("httpResponse");
-
+    log(httpResponse.body.toString(), name: "httpResponse");
     var httpResponseBody = json.decode(httpResponse.body);
 
-    return generateSuccessResponse(httpResponseBody,httpResponse.statusCode);
+    return generateSuccessResponse(httpResponseBody, httpResponse.statusCode);
   } on SocketException {
     return generateErrorResponse('Couldn\'t Connect, Try Again Later');
-  } on FormatException catch (e,stack) {
+  } on FormatException catch (e, stack) {
     if (e.toString().contains("Request Not Implemented")) {
       return generateErrorResponse('Request Not Implemented');
     }
@@ -69,18 +70,18 @@ postRequest(endpoint, body) async {
     print("update_customer_profile request");
     print(endpoint.toString().contains('update_customer_profile'));
     late var httpResponse;
-    if(endpoint.toString().contains('update_customer_profile')){
+    if (endpoint.toString().contains('update_customer_profile')) {
       // print("update_customer_profile contains update_customer_profile");
 
-      httpResponse = await http.post(
-          Uri.https(env.apiEndPoint, "$endpoint"),
-          params:endpoint.toString().contains('update_customer_profile')? json.decode(json.encode(body)) : null
-      );
-    }else{
-      httpResponse = await http.post(
-          Uri.https(env.apiEndPoint, "$endpoint"),
-          body:endpoint.toString().contains('update_customer_profile')?null: json.encode(body)
-      );
+      httpResponse = await http.post(Uri.https(env.apiEndPoint, "$endpoint"),
+          params: endpoint.toString().contains('update_customer_profile')
+              ? json.decode(json.encode(body))
+              : null);
+    } else {
+      httpResponse = await http.post(Uri.https(env.apiEndPoint, "$endpoint"),
+          body: endpoint.toString().contains('update_customer_profile')
+              ? null
+              : json.encode(body));
     }
 
     print("postRequest called pass 2");
@@ -91,7 +92,7 @@ postRequest(endpoint, body) async {
     print(httpResponse.statusCode);
     var httpResponseBody = json.decode(httpResponse.body);
 
-    return generateSuccessResponse(httpResponseBody,httpResponse.statusCode);
+    return generateSuccessResponse(httpResponseBody, httpResponse.statusCode);
   } on SocketException {
     // print("post SocketException exception");
     return generateErrorResponse('Couldn\'t Connect, Try Again Later');
@@ -112,12 +113,10 @@ postRequest(endpoint, body) async {
 
     return generateErrorResponse('Something went wrong, try again');
   } on Exception catch (e) {
-
     // print("post exception");
     // print(e.toString());
     return generateErrorResponse('Something went wrong, try again');
   }
-
 }
 
 patchRequest(endpoint, body) async {
@@ -134,10 +133,10 @@ patchRequest(endpoint, body) async {
     print("update_customer_profile request");
     print(endpoint.toString().contains('update_customer_profile'));
     late var httpResponse;
-    httpResponse = await http.patch(
-        Uri.https(env.apiEndPoint, "$endpoint"),
-        body:endpoint.toString().contains('update_customer_profile')?null: json.encode(body)
-    );
+    httpResponse = await http.patch(Uri.https(env.apiEndPoint, "$endpoint"),
+        body: endpoint.toString().contains('update_customer_profile')
+            ? null
+            : json.encode(body));
 
     print("patchRequest called pass 2");
 
@@ -147,7 +146,7 @@ patchRequest(endpoint, body) async {
     print(httpResponse.statusCode);
     var httpResponseBody = json.decode(httpResponse.body);
 
-    return generateSuccessResponse(httpResponseBody,httpResponse.statusCode);
+    return generateSuccessResponse(httpResponseBody, httpResponse.statusCode);
   } on SocketException {
     // print("patch SocketException exception");
     return generateErrorResponse('Couldn\'t Connect, Try Again Later');
@@ -168,27 +167,26 @@ patchRequest(endpoint, body) async {
 
     return generateErrorResponse('Something went wrong, try again');
   } on Exception catch (e) {
-
     // print("patch exception");
     // print(e.toString());
     return generateErrorResponse('Something went wrong, try again');
   }
-
 }
-deleteRequest(endpoint,parameters) async {
+
+deleteRequest(endpoint, parameters) async {
   try {
     final http = InterceptedHttp.build(interceptors: [
       AppHttpInterceptor(),
     ]);
     print("deleteRequest called pass 1");
     print(Uri.https(env.apiEndPoint, "$endpoint").toString());
-    final httpResponse =
-    await http.delete(Uri.https(env.apiEndPoint, "/$endpoint"),params: json.decode(json.encode(parameters)));
+    final httpResponse = await http.delete(
+        Uri.https(env.apiEndPoint, "/$endpoint"),
+        params: json.decode(json.encode(parameters)));
 
     var httpResponseBody = json.decode(httpResponse.body);
 
-
-    return generateSuccessResponse(httpResponseBody,httpResponse.statusCode);
+    return generateSuccessResponse(httpResponseBody, httpResponse.statusCode);
   } on SocketException {
     return generateErrorResponse('Couldn\'t Connect, Try Again Later');
   } on FormatException catch (e) {
@@ -208,40 +206,44 @@ deleteRequest(endpoint,parameters) async {
 }
 
 generateErrorResponse(String errorMessage) {
-  AppHttpResponse poundHttpResponse = AppHttpResponse(
-      statusCode: 404,  message: errorMessage, data: null);
+  AppHttpResponse poundHttpResponse =
+      AppHttpResponse(statusCode: 404, message: errorMessage, data: null);
 
   return poundHttpResponse;
 }
 
 generateSuccessResponse(dynamic httpResponseBody, int requestStatusCode) {
-
   print("generateSuccessResponse");
   // print(httpResponseBody);
-  var result = httpResponseBody['result'] != null ?httpResponseBody['result']:httpResponseBody  ;
+  var result = httpResponseBody['result'] != null
+      ? httpResponseBody['result']
+      : httpResponseBody;
   print(result.toString());
-  if(result is String && result.toString().contains('UNAUTHORIZED')){
+  if (result is String && result.toString().contains('UNAUTHORIZED')) {
     return generateErrorResponse('UnAuthorized');
   }
-  if(result is String)
-  {
+  if (result is String) {
     return generateErrorResponse('Something went wrong, try again');
-  }
-  else{
-    num statusCode = (result  != null && result['statusCode']  != null)
+  } else {
+    num statusCode = (result != null && result['statusCode'] != null)
         ? result['statusCode']
-        :(result  != null && result['statusCode']  != null)
-        ? result['statusCode']:result.toString().contains('Error')?500: requestStatusCode;
-    String message = (result  != null && result['message']  != null)
+        : (result != null && result['statusCode'] != null)
+            ? result['statusCode']
+            : result.toString().contains('Error')
+                ? 500
+                : requestStatusCode;
+    String message = (result != null && result['message'] != null)
         ? result['message']
-        :(result  != null && result['error']  != null)
-        ? result['error'] is String?result['error']:''
-        : '';
-    dynamic data = (result  != null && result['data']  != null)
+        : (result != null && result['error'] != null)
+            ? result['error'] is String
+                ? result['error']
+                : ''
+            : '';
+    dynamic data = (result != null && result['data'] != null)
         ? result['data']
-        :(result  != null && result['payload']  != null)
-        ? result['payload']
-        : result;
+        : (result != null && result['payload'] != null)
+            ? result['payload']
+            : result;
     print("statusCode");
     print(statusCode);
     print("message");
@@ -249,21 +251,31 @@ generateSuccessResponse(dynamic httpResponseBody, int requestStatusCode) {
     print("data");
     print(data);
     AppHttpResponse poundHttpResponse = AppHttpResponse(
-        statusCode:(result  != null && result['statusCode']  != null)
+        statusCode: (result != null && result['statusCode'] != null)
             ? result['statusCode']
-            :(result  != null && result['statusCode']  != null)
-            ? result['statusCode']: result.toString().contains('Error')?500: statusCode,
-        message: (result  != null && result['message']  != null && result['message']  != "")
+            : (result != null && result['statusCode'] != null)
+                ? result['statusCode']
+                : result.toString().contains('Error')
+                    ? 500
+                    : statusCode,
+        message: (result != null &&
+                result['message'] != null &&
+                result['message'] != "")
             ? result['message']
-            :(result  != null && result['error']  != null && result['error']  != "")
-            ? result['error'] is String?result['error']:"something_wrong".tr
-            : "something_wrong".tr ,
-        data: (result  != null && result['data']  != null)
+            : (result != null &&
+                    result['error'] != null &&
+                    result['error'] != "")
+                ? result['error'] is String
+                    ? result['error']
+                    : "something_wrong".tr
+                : "something_wrong".tr,
+        data: (result != null && result['data'] != null)
             ? result['data']
-            :(result  != null && result['payload']  != null)
-            ? result['payload']
-            : result.toString().contains('Error')?null: null);
+            : (result != null && result['payload'] != null)
+                ? result['payload']
+                : result.toString().contains('Error')
+                    ? null
+                    : null);
     return poundHttpResponse;
   }
-
 }

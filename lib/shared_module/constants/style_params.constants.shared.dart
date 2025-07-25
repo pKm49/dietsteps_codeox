@@ -7,6 +7,7 @@ const Color APPSTYLE_PrimaryColorBgLight = Color(0xff9585c3);
 const Color APPSTYLE_PrimaryColorDark = Color(0xff243624);
 const Color APPSTYLE_GuideOrange = Color(0xFFF88E0D);
 const Color APPSTYLE_GuideYellow = Color(0xFFF8CC0D);
+const Color APPSTYLE_MUTEDGOLDYELLOW = Color(0xFFE5B647);
 const Color APPSTYLE_GuideGreen = Color(0xFF33AD66);
 const Color APPSTYLE_WhatsappGreen = Color(0xFF25D366);
 const Color APPSTYLE_GuideRed = Color(0xFFD62C49);
@@ -68,4 +69,3 @@ const Duration APPSTYLE_DefaultDuration = Duration(milliseconds: 300);
 
 const String APPSTYLE_DefaultFontFamilyEnglish = "OpenSans";
 const String APPSTYLE_DefaultFontFamilyArabic = "HelveticaNeueLTArabic";
-

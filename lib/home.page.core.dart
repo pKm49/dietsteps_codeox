@@ -64,7 +64,7 @@ class _HomePage_CoreState extends State<HomePage_Core> {
               children: [
                 Container(
                   width: screenwidth,
-                  height: (screenwidth * .2) + (APPSTYLE_SpaceMedium * 2),
+                  height: (screenwidth * .2) + (APPSTYLE_SpaceMedium * 2.5),
                   padding: EdgeInsets.all(APPSTYLE_SpaceMedium),
                   margin: EdgeInsets.only(bottom: APPSTYLE_SpaceMedium),
                   child: Row(
@@ -89,14 +89,11 @@ class _HomePage_CoreState extends State<HomePage_Core> {
                             fit: BoxFit.scaleDown,
                             child: Text(
                               (Localizations.localeOf(context)
-                                  .languageCode
-                                  .toString() ==
-                                  'ar')?"${sharedController
-                                  .userData.value.firstNameArabic} ${sharedController
-                                  .userData.value.lastNameArabic}"
-                                  :"${sharedController
-                                  .userData.value.firstName} ${sharedController
-                                  .userData.value.lastName}",
+                                          .languageCode
+                                          .toString() ==
+                                      'ar')
+                                  ? "${sharedController.userData.value.firstNameArabic} ${sharedController.userData.value.lastNameArabic}"
+                                  : "${sharedController.userData.value.firstName} ${sharedController.userData.value.lastName}",
                               textAlign: TextAlign.start,
                               style: getHeadlineLargeStyle(context).copyWith(
                                   color: APPSTYLE_BackgroundWhite,
@@ -115,35 +112,37 @@ class _HomePage_CoreState extends State<HomePage_Core> {
                           // ),
                           FittedBox(
                             fit: BoxFit.scaleDown,
-                            child: Text("ID : ${sharedController.userData.value.customerCode.toString()}",
+                            child: Text(
+                              "ID : ${sharedController.userData.value.customerCode.toString()}",
                               textAlign: TextAlign.start,
                               style: getBodyMediumStyle(context).copyWith(
                                   color: APPSTYLE_BackgroundWhite,
-                                  fontWeight: APPSTYLE_FontWeightBold
-                              ),
+                                  fontWeight: APPSTYLE_FontWeightBold),
                             ),
                           ),
                           FittedBox(
                             fit: BoxFit.scaleDown,
-                            child: Text(sharedController.userData.value.shift,
+                            child: Text(
+                              sharedController.userData.value.shift,
                               textAlign: TextAlign.start,
                               style: getBodyMediumStyle(context).copyWith(
-                                fontSize: 16,
+                                  fontSize: 16,
                                   color: APPSTYLE_BackgroundWhite,
-                                  fontWeight: APPSTYLE_FontWeightBold
-                              ),
+                                  fontWeight: APPSTYLE_FontWeightBold),
                             ),
                           ),
                           Visibility(
-                            visible: sharedController.userData.value.deliveryTime!="",
+                            visible:
+                                sharedController.userData.value.deliveryTime !=
+                                    "",
                             child: FittedBox(
                               fit: BoxFit.scaleDown,
-                              child: Text("${sharedController.userData.value.deliveryTime.toString()}",
+                              child: Text(
+                                "${sharedController.userData.value.deliveryTime.toString()}",
                                 textAlign: TextAlign.start,
                                 style: getBodyMediumStyle(context).copyWith(
                                     color: APPSTYLE_BackgroundWhite,
-                                    fontWeight: APPSTYLE_FontWeightBold
-                                ),
+                                    fontWeight: APPSTYLE_FontWeightBold),
                               ),
                             ),
                           ),
@@ -166,7 +165,7 @@ class _HomePage_CoreState extends State<HomePage_Core> {
                       addHorizontalSpace(APPSTYLE_SpaceMedium),
                       InkWell(
                         onTap: () {
-                         openDialer();
+                          openDialer();
                         },
                         child: Icon(Ionicons.call_outline,
                             color: APPSTYLE_BackgroundWhite,
@@ -382,8 +381,8 @@ class _HomePage_CoreState extends State<HomePage_Core> {
                                                     "noactivesubscription") &&
                                             !sharedController
                                                 .isUserDataFetching.value,
-                                        child: Text( "subscription_purchase_message"
-                                                      .tr,
+                                        child: Text(
+                                          "subscription_purchase_message".tr,
                                           textAlign: TextAlign.center,
                                           maxLines: 3,
                                           style: getBodyMediumStyle(context)
@@ -471,7 +470,7 @@ class _HomePage_CoreState extends State<HomePage_Core> {
                                                           context)
                                                       .copyWith(
                                                           color:
-                                                          APPSTYLE_PrimaryColor),
+                                                              APPSTYLE_PrimaryColor),
                                                 )),
                                               ),
                                             ),
@@ -495,21 +494,24 @@ class _HomePage_CoreState extends State<HomePage_Core> {
                                       addVerticalSpace(APPSTYLE_SpaceSmall),
                                       Visibility(
                                         visible: !sharedController.userData
-                                            .value.subscriptionRemainingDays
-                                            .toLowerCase()
-                                            .replaceAll(' ', '')
-                                            .contains(
-                                            "noactivesubscription") &&
+                                                .value.subscriptionRemainingDays
+                                                .toLowerCase()
+                                                .replaceAll(' ', '')
+                                                .contains(
+                                                    "noactivesubscription") &&
                                             !sharedController
                                                 .isUserDataFetching.value,
-                                        child:   Text( sharedController.userData.value.shift.toLowerCase()
-                                            .replaceAll(' ', '')
-                                            .contains(
-                                            "samedaydelivery")?"morning_shift_string".tr:"evening_shift_string".tr,
+                                        child: Text(
+                                          sharedController.userData.value.shift
+                                                  .toLowerCase()
+                                                  .replaceAll(' ', '')
+                                                  .contains("samedaydelivery")
+                                              ? "morning_shift_string".tr
+                                              : "evening_shift_string".tr,
                                           style: getBodyMediumStyle(context)
                                               .copyWith(
-                                              color:
-                                              APPSTYLE_BackgroundWhite),
+                                                  color:
+                                                      APPSTYLE_BackgroundWhite),
                                         ),
                                       ),
                                       Visibility(
@@ -556,8 +558,7 @@ class _HomePage_CoreState extends State<HomePage_Core> {
                                       backgroundColor:
                                           MaterialStateProperty.all<Color>(
                                               APPSTYLE_BackgroundWhite),
-                                      padding: MaterialStateProperty.all<
-                                              EdgeInsetsGeometry>(
+                                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                                           const EdgeInsets.symmetric(
                                               horizontal: APPSTYLE_SpaceMedium,
                                               vertical:
@@ -565,31 +566,33 @@ class _HomePage_CoreState extends State<HomePage_Core> {
                                       shape: MaterialStateProperty.all<OutlinedBorder>(
                                           RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(1000)))),
-                                  child:sharedController.isPlanActivating.value
-                                      || sharedController.isOrderDetailsFetching.value
+                                                  BorderRadius.circular(
+                                                      1000)))),
+                                  child: sharedController.isPlanActivating.value ||
+                                          sharedController.isOrderDetailsFetching.value
                                       ? LoadingAnimationWidget.staggeredDotsWave(
-                                    color: APPSTYLE_PrimaryColor,
-                                    size: 24,
-                                  ):  FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                        !sharedController.userData.value
-                                                .subscriptionRemainingDays
-                                                .toLowerCase()
-                                                .replaceAll(' ', '')
-                                                .contains(
-                                                    "noactivesubscription")
-                                            ? 'renew_subscription'.tr
-                                             : "purchase_subscription"
-                                                        .tr,
-                                        style: getLabelLargeStyle(context)
-                                            .copyWith(
-                                                color: APPSTYLE_PrimaryColor,
-                                                fontWeight:
-                                                    APPSTYLE_FontWeightBold),
-                                        textAlign: TextAlign.center),
-                                  ),
+                                          color: APPSTYLE_PrimaryColor,
+                                          size: 24,
+                                        )
+                                      : FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          child: Text(
+                                              !sharedController.userData.value
+                                                      .subscriptionRemainingDays
+                                                      .toLowerCase()
+                                                      .replaceAll(' ', '')
+                                                      .contains(
+                                                          "noactivesubscription")
+                                                  ? 'renew_subscription'.tr
+                                                  : "purchase_subscription".tr,
+                                              style: getLabelLargeStyle(context)
+                                                  .copyWith(
+                                                      color:
+                                                          APPSTYLE_PrimaryColor,
+                                                      fontWeight:
+                                                          APPSTYLE_FontWeightBold),
+                                              textAlign: TextAlign.center),
+                                        ),
                                   onPressed: () {
                                     Get.toNamed(AppRouteNames
                                         .planPurchaseSubscriptionPlansCategoryListRoute);
@@ -646,16 +649,22 @@ class _HomePage_CoreState extends State<HomePage_Core> {
                                       showBookingConfirmDialogue(context);
                                     }
                                   })),
-
-
                         ],
                       ),
                     ),
                     Visibility(
-                        visible: !sharedController.isUserDataFetching.value && sharedController.mySubscriptions.where((p0) => p0.status=='in_progress').toList().isEmpty,
+                        visible: !sharedController.isUserDataFetching.value &&
+                            sharedController.mySubscriptions
+                                .where((p0) => p0.status == 'in_progress')
+                                .toList()
+                                .isEmpty,
                         child: addVerticalSpace(APPSTYLE_SpaceExtraSmall)),
                     Visibility(
-                      visible: !sharedController.isUserDataFetching.value && sharedController.mySubscriptions.where((p0) => p0.status=='in_progress').toList().isEmpty,
+                      visible: !sharedController.isUserDataFetching.value &&
+                          sharedController.mySubscriptions
+                              .where((p0) => p0.status == 'in_progress')
+                              .toList()
+                              .isEmpty,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -664,30 +673,37 @@ class _HomePage_CoreState extends State<HomePage_Core> {
                               width: screenwidth * .6,
                               child: OutlinedButton(
                                   style: ButtonStyle(
-                                      side:  MaterialStateProperty.all<BorderSide>(BorderSide(width: 1.5, color:APPSTYLE_BackgroundWhite)) ,
-
+                                      side: MaterialStateProperty.all<BorderSide>(
+                                          BorderSide(
+                                              width: 1.5,
+                                              color: APPSTYLE_BackgroundWhite)),
                                       padding: MaterialStateProperty.all<
-                                          EdgeInsetsGeometry>(
+                                              EdgeInsetsGeometry>(
                                           const EdgeInsets.symmetric(
                                               horizontal: APPSTYLE_SpaceMedium,
                                               vertical:
-                                              APPSTYLE_SpaceExtraSmall)),
-                                      shape: MaterialStateProperty.all<
-                                          OutlinedBorder>(
+                                                  APPSTYLE_SpaceExtraSmall)),
+                                      shape: MaterialStateProperty.all<OutlinedBorder>(
                                           RoundedRectangleBorder(
                                               borderRadius:
-                                              BorderRadius.circular(
-                                                  1000)))),
+                                                  BorderRadius.circular(1000)))),
                                   child: FittedBox(
                                     fit: BoxFit.scaleDown,
-                                    child:  Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
-                                        Image.asset(ASSETS_MEALS,width: 30),
-                                        addHorizontalSpace(APPSTYLE_SpaceMedium),
+                                        Image.asset(ASSETS_MEALS, width: 30),
+                                        addHorizontalSpace(
+                                            APPSTYLE_SpaceMedium),
                                         Text('Show our menu',
-                                            style: getHeadlineMediumStyle(context).copyWith(
-                                                color: APPSTYLE_BackgroundWhite,fontWeight: APPSTYLE_FontWeightBold),
+                                            style: getHeadlineMediumStyle(
+                                                    context)
+                                                .copyWith(
+                                                    color:
+                                                        APPSTYLE_BackgroundWhite,
+                                                    fontWeight:
+                                                        APPSTYLE_FontWeightBold),
                                             textAlign: TextAlign.center),
                                       ],
                                     ),
@@ -782,9 +798,7 @@ class _HomePage_CoreState extends State<HomePage_Core> {
     );
   }
 
-
   openWhatsapp() async {
-
     String contact = sharedController.supportNumber.value;
 
     // final Uri whatsappUrl = Uri(
@@ -802,10 +816,9 @@ class _HomePage_CoreState extends State<HomePage_Core> {
       await UrlLauncher.launchUrl(whatsappUrl.asUri());
     } catch (e) {
       print('object');
-      await UrlLauncher.launchUrl(
-          Uri.parse(webUrl), mode: UrlLauncher.LaunchMode.externalApplication);
+      await UrlLauncher.launchUrl(Uri.parse(webUrl),
+          mode: UrlLauncher.LaunchMode.externalApplication);
     }
-
   }
 
   openDialer() async {
@@ -816,7 +829,6 @@ class _HomePage_CoreState extends State<HomePage_Core> {
       path: contact,
     );
     String webUrl = 'tel:$contact';
-
 
     try {
       await UrlLauncher.launchUrl(dialerUrl);

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dietsteps/feature_modules/plan_purchase/models/discount_data.model.plan_purchase.dart';
 import 'package:dietsteps/feature_modules/plan_purchase/models/payment_data.model.plan_purchase.dart';
 import 'package:dietsteps/feature_modules/plan_purchase/models/plan.model.plan_purchase.dart';
@@ -32,6 +34,17 @@ class PlanPurchaseController extends GetxController {
       mapSubscriptionCategory({}).obs;
   Rx<SubscriptionPlan> currentSubscription = mapSubscriptionItem({}).obs;
 
+  // Variables to store bottom sheet state
+  RxBool wasBottomSheetOpen = false.obs;
+  RxString lastSelectedPlanCategory = "".obs;
+
+  Map<String, dynamic> bottomSheetState = {};
+
+  Map<int, int> customMealCounts = {};
+  Map<int, int> customMealProteins = {};
+  Map<int, int> customMealCarbs = {};
+  double customizedPrice = 0.0;
+
   var paymentData = mapPaymentData({}).obs;
   var subTotal = (0.0).obs;
   var discount = (0.0).obs;
@@ -59,7 +72,7 @@ class PlanPurchaseController extends GetxController {
   var currentMonth = DateTime(DateTime.now().year, DateTime.now().month, 1).obs;
 
   @override
-  void onInit()async {
+  void onInit() async {
     super.onInit();
     await getBufferTime();
     await setMinimumPossibleDate();
@@ -68,16 +81,19 @@ class PlanPurchaseController extends GetxController {
       resetCouponCode();
     });
   }
- Future<void> getBufferTime()async{
+
+  Future<void> getBufferTime() async {
     print("buffer");
     var mySubsHttpService = MySubsHttpService();
-    BufferDetailsResponse response= await mySubsHttpService.getBufferTime();
-    bufferBeforeFourThirty=response.payload?.bufferBefore430??48;
-    bufferAfterFourThirty=response.payload?.bufferAfter430??72;
-    bufferAfterFourThirtyWednesday=response.payload?.wednesdayBufferAfter430??96;
-    bufferBeforeFourThirtyWednesday=response.payload?.wednesdayBufferBefore430??72;
-
+    BufferDetailsResponse response = await mySubsHttpService.getBufferTime();
+    bufferBeforeFourThirty = response.payload?.bufferBefore430 ?? 48;
+    bufferAfterFourThirty = response.payload?.bufferAfter430 ?? 72;
+    bufferAfterFourThirtyWednesday =
+        response.payload?.wednesdayBufferAfter430 ?? 96;
+    bufferBeforeFourThirtyWednesday =
+        response.payload?.wednesdayBufferBefore430 ?? 72;
   }
+
   Future<void> setMinimumPossibleDate() async {
     tz.initializeTimeZones();
     final kuwaitTimeZone = tz.getLocation('Asia/Kuwait');
@@ -104,12 +120,12 @@ class PlanPurchaseController extends GetxController {
 
     if (isWednesday) {
       durationToAdd = nowInKuwait.isBefore(today430AM)
-          ? Duration(hours: bufferBeforeFourThirtyWednesday??72)
-          :  Duration(hours: bufferAfterFourThirtyWednesday??96);
+          ? Duration(hours: bufferBeforeFourThirtyWednesday ?? 72)
+          : Duration(hours: bufferAfterFourThirtyWednesday ?? 96);
     } else {
       durationToAdd = nowInKuwait.isBefore(today430AM)
-          ?  Duration(hours: bufferBeforeFourThirty??48)
-          :  Duration(hours: bufferAfterFourThirty??72);
+          ? Duration(hours: bufferBeforeFourThirty ?? 48)
+          : Duration(hours: bufferAfterFourThirty ?? 72);
     }
 
     // Calculate minimum date in Kuwait timezone
@@ -126,14 +142,14 @@ class PlanPurchaseController extends GetxController {
     print("📅 Calculated minimum date: ${minimumPossibleDate.value}");
   }
 
-
   Future<void> getSubscriptionCategories() async {
     isCategoriesFetching.value = true;
     subscriptionCategories.value = [];
     isPaymentGatewayLoading.value = false;
-    var planPurchaseHttpService = new PlanPurchaseHttpService();
+    var planPurchaseHttpService = PlanPurchaseHttpService();
     subscriptionCategories.value =
         await planPurchaseHttpService.getSubscriptionCategories();
+    log(subscriptionCategories.toString(), name: "subscriptionCategories");
     isCategoriesFetching.value = false;
     update();
     if (subscriptionCategories.isEmpty) {
@@ -158,6 +174,7 @@ class PlanPurchaseController extends GetxController {
     discount.value = 0.0;
     total.value = subTotal.value - discount.value;
   }
+
   Future<void> getSubscriptionsByCategory() async {
     isPaymentGatewayLoading.value = false;
     isSubscriptionsFetching.value = true;
@@ -190,7 +207,9 @@ class PlanPurchaseController extends GetxController {
 
     var planPurchaseHttpService = PlanPurchaseHttpService();
     DiscountData discountData = await planPurchaseHttpService.verifyCoupon(
-        currentSubscription.value.id, couponCodeController.value.text,mobile??"");
+        currentSubscription.value.id,
+        couponCodeController.value.text,
+        mobile ?? "");
 
     if (!discountData.isValid) {
       isCouponCodeValid.value = false;
@@ -219,24 +238,33 @@ class PlanPurchaseController extends GetxController {
       isOrderCreating.value = true;
       var planPurchaseHttpService = PlanPurchaseHttpService();
 
-      PaymentData tPaymentData = await planPurchaseHttpService.createOrder( PurchaseData(
-          planCategoryId: currentCategory.value.id,
-          planId: currentSubscription.value.id,
-          startDate: selectedDate.value, promoCode: couponCodeController.value.text,
-          mobile: mobile
-      ) );
+      PaymentData tPaymentData = await planPurchaseHttpService.createOrder(
+          PurchaseData(
+              planCategoryId: currentCategory.value.id,
+              planId: currentSubscription.value.id,
+              startDate: selectedDate.value,
+              promoCode: couponCodeController.value.text,
+              mobile: mobile));
       paymentData.value = tPaymentData;
 
       if (paymentData.value.paymentUrl == "" ||
           paymentData.value.redirectUrl == "") {
-        if ((total.value == 0 || total.value == 0.0) && (paymentData.value.refId!='' && paymentData.value.orderId!='')) {
+        if ((total.value == 0 || total.value == 0.0) &&
+            (paymentData.value.refId != '' &&
+                paymentData.value.orderId != '')) {
           showSnackbar(Get.context!, "payment_capture_success".tr, "info");
-          activatePlan(paymentData.value.subscriptionId );
-          Get.toNamed(AppRouteNames.otpVerificationSuccessRoute,arguments: [
-            ASSETS_SUCCESSMARK,"subscription_success","subscription_success_info",
-            'home',false,AppRouteNames.homeRoute,""
-          ])?.then((value) => Get.toNamed(AppRouteNames.homeRoute,arguments: [0]));
-        }else{
+          activatePlan(paymentData.value.subscriptionId);
+          Get.toNamed(AppRouteNames.otpVerificationSuccessRoute, arguments: [
+            ASSETS_SUCCESSMARK,
+            "subscription_success",
+            "subscription_success_info",
+            'home',
+            false,
+            AppRouteNames.homeRoute,
+            ""
+          ])?.then(
+              (value) => Get.toNamed(AppRouteNames.homeRoute, arguments: [0]));
+        } else {
           showSnackbar(Get.context!, "customer_support_message".tr, "error");
         }
 
@@ -263,8 +291,8 @@ class PlanPurchaseController extends GetxController {
       isDateChecking.value = true;
       var planPurchaseHttpService = PlanPurchaseHttpService();
       String dateString = DateFormat("yyyy-MM-dd").format(selectedDate.value);
-      bool isSuccess = await planPurchaseHttpService
-          .checkDateAvailability(dateString,mobile,currentSubscription.value.id);
+      bool isSuccess = await planPurchaseHttpService.checkDateAvailability(
+          dateString, mobile, currentSubscription.value.id);
       isDateChecking.value = false;
 
       if (isSuccess) {
@@ -278,8 +306,8 @@ class PlanPurchaseController extends GetxController {
     isOrderCreating.value = true;
     isPaymentGatewayLoading.value = true;
     var planPurchaseHttpService = PlanPurchaseHttpService();
-    bool isSuccess = await planPurchaseHttpService
-        .checkOrderStatus(paymentData.value.refId);
+    bool isSuccess =
+        await planPurchaseHttpService.checkOrderStatus(paymentData.value.refId);
     isOrderCreating.value = false;
 
     if (!isSuccess) {
@@ -287,19 +315,24 @@ class PlanPurchaseController extends GetxController {
       showSnackbar(Get.context!, "payment_capture_error".tr, "error");
     } else {
       showSnackbar(Get.context!, "payment_capture_success".tr, "info");
-      activatePlan(paymentData.value.subscriptionId );
-      Get.toNamed(AppRouteNames.otpVerificationSuccessRoute,arguments: [
-        ASSETS_SUCCESSMARK,"subscription_success","subscription_success_info",
-        'home',false,AppRouteNames.homeRoute,""
-      ]) ;
+      activatePlan(paymentData.value.subscriptionId);
+      Get.toNamed(AppRouteNames.otpVerificationSuccessRoute, arguments: [
+        ASSETS_SUCCESSMARK,
+        "subscription_success",
+        "subscription_success_info",
+        'home',
+        false,
+        AppRouteNames.homeRoute,
+        ""
+      ]);
     }
   }
 
-  void activatePlan(int subscriptionId ) async {
-    if(subscriptionId != -1){
+  void activatePlan(int subscriptionId) async {
+    if (subscriptionId != -1) {
       var planPurchaseHttpService = PlanPurchaseHttpService();
-      bool isSuccess = await planPurchaseHttpService
-          .activateSubscription(subscriptionId);
+      bool isSuccess =
+          await planPurchaseHttpService.activateSubscription(subscriptionId);
 
       resetData();
     }
@@ -350,23 +383,28 @@ class PlanPurchaseController extends GetxController {
   }
 
   void previousMonth() {
-    var newDate = DateTime(currentMonth.value.year, currentMonth.value.month - 1, currentMonth.value.day);
+    var newDate = DateTime(currentMonth.value.year,
+        currentMonth.value.month - 1, currentMonth.value.day);
     currentMonth.value = newDate;
     setCurrentMonthWeekDays();
   }
 
   void nextMonth() {
-    var newDate = DateTime(currentMonth.value.year, currentMonth.value.month + 1, currentMonth.value.day);
+    var newDate = DateTime(currentMonth.value.year,
+        currentMonth.value.month + 1, currentMonth.value.day);
     currentMonth.value = newDate;
     setCurrentMonthWeekDays();
   }
 
   setCurrentMonthWeekDays() {
     List<DateTime> weekDays = [];
-    DateTime weekStartDate = getDate(currentMonth.value.subtract(Duration(days: currentMonth.value.weekday))) ;
-    DateTime weekEndDate = getDate(currentMonth.value.add(Duration(days: DateTime.daysPerWeek - (currentMonth.value.weekday+1))));
+    DateTime weekStartDate = getDate(currentMonth.value
+        .subtract(Duration(days: currentMonth.value.weekday)));
+    DateTime weekEndDate = getDate(currentMonth.value.add(Duration(
+        days: DateTime.daysPerWeek - (currentMonth.value.weekday + 1))));
 
-    if(weekStartDate.month < currentMonth.value.month && weekEndDate.month < currentMonth.value.month){
+    if (weekStartDate.month < currentMonth.value.month &&
+        weekEndDate.month < currentMonth.value.month) {
       weekStartDate = currentMonth.value;
       weekEndDate = currentMonth.value.add(Duration(days: 6));
     }
@@ -378,23 +416,22 @@ class PlanPurchaseController extends GetxController {
     fifthWeekDays.clear();
     sixthWeekDays.clear();
     for (int index = 1; index <= 6; index++) {
-      weekDays=[];
+      weekDays = [];
       if (index != 1) {
-        weekStartDate = weekStartDate.add(Duration(days:   7));
-        weekEndDate = weekEndDate.add(Duration(days:   7));
+        weekStartDate = weekStartDate.add(Duration(days: 7));
+        weekEndDate = weekEndDate.add(Duration(days: 7));
       }
 
-      for (int i = 0; i <= weekEndDate
-          .difference(weekStartDate)
-          .inDays; i++) {
+      for (int i = 0; i <= weekEndDate.difference(weekStartDate).inDays; i++) {
         weekDays.add(weekStartDate.add(Duration(days: i)));
       }
 
-      switch (index){
-        case 1:{
-          firstWeekDays.addAll(weekDays);
-          break;
-        }
+      switch (index) {
+        case 1:
+          {
+            firstWeekDays.addAll(weekDays);
+            break;
+          }
         case 2:
           {
             secondWeekDays.addAll(weekDays);
@@ -426,15 +463,13 @@ class PlanPurchaseController extends GetxController {
 
   DateTime getDate(DateTime d) => DateTime(d.year, d.month, d.day);
 
-
-
   Future<void> planChoiceSelected() async {
     var sharedPreferences = await SharedPreferences.getInstance();
     final String? mobile = sharedPreferences.getString('mobile');
 
     if (mobile != null && mobile != "") {
       Get.toNamed(AppRouteNames.planPurchaseSetInitialDateRoute);
-    }else{
+    } else {
       showSnackbar(Get.context!, "login_message".tr, "info");
       Get.toNamed(AppRouteNames.loginRoute);
     }
