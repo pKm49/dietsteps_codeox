@@ -300,7 +300,8 @@
       "select_shift": "Select Time",
       "login_register_message": "Please login or register to continue!",
       "show_menu": "Show Menu",
-      "shop_now": "Shop Now"
+      "shop_now": "Shop Now",
+      "customize_plan":"You must customize your plan before proceeding."
     }
   },
   {
@@ -609,7 +610,8 @@
       "select_shift": "حدد الوقت",
       "login_register_message": "الرجاء تسجيل الدخول أو التسجيل للمتابعة!",
       "show_menu": "عرض الطعام",
-      "shop_now": "تسوق الآن"
+      "shop_now": "تسوق الآن",
+      "customize_plan":"يجب تخصيص خطتك قبل المتابعة."
 
     }
   }

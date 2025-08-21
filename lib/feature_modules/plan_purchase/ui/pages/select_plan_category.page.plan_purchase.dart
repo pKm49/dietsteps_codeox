@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -6,6 +7,7 @@ import 'package:dietsteps/feature_modules/plan_purchase/ui/components/subscripti
 import 'package:dietsteps/shared_module/constants/app_route_names.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/style_params.constants.shared.dart';
 import 'package:dietsteps/shared_module/constants/widget_styles.constants.shared.dart';
+import 'package:dietsteps/shared_module/services/utility-services/toaster_snackbar_shower.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/widget_generator.service.shared.dart';
 import 'package:dietsteps/shared_module/services/utility-services/widget_properties_generator.service.shared.dart';
 import 'package:dietsteps/shared_module/ui/components/custom_back_button.component.shared.dart';
@@ -40,7 +42,7 @@ class _SelectPlanCategoryPage_PlanPurchaseState
   Widget build(BuildContext context) {
     double screenwidth = MediaQuery.of(context).size.width;
     double screenheight = MediaQuery.of(context).size.height;
-
+    int selectedCarousalIdx = 0;
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -166,6 +168,9 @@ class _SelectPlanCategoryPage_PlanPurchaseState
                               autoPlay: false,
                               viewportFraction: 0.7,
                               onPageChanged: (index, reason) {
+                                selectedCarousalIdx = index;
+                                log(selectedCarousalIdx.toString(),
+                                    name: "idx");
                                 planPurchaseController.changeCategory(
                                     planPurchaseController
                                         .subscriptionCategories[index]);
@@ -184,7 +189,7 @@ class _SelectPlanCategoryPage_PlanPurchaseState
                                                                 .value
                                                                 .id ==
                                                             element.id
-                                                        ? APPSTYLE_MUTEDGOLDYELLOW
+                                                        ? APPSTYLE_PrimaryColor
                                                         : Colors.transparent,
                                                     width: 3)),
                                     height: screenheight * .28,
@@ -217,22 +222,33 @@ class _SelectPlanCategoryPage_PlanPurchaseState
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            if (!planPurchaseController
-                                .isCategoriesFetching.value) {
-                              if (planPurchaseController
-                                  .subscriptionCategories.isNotEmpty) {
+                            if (planPurchaseController
+                                .subscriptionCategories[selectedCarousalIdx]
+                                .isCustomisable) {
+                              Get.rawSnackbar(
+                                  message: "customize_plan".tr,
+                                  snackPosition: SnackPosition.TOP,
+                                  borderRadius: APPSTYLE_BorderRadiusSmall,
+                                  maxWidth: screenwidth * .9,
+                                  backgroundColor: APPSTYLE_PrimaryColor);
+                            } else {
+                              if (!planPurchaseController
+                                  .isCategoriesFetching.value) {
                                 if (planPurchaseController
-                                        .currentCategory.value.id ==
-                                    -1) {
-                                  planPurchaseController.changeCategory(
-                                      planPurchaseController
-                                          .subscriptionCategories[0]);
+                                    .subscriptionCategories.isNotEmpty) {
+                                  if (planPurchaseController
+                                          .currentCategory.value.id ==
+                                      -1) {
+                                    planPurchaseController.changeCategory(
+                                        planPurchaseController
+                                            .subscriptionCategories[0]);
+                                  }
+                                  Get.toNamed(AppRouteNames
+                                      .planPurchaseSubscriptionPlansListRoute);
+                                } else {
+                                  planPurchaseController
+                                      .getSubscriptionCategories();
                                 }
-                                Get.toNamed(AppRouteNames
-                                    .planPurchaseSubscriptionPlansListRoute);
-                              } else {
-                                planPurchaseController
-                                    .getSubscriptionCategories();
                               }
                             }
                           },

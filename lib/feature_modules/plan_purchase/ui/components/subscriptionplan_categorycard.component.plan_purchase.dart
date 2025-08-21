@@ -180,7 +180,7 @@ class SubscriptionPlanCategoryCardComponent_PlanPurchase
                         savedState: stateToRestore);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: APPSTYLE_MUTEDGOLDYELLOW,
+                    backgroundColor: APPSTYLE_PrimaryColor,
                     foregroundColor: APPSTYLE_BackgroundWhite,
                     padding:
                         const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
